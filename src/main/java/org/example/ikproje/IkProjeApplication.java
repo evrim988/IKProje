@@ -10,6 +10,7 @@ public class IkProjeApplication {
         SpringApplication.run(IkProjeApplication.class, args);
         System.out.println();
         System.out.println("Harun SAKINn12342134");
+        System.out.println("msacak");
     }
 
 }
