@@ -9,7 +9,7 @@ public class IkProjeApplication {
     public static void main(String[] args) {
         SpringApplication.run(IkProjeApplication.class, args);
         System.out.println();
-        System.out.println("Harun SAKINn12342134");
+        System.out.println("harunsakin16");
     }
 
 }
