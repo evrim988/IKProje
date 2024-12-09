@@ -15,10 +15,10 @@ import java.util.Optional;
 public class JwtManager {
 
 
-    private String secretKey;
+    private String secretKey="qAz1+!rUt7w$eS5#";
 
 
-    private String issuer;
+    private String issuer="IKProje";
 
     private final Long ExDate = 1000L * 60 * 60; //60 dk sonra iptal olsun.
 
@@ -34,7 +34,7 @@ public class JwtManager {
                 .withIssuedAt(createdDate)
                 .withExpiresAt(expirationDate)
                 .withClaim("authId", authId)
-                .withClaim("key", "JAVAOTEL_APP")
+                .withClaim("key", "IKProje")
                 .sign(algorithm);
         return token;
     }
