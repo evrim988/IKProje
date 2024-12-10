@@ -23,16 +23,10 @@ public class User extends BaseEntity {
     String firstName;
     String lastName;
     String email;
-    String username;
     String password;
-    String birthDate;
     Long companyId;
-    Double salary;
-    String region;
-    String address;
     String phone;
     String avatarUrl;
-
     @Enumerated(EnumType.STRING)
     EUserRole userRole;
 }

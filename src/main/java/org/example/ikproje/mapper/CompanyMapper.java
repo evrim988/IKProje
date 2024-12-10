@@ -1,5 +1,6 @@
 package org.example.ikproje.mapper;
 
+import org.example.ikproje.dto.request.UpdateInfoRequestDto;
 import org.example.ikproje.dto.request.UserRegisterRequestDto;
 import org.example.ikproje.entity.Company;
 import org.mapstruct.Mapper;
@@ -12,9 +13,10 @@ public interface CompanyMapper {
 	CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);
 	
 	@Mapping(target = "name", source = "companyName")
-	@Mapping(target = "address", source = "companyAddress")
 	@Mapping(target = "phone", source = "companyPhone")
 	@Mapping(target = "email", source = "companyEmail")
 	@Mapping(target = "logo", source = "companyLogo")
-	Company fromRegisterDto(UserRegisterRequestDto dto);
+	@Mapping(target = "foundationDate", source = "companyFoundationDate")
+	@Mapping(target = "industry", source = "companyIndustry")
+	Company fromRegisterDto(UpdateInfoRequestDto dto);
 }
