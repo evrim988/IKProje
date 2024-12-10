@@ -1,0 +1,19 @@
+package org.example.ikproje.entity.enums;
+
+public enum EUserDepartmentType {
+	HR,
+	FINANCE,
+	IT,
+	SALES,
+	MARKETING,
+	ENGINEERING,
+	RESEARCH,
+	CUSTOMER_SERVICE,
+	LEGAL,
+	OPERATIONS,
+	PROCUREMENT,
+	LOGISTICS,
+	DESIGN,
+	ADMINISTRATION,
+	SECURITY
+}

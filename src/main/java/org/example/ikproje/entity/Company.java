@@ -16,10 +16,10 @@ public class Company extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    String address;
+    Long addressId;
     String phone;
     String email;
     String logo;
-    Long expirationDate;
     Long foundationDate;
+    String industry;
 }

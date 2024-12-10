@@ -3,6 +3,7 @@ package org.example.ikproje.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
+import org.example.ikproje.dto.request.UpdateInfoRequestDto;
 import org.example.ikproje.dto.request.UserRegisterRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.exception.ErrorType;
@@ -47,5 +48,15 @@ public class UserController {
 				                         .success(true)
 				                         .message("Giriş başarılı.")
 		                                     .build());
+	}
+	
+	@PutMapping(UPDATE)
+	public ResponseEntity<BaseResponse<Boolean>> update(@RequestBody @Valid UpdateInfoRequestDto dto){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+				                         .code(200)
+				                         .success(true)
+				                         .message("Güncelleme başarılı.")
+				                         .data(userService.update(dto))
+		                                 .build());
 	}
 }
