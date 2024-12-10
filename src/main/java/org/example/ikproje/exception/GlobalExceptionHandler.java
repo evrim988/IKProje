@@ -13,7 +13,7 @@ import java.util.List;
 
 @ControllerAdvice
 @Slf4j
-public class GlobalExcepitonHandler {
+public class GlobalExceptionHandler {
 
     /**
      * Tanımlaması yapılmayan diğer tüm hataları yakalamak için RuntimeException yakalayım.

@@ -1,6 +1,5 @@
 package org.example.ikproje.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.UpdateInfoRequestDto;
@@ -21,18 +20,9 @@ import org.example.ikproje.mapper.UserMapper;
 import org.example.ikproje.repository.UserRepository;
 import org.example.ikproje.utility.EncryptionManager;
 import org.example.ikproje.utility.JwtManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -92,7 +82,7 @@ public class UserService {
 		if (optUser.isEmpty()){
 			throw new IKProjeException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
 		}
-		return jwtManager.createToken(optUser.get().getId());
+		return jwtManager.createUserToken(optUser.get().getId());
 	}
 	
 	private static String getEncryptedPassword(String password) {

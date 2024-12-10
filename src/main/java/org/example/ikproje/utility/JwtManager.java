@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -18,15 +17,15 @@ public class JwtManager {
     private String secretKey="qAz1+!rUt7w$eS5#";
 
 
-    private String issuer="IKProje";
+    private String issuer="IKProje";    
 
     private final Long ExDate = 1000L * 60 * 60; //60 dk sonra iptal olsun.
 
-    public String createToken(Long authId) {
+    Algorithm algorithm = Algorithm.HMAC512(secretKey);
+
+    public String createUserToken(Long authId) {
         Date createdDate = new Date(System.currentTimeMillis());
         Date expirationDate = new Date(System.currentTimeMillis() + ExDate);
-
-        Algorithm algorithm = Algorithm.HMAC512(secretKey);
 
         String token = JWT.create()
                 .withAudience()
@@ -35,19 +34,41 @@ public class JwtManager {
                 .withExpiresAt(expirationDate)
                 .withClaim("authId", authId)
                 .withClaim("key", "IKProje")
+                .withClaim("role","USER")
                 .sign(algorithm);
         return token;
     }
 
+    public String createAdminToken(Long adminId, String email) {
+        Date createdDate = new Date(System.currentTimeMillis());
+        Date expirationDate = new Date(System.currentTimeMillis() + ExDate);
+
+        return JWT.create()
+                .withIssuer(issuer)
+                .withIssuedAt(createdDate)
+                .withExpiresAt(expirationDate)
+                .withClaim("adminId",adminId)
+                .withClaim("email",email)
+                .withClaim("key","IKProje")
+                .withClaim("role","ADMIN")
+                .sign(algorithm);
+    }
+
     public Optional<Long> validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if(Objects.isNull(decodedJWT))
                 return Optional.empty();
-            Long authId = decodedJWT.getClaim("authId").asLong();
-            return Optional.of(authId);
+
+            String role = decodedJWT.getClaim("role").asString();
+            if(role.equals("ADMIN")){
+                return Optional.of(decodedJWT.getClaim("adminId").asLong());
+            }
+            else{
+                return Optional.of(decodedJWT.getClaim("authId").asLong());
+            }
+
         }
         catch (Exception e) {
             return Optional.empty();

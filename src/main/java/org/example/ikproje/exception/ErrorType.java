@@ -16,7 +16,8 @@ public enum ErrorType {
     DECRYPTION_FAILED(7002,"Şifre çözümleme başarısız.",HttpStatus.BAD_REQUEST),
     INVALID_USERNAME_OR_PASSWORD(6002,"Kullanıcı adı ya da şifre hatalıdır",HttpStatus.BAD_REQUEST),
     PASSWORDS_NOT_MATCH(6003,"Girilen şifreler eşleşmiyor. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
-    MAIL_ALREADY_EXIST(6004,"Girilen mail adresi sistemde mevcut. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST);
+    MAIL_ALREADY_EXIST(6004,"Girilen mail adresi sistemde mevcut. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
+    ADMIN_NOT_FOUND(9002,"Mail ya da şifre hatalı.",HttpStatus.BAD_REQUEST);
 
 
     int code;
