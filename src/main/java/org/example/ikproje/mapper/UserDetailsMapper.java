@@ -1,6 +1,5 @@
 package org.example.ikproje.mapper;
 
-import org.example.ikproje.dto.request.UpdateInfoRequestDto;
 import org.example.ikproje.dto.request.UserRegisterRequestDto;
 import org.example.ikproje.entity.UserDetails;
 import org.mapstruct.Mapper;
@@ -11,5 +10,5 @@ import org.mapstruct.factory.Mappers;
 public interface UserDetailsMapper {
 	UserDetailsMapper INSTANCE = Mappers.getMapper(UserDetailsMapper.class);
 	
-	UserDetails fromRegisterDto(UpdateInfoRequestDto dto);
+	UserDetails fromRegisterDto(UserRegisterRequestDto dto);
 }

@@ -3,12 +3,8 @@ package org.example.ikproje.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
-import org.example.ikproje.dto.request.UpdateInfoRequestDto;
 import org.example.ikproje.dto.request.UserRegisterRequestDto;
-import org.example.ikproje.entity.Address;
-import org.example.ikproje.entity.Company;
-import org.example.ikproje.entity.User;
-import org.example.ikproje.entity.UserDetails;
+import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.exception.ErrorType;
@@ -25,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +31,10 @@ public class UserService {
 	private final UserDetailsService userDetailsService;
 	private final AddressService addressService;
 	private final JwtManager jwtManager;
+	private final EmailService emailService;
+	private final VerificationTokenService verificationTokenService;
 	
+	@Transactional
 	public void register( UserRegisterRequestDto dto) {
 		if (userRepository.existsByEmail(dto.email())){
 			throw new IKProjeException(ErrorType.MAIL_ALREADY_EXIST);
@@ -44,35 +44,79 @@ public class UserService {
 		String encryptedPassword = getEncryptedPassword(dto.password());
 		user.setPassword(encryptedPassword);
 		user.setState(EState.PASSIVE);
+		user.setAvatarUrl(dto.avatarUrl());
+		Address userAddress = AddressMapper.INSTANCE.toUserAddress(dto);
+		Address companyAddress = AddressMapper.INSTANCE.toCompanyAddress(dto);
+		addressService.saveAll(Arrays.asList(userAddress, companyAddress));
+		UserDetails userDetails = UserDetailsMapper.INSTANCE.fromRegisterDto(dto);
+		userDetails.setAddressId(userAddress.getId());
+		Company company = CompanyMapper.INSTANCE.fromRegisterDto(dto);
+		company.setAddressId(companyAddress.getId());
+		companyService.save(company);
+		user.setCompanyId(company.getId());
+		user.setState(EState.ACTIVE);
 		userRepository.save(user);
+		userDetails.setUserId(user.getId());
+		userDetailsService.save(userDetails);
+		//Mail gönderirken alıcı olarak dto'dan gelen (şirket yöneticisi) mail adresi ve oluşturduğum verification
+		// token'i giriyorum
+		emailService.sendEmail(dto.email(),generateVerificationToken(user.getId()));
 	}
 	
-	public boolean update(UpdateInfoRequestDto dto){
-		Optional<User> optUser = userRepository.findById(dto.userId());
+	/**
+	 * Mail'e gidecek link için bir token oluşturdum.
+	 * Bu token'in ilk 16 hanesi UUID'den gelen random rakamlar, harfler ve özel karakterlerden oluşuyor.
+	 * İlk 16 haneden sonraki haneler ise sistemin şuanki zamanına 1 dakika ekleyecek bir epoch time içeriyor.
+	 * verifyAccount methodunu kullanırken eğer token üretildikten sonra 1 dakikadan fazla bir zaman geçtiyse,
+	 * token'in süresi doldu diye bir hata veriyor.
+	 * @param userId
+	 * @return
+	 */
+	public String generateVerificationToken(Long userId){
+		StringBuilder verificationTokenSB = new StringBuilder();
+		String token = UUID.randomUUID().toString();
+		verificationTokenSB.append(token.substring(0,16));
+		verificationTokenSB.append(System.currentTimeMillis()+(1000*60));
+		VerificationToken verificationToken = new VerificationToken(verificationTokenSB.toString(),userId);
+		verificationTokenService.save(verificationToken);
+		return verificationTokenSB.toString();
+	}
+	
+	/**
+	 * Bu method'a parametre olarak gelen token, veritabanında var mı diye kontrol ediliyor.
+	 * Daha sonra token'in süresi dolmuş mu diye kontrol ediliyor.
+	 * Daha sonra token'in içerisinden userId alınıp, user'ın varlığı kontrol ediliyor.
+	 * Eğer tüm şartlar sağlanıyorsa mail onayı gerçekleşiyor ve token'in state'i passive oluyor.
+	 * @param verificationToken
+	 */
+	public void verifyAccount(String verificationToken){
+		Optional<VerificationToken> optVerificationToken = verificationTokenService.findByToken(verificationToken);
+		if (optVerificationToken.isEmpty()){
+			throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		}
+		VerificationToken verToken = optVerificationToken.get();
+		if (verToken.getState()==EState.PASSIVE){
+			throw new IKProjeException(ErrorType.TOKEN_ALREADY_USED);
+		}
+		long expDate = Long.parseLong(verificationToken.substring(16));
+		if (expDate<System.currentTimeMillis()){
+			verToken.setState(EState.PASSIVE);
+			verificationTokenService.save(verToken);
+			throw new IKProjeException(ErrorType.EXP_TOKEN);
+		}
+		Long userId = verToken.getUserId();
+		Optional<User> optUser = userRepository.findById(userId);
 		if (optUser.isEmpty()){
 			throw new IKProjeException(ErrorType.USER_NOTFOUND);
 		}
-		try{
-			User user = optUser.get();
-			user.setAvatarUrl(dto.avatarUrl());
-			Address userAddress = AddressMapper.INSTANCE.toUserAddress(dto);
-			Address companyAddress = AddressMapper.INSTANCE.toCompanyAddress(dto);
-			addressService.saveAll(Arrays.asList(userAddress, companyAddress));
-			UserDetails userDetails = UserDetailsMapper.INSTANCE.fromRegisterDto(dto);
-			userDetails.setAddressId(userAddress.getId());
-			Company company = CompanyMapper.INSTANCE.fromRegisterDto(dto);
-			company.setAddressId(companyAddress.getId());
-			companyService.save(company);
-			user.setCompanyId(company.getId());
-			userDetails.setUserId(user.getId());
-			userDetailsService.save(userDetails);
-			user.setState(EState.ACTIVE);
-			userRepository.save(user);
-			return true;
-		}catch (Exception e){
-			return false;
-		}
+		User user = optUser.get();
+		user.setIsMailVerified(true);
+		verToken.setState(EState.PASSIVE);
+		userRepository.save(user);
+		verificationTokenService.save(verToken);
 	}
+	
+
 	
 	public String login(LoginRequestDto dto) {
 		String encryptedPassword = getEncryptedPassword(dto.password());

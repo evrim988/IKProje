@@ -1,10 +1,7 @@
 package org.example.ikproje.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.example.ikproje.entity.enums.EUserRole;
 
@@ -29,4 +26,8 @@ public class User extends BaseEntity {
     String avatarUrl;
     @Enumerated(EnumType.STRING)
     EUserRole userRole;
+    @Builder.Default
+    Boolean isMailVerified=false;
+    @Builder.Default
+    Boolean isApproved=false;
 }

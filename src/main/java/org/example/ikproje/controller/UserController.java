@@ -3,7 +3,6 @@ package org.example.ikproje.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
-import org.example.ikproje.dto.request.UpdateInfoRequestDto;
 import org.example.ikproje.dto.request.UserRegisterRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.exception.ErrorType;
@@ -11,12 +10,6 @@ import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 import static org.example.ikproje.constant.RestApis.*;
 @RestController
@@ -50,13 +43,15 @@ public class UserController {
 		                                     .build());
 	}
 	
-	@PutMapping(UPDATE)
-	public ResponseEntity<BaseResponse<Boolean>> update(@RequestBody @Valid UpdateInfoRequestDto dto){
+	@GetMapping(VERIFY_ACCOUNT)
+	public ResponseEntity<BaseResponse<Boolean>> verifyAccount(@RequestParam("token") String token){
+		userService.verifyAccount(token);
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 				                         .code(200)
+				                         .message("Mail başarıyla onaylandı.")
+				                         .data(true)
 				                         .success(true)
-				                         .message("Güncelleme başarılı.")
-				                         .data(userService.update(dto))
 		                                 .build());
 	}
+
 }

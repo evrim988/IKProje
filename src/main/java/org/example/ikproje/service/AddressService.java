@@ -15,7 +15,6 @@ public class AddressService {
 	}
 	
 	public void saveAll(Iterable<Address> addresses) {
-		System.out.println("harun");
 		addressRepository.saveAll(addresses);
 	}
 	
