@@ -1,5 +1,6 @@
 package org.example.ikproje.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.UpdateInfoRequestDto;
