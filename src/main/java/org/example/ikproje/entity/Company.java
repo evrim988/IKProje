@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
@@ -20,6 +22,6 @@ public class Company extends BaseEntity {
     String phone;
     String email;
     String logo;
-    Long foundationDate;
+    LocalDate foundationDate;
     String industry;
 }

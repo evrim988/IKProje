@@ -11,7 +11,9 @@ public enum ErrorType {
     VALIDATION_ERROR(400,"Girilen parametreler hatalıdır. Lütfen kontrol ederek tekrar deneyiniz.", HttpStatus.BAD_REQUEST),
     
     USER_NOTFOUND(5001,"Kullanıcı Bulunamadı!",HttpStatus.NOT_FOUND),
-    INVALID_TOKEN(9001,"geçersiz token bilgisi",HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(9001,"Geçersiz token bilgisi",HttpStatus.BAD_REQUEST),
+    EXP_TOKEN(9002,"Token'in süresi doldu!",HttpStatus.BAD_REQUEST),
+    TOKEN_ALREADY_USED(9003,"Bu token zaten kullanıldı.",HttpStatus.BAD_REQUEST),
     ENCRYPTION_FAILED(7001,"Şifreleme başarısız.",HttpStatus.BAD_REQUEST),
     DECRYPTION_FAILED(7002,"Şifre çözümleme başarısız.",HttpStatus.BAD_REQUEST),
     INVALID_USERNAME_OR_PASSWORD(6002,"Kullanıcı adı ya da şifre hatalıdır",HttpStatus.BAD_REQUEST),
