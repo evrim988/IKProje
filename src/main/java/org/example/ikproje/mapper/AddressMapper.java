@@ -1,6 +1,6 @@
 package org.example.ikproje.mapper;
 
-import org.example.ikproje.dto.request.UserRegisterRequestDto;
+import org.example.ikproje.dto.request.RegisterRequestDto;
 import org.example.ikproje.entity.Address;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,7 +18,7 @@ public interface AddressMapper {
 	@Mapping(target = "street", source = "street")
 	@Mapping(target = "postalCode", source = "postalCode")
 	@Mapping(target = "aptNumber", source = "aptNumber")
-	Address toUserAddress(UserRegisterRequestDto dto);
+	Address toUserAddress(RegisterRequestDto dto);
 	
 	
 	@Mapping(target = "region", source = "companyRegion")
@@ -28,6 +28,6 @@ public interface AddressMapper {
 	@Mapping(target = "street", source = "companyStreet")
 	@Mapping(target = "postalCode", source = "companyPostalCode")
 	@Mapping(target = "aptNumber", source = "companyAptNumber")
-	Address toCompanyAddress(UserRegisterRequestDto dto);
+	Address toCompanyAddress(RegisterRequestDto dto);
 
 }

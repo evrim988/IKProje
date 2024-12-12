@@ -26,8 +26,5 @@ public class User extends BaseEntity {
     String avatarUrl;
     @Enumerated(EnumType.STRING)
     EUserRole userRole;
-    @Builder.Default
-    Boolean isMailVerified=false;
-    @Builder.Default
-    Boolean isApproved=false;
+   
 }

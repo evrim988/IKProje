@@ -1,19 +1,13 @@
 package org.example.ikproje.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 
 import java.time.LocalDate;
 
-public record UserRegisterRequestDto(
+public record RegisterRequestDto(
 		String firstName,
 		String lastName,
-		String email,
-		String password,
-		String rePassword,
 		String phone,
 		String avatarUrl,
 		Double salary,
@@ -40,6 +34,8 @@ public record UserRegisterRequestDto(
 		String companyName,
 		String companyPhone,
 		String companyEmail,
+		String companyPassword,
+		String companyRePassword,
 		String companyLogo,
 		LocalDate companyFoundationDate,
 		String companyIndustry
