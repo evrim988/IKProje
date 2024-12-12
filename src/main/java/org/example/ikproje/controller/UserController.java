@@ -3,7 +3,7 @@ package org.example.ikproje.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
-import org.example.ikproje.dto.request.UserRegisterRequestDto;
+import org.example.ikproje.dto.request.RegisterRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
@@ -20,8 +20,8 @@ public class UserController {
 	private final UserService userService;
 	
 	@PostMapping(REGISTER)
-	public ResponseEntity<BaseResponse<Boolean>> register(@RequestBody @Valid UserRegisterRequestDto dto){
-		if (!dto.password().equals(dto.rePassword())){
+	public ResponseEntity<BaseResponse<Boolean>> register(@RequestBody @Valid RegisterRequestDto dto){
+		if (!dto.companyPassword().equals(dto.companyRePassword())){
 			throw new IKProjeException(ErrorType.PASSWORDS_NOT_MATCH);
 		}
 			userService.register(dto);

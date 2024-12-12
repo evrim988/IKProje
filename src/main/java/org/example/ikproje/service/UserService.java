@@ -3,7 +3,7 @@ package org.example.ikproje.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
-import org.example.ikproje.dto.request.UserRegisterRequestDto;
+import org.example.ikproje.dto.request.RegisterRequestDto;
 import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
@@ -35,13 +35,14 @@ public class UserService {
 	private final VerificationTokenService verificationTokenService;
 	
 	@Transactional
-	public void register( UserRegisterRequestDto dto) {
-		if (userRepository.existsByEmail(dto.email())){
+	public void register( RegisterRequestDto dto) {
+		if (userRepository.existsByEmail(dto.companyEmail())){
 			throw new IKProjeException(ErrorType.MAIL_ALREADY_EXIST);
 		}
 		User user = UserMapper.INSTANCE.fromRegisterDto(dto);
 		user.setUserRole(EUserRole.COMPANY_MANAGER);
-		String encryptedPassword = getEncryptedPassword(dto.password());
+		String encryptedPassword = getEncryptedPassword(dto.companyPassword());
+		user.setEmail(dto.companyEmail());
 		user.setPassword(encryptedPassword);
 		user.setState(EState.PASSIVE);
 		user.setAvatarUrl(dto.avatarUrl());
@@ -52,6 +53,7 @@ public class UserService {
 		userDetails.setAddressId(userAddress.getId());
 		Company company = CompanyMapper.INSTANCE.fromRegisterDto(dto);
 		company.setAddressId(companyAddress.getId());
+		company.setPassword(encryptedPassword);
 		companyService.save(company);
 		user.setCompanyId(company.getId());
 		user.setState(EState.ACTIVE);
@@ -60,7 +62,7 @@ public class UserService {
 		userDetailsService.save(userDetails);
 		//Mail gönderirken alıcı olarak dto'dan gelen (şirket yöneticisi) mail adresi ve oluşturduğum verification
 		// token'i giriyorum
-		emailService.sendEmail(dto.email(),generateVerificationToken(user.getId()));
+		emailService.sendEmail(dto.companyEmail(),generateVerificationToken(user.getId()));
 	}
 	
 	/**
@@ -69,15 +71,15 @@ public class UserService {
 	 * İlk 16 haneden sonraki haneler ise sistemin şuanki zamanına 1 dakika ekleyecek bir epoch time içeriyor.
 	 * verifyAccount methodunu kullanırken eğer token üretildikten sonra 1 dakikadan fazla bir zaman geçtiyse,
 	 * token'in süresi doldu diye bir hata veriyor.
-	 * @param userId
+	 * @param companyId
 	 * @return
 	 */
-	public String generateVerificationToken(Long userId){
+	public String generateVerificationToken(Long companyId){
 		StringBuilder verificationTokenSB = new StringBuilder();
 		String token = UUID.randomUUID().toString();
 		verificationTokenSB.append(token.substring(0,16));
 		verificationTokenSB.append(System.currentTimeMillis()+(1000*60));
-		VerificationToken verificationToken = new VerificationToken(verificationTokenSB.toString(),userId);
+		VerificationToken verificationToken = new VerificationToken(verificationTokenSB.toString(),companyId);
 		verificationTokenService.save(verificationToken);
 		return verificationTokenSB.toString();
 	}
@@ -85,7 +87,7 @@ public class UserService {
 	/**
 	 * Bu method'a parametre olarak gelen token, veritabanında var mı diye kontrol ediliyor.
 	 * Daha sonra token'in süresi dolmuş mu diye kontrol ediliyor.
-	 * Daha sonra token'in içerisinden userId alınıp, user'ın varlığı kontrol ediliyor.
+	 * Daha sonra token'in içerisinden companyId alınıp, company'nin varlığı kontrol ediliyor.
 	 * Eğer tüm şartlar sağlanıyorsa mail onayı gerçekleşiyor ve token'in state'i passive oluyor.
 	 * @param verificationToken
 	 */
@@ -104,15 +106,15 @@ public class UserService {
 			verificationTokenService.save(verToken);
 			throw new IKProjeException(ErrorType.EXP_TOKEN);
 		}
-		Long userId = verToken.getUserId();
-		Optional<User> optUser = userRepository.findById(userId);
-		if (optUser.isEmpty()){
-			throw new IKProjeException(ErrorType.USER_NOTFOUND);
+		Long companyId = verToken.getCompanyId();
+		Optional<Company> optCompany = companyService.findById(companyId);
+		if (optCompany.isEmpty()){
+			throw new IKProjeException(ErrorType.COMPANY_NOTFOUND);
 		}
-		User user = optUser.get();
-		user.setIsMailVerified(true);
+		Company company = optCompany.get();
+		company.setIsMailVerified(true);
 		verToken.setState(EState.PASSIVE);
-		userRepository.save(user);
+		companyService.save(company);
 		verificationTokenService.save(verToken);
 	}
 	
@@ -120,14 +122,17 @@ public class UserService {
 	
 	public String login(LoginRequestDto dto) {
 		String encryptedPassword = getEncryptedPassword(dto.password());
-		System.out.println(encryptedPassword);
-		Optional<User> optUser =
-				userRepository.findOptionalByEmailAndPassword(dto.email(),encryptedPassword );
-		System.out.println(optUser.isPresent());
-		if (optUser.isEmpty()){
+		Optional<Company> optCompany =
+				companyService.findOptionalByEmailAndPassword(dto.email(), encryptedPassword);
+		if (optCompany.isEmpty()){
 			throw new IKProjeException(ErrorType.INVALID_USERNAME_OR_PASSWORD);
 		}
-		return jwtManager.createUserToken(optUser.get().getId());
+		Company company = optCompany.get();
+		if(!company.getIsMailVerified()){
+			emailService.sendEmail(dto.email(),generateVerificationToken(company.getId()));
+			throw new IKProjeException(ErrorType.MAIL_NOT_VERIFIED);
+		}
+		return jwtManager.createUserToken(company.getId());
 	}
 	
 	private static String getEncryptedPassword(String password) {

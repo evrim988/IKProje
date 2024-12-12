@@ -21,7 +21,12 @@ public class Company extends BaseEntity {
     Long addressId;
     String phone;
     String email;
+    String password;
     String logo;
     LocalDate foundationDate;
     String industry;
+    @Builder.Default
+    Boolean isMailVerified=false;
+    @Builder.Default
+    Boolean isApproved=false;
 }
