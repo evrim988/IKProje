@@ -26,7 +26,5 @@ public class AdminService {
         throw new IKProjeException(ErrorType.ADMIN_NOT_FOUND);
     }
 
-    public List<Admin> testFindAll(){
-        return adminRepository.findAll();
-    }
+
 }
