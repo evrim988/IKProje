@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.RegisterRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
+import org.example.ikproje.dto.response.UserProfileResonseDto;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
@@ -52,6 +53,16 @@ public class UserController {
 				                         .data(true)
 				                         .success(true)
 		                                 .build());
+	}
+
+	@GetMapping(GETPROFILE)
+	public ResponseEntity<BaseResponse<UserProfileResonseDto>> getProfile(String token){
+		return ResponseEntity.ok(BaseResponse.<UserProfileResonseDto>builder()
+						.code(200)
+						.message("Profil bilgisi başarıyla getirildi.")
+						.data(userService.getProfile(token))
+						.success(true)
+				.build());
 	}
 
 }

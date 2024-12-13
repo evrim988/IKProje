@@ -29,13 +29,5 @@ public class AdminController {
                 .build());
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<BaseResponse<List<Admin>>> test(){
-        return ResponseEntity.ok(BaseResponse.<List<Admin>>builder()
-                        .code(200)
-                        .message("Test başarılı")
-                        .success(true)
-                        .data(adminService.testFindAll())
-                .build());
-    }
+
 }

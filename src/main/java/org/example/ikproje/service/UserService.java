@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.RegisterRequestDto;
+import org.example.ikproje.dto.response.UserProfileResonseDto;
 import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
@@ -144,5 +145,22 @@ public class UserService {
 			throw new IKProjeException(ErrorType.ENCRYPTION_FAILED);
 		}
 		return encryptedPassword;
+	}
+
+	public UserProfileResonseDto getProfile(String token) {
+		Optional<Long> optionalUserId = jwtManager.validateToken(token);
+		if(optionalUserId.isEmpty()){
+			throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		}
+		Optional<User> optionalUser = userRepository.findById(optionalUserId.get());
+		if (optionalUser.isEmpty()){
+			throw new IKProjeException(ErrorType.USER_NOTFOUND);
+		}
+		UserProfileResonseDto dto = UserProfileResonseDto.builder()
+				.firstName(optionalUser.get().getFirstName())
+				.lastName(optionalUser.get().getLastName())
+				.avatarUrl(optionalUser.get().getAvatarUrl())
+				.build();
+		return dto;
 	}
 }
