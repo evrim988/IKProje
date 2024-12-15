@@ -17,5 +17,9 @@ public class RestApis {
     public static final String UPDATE="/update";
     public static final String VERIFY_ACCOUNT="/verify-account";
     public static final String GETPROFILE = "/get-profile";
+    
+    
+    
+    public static final String UPDATE_COMPANY_LOGO="/update-company-logo";
 
 }

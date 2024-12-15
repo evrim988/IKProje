@@ -15,7 +15,6 @@ public interface CompanyMapper {
 	@Mapping(target = "phone", source = "companyPhone")
 	@Mapping(target = "email", source = "companyEmail")
 	@Mapping(target = "password", source = "companyPassword")
-	@Mapping(target = "logo", source = "companyLogo")
 	@Mapping(target = "foundationDate", source = "companyFoundationDate")
 	@Mapping(target = "industry", source = "companyIndustry")
 	Company fromRegisterDto(RegisterRequestDto dto);
