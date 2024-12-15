@@ -9,7 +9,6 @@ public record RegisterRequestDto(
 		String firstName,
 		String lastName,
 		String phone,
-		String avatarUrl,
 		Double salary,
 		LocalDate hireDate,
 		@Pattern(regexp = "\\d{11}", message = "TC No 11 haneli olmalıdır ve tamamı rakamlardan oluşmalıdır.")
@@ -36,7 +35,6 @@ public record RegisterRequestDto(
 		String companyEmail,
 		String companyPassword,
 		String companyRePassword,
-		String companyLogo,
 		LocalDate companyFoundationDate,
 		String companyIndustry
 		) {

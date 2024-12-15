@@ -10,10 +10,19 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   mail:
     host: localhost
     port: 25
     username: ''
     password: ''
     protocol: smtp
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+cloudinary:
+  cloud_name: dxtmlp6jw
+  api_key: 529484785928648
+  api_secret: spD9pBPUlI4lTJtbzGr6Is-MGVo

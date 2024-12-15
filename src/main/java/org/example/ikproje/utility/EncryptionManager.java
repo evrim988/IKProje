@@ -1,5 +1,8 @@
 package org.example.ikproje.utility;
 
+import org.example.ikproje.exception.ErrorType;
+import org.example.ikproje.exception.IKProjeException;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -31,6 +34,17 @@ public class EncryptionManager {
 		byte[] decodedData=Base64.getDecoder().decode(data);
 		byte[] originalData=cipher.doFinal(decodedData);
 		return new String(originalData);
+	}
+	
+	public static String getEncryptedPassword(String password) {
+		String encryptedPassword = "";
+		try {
+			encryptedPassword = EncryptionManager.encrypt(password);
+		}
+		catch (Exception e) {
+			throw new IKProjeException(ErrorType.ENCRYPTION_FAILED);
+		}
+		return encryptedPassword;
 	}
 	
 }

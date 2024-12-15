@@ -4,13 +4,18 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.RegisterRequestDto;
+import org.example.ikproje.dto.request.UpdateCompanyLogoRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.dto.response.UserProfileResonseDto;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static org.example.ikproje.constant.RestApis.*;
 @RestController
@@ -20,18 +25,22 @@ import static org.example.ikproje.constant.RestApis.*;
 public class UserController {
 	private final UserService userService;
 	
-	@PostMapping(REGISTER)
-	public ResponseEntity<BaseResponse<Boolean>> register(@RequestBody @Valid RegisterRequestDto dto){
+	@PostMapping(value = REGISTER)
+	public ResponseEntity<BaseResponse<Boolean>> register(
+			@RequestBody @Valid RegisterRequestDto dto) {
+		
 		if (!dto.companyPassword().equals(dto.companyRePassword())){
 			throw new IKProjeException(ErrorType.PASSWORDS_NOT_MATCH);
 		}
-			userService.register(dto);
+		
+		userService.register(dto);
+		
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-				                         .code(200)
-				                         .data(true)
-				                         .message("Üyelik başarıyla oluşturuldu.")
-				                         .success(true)
-		                                 .build());
+		                                     .code(200)
+		                                     .data(true)
+		                                     .message("Üyelik başarıyla oluşturuldu.")
+		                                     .success(true)
+		                                     .build());
 	}
 	
 	@PostMapping(LOGIN)
@@ -63,6 +72,19 @@ public class UserController {
 						.data(userService.getProfile(token))
 						.success(true)
 				.build());
+	}
+	
+	@PostMapping(value = UPDATE_COMPANY_LOGO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<BaseResponse<Boolean>> addLogoToCompany(String token,
+	                                                              @ModelAttribute @Valid UpdateCompanyLogoRequestDto dto, MultipartFile file)
+			throws IOException {
+		userService.addLogoToCompany(token,dto,file);
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+				                         .code(200)
+				                         .data(true)
+				                         .success(true)
+				                         .message("Şirket logosu eklendi.")
+		                                     .build());
 	}
 
 }
