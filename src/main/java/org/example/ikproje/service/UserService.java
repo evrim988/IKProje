@@ -142,7 +142,8 @@ public class UserService {
 		return dto;
 	}
 	
-	public void addLogoToCompany(String token, UpdateCompanyLogoRequestDto dto, MultipartFile file) throws IOException {
+	public void addLogoToCompany(String token, Long companyId, MultipartFile file) throws IOException {
+		System.out.println(companyId);
 		Optional<Long> optUserId = jwtManager.validateToken(token);
 		if (optUserId.isEmpty()){
 			throw new IKProjeException(ErrorType.INVALID_TOKEN);
@@ -155,7 +156,7 @@ public class UserService {
 		if (!user.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
 			throw new IKProjeException(ErrorType.UNAUTHORIZED);
 		}
-		Optional<Company> optCompany = companyService.findById(dto.companyId());
+		Optional<Company> optCompany = companyService.findById(companyId);
 		if (optCompany.isEmpty()){
 			throw new IKProjeException(ErrorType.COMPANY_NOTFOUND);
 		}
@@ -172,7 +173,6 @@ public class UserService {
 
 		VwPersonel vwPersonel = vwPersonelOptional.get();
 		vwPersonel.setPersonelAssets(assetService.getAllVwAssetsByUserId(vwPersonel.getId()));
-
 
 		return vwPersonelOptional.get();
 	}

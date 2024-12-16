@@ -15,6 +15,7 @@ import static org.example.ikproje.constant.RestApis.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ADMIN)
+@CrossOrigin("*")
 public class AdminController {
 
     private final AdminService adminService;
