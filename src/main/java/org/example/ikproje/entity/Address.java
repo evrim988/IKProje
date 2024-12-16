@@ -15,10 +15,11 @@ public class Address extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	Long userId; // sonradan eklendi. MS 16.12.2024
 	String region;
 	String city;
 	String district;
-	String neighborhood;
+	String neighbourhood;
 	String street;
 	String postalCode;
 	String aptNumber;

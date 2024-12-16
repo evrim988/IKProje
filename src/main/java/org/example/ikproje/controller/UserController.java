@@ -6,10 +6,11 @@ import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.RegisterRequestDto;
 import org.example.ikproje.dto.request.UpdateCompanyLogoRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
-import org.example.ikproje.dto.response.UserProfileResonseDto;
+import org.example.ikproje.dto.response.UserProfileResponseDto;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
+import org.example.ikproje.view.VwPersonel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,8 +66,8 @@ public class UserController {
 	}
 
 	@GetMapping(GETPROFILE)
-	public ResponseEntity<BaseResponse<UserProfileResonseDto>> getProfile(String token){
-		return ResponseEntity.ok(BaseResponse.<UserProfileResonseDto>builder()
+	public ResponseEntity<BaseResponse<UserProfileResponseDto>> getProfile(String token){
+		return ResponseEntity.ok(BaseResponse.<UserProfileResponseDto>builder()
 						.code(200)
 						.message("Profil bilgisi başarıyla getirildi.")
 						.data(userService.getProfile(token))
@@ -86,5 +87,17 @@ public class UserController {
 				                         .message("Şirket logosu eklendi.")
 		                                     .build());
 	}
+
+	@GetMapping("get-personel-profile")
+	public ResponseEntity<BaseResponse<VwPersonel>> getPersonelProfile(@RequestParam String token){
+		return ResponseEntity.ok(BaseResponse.<VwPersonel>builder()
+						.code(200)
+						.data(userService.getPersonelProfile(token))
+						.success(true)
+						.message("Personel profili getirildi.")
+				.build());
+	}
+
+
 
 }

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.RegisterRequestDto;
 import org.example.ikproje.dto.request.UpdateCompanyLogoRequestDto;
-import org.example.ikproje.dto.response.UserProfileResonseDto;
+import org.example.ikproje.dto.response.UserProfileResponseDto;
 import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
@@ -20,6 +20,7 @@ import org.example.ikproje.mapper.UserMapper;
 import org.example.ikproje.repository.UserRepository;
 import org.example.ikproje.utility.EncryptionManager;
 import org.example.ikproje.utility.JwtManager;
+import org.example.ikproje.view.VwPersonel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +40,8 @@ public class UserService {
 	private final EmailService emailService;
 	private final VerificationTokenService verificationTokenService;
 	private final CloudinaryService cloudinaryService;
-	
+	private final AssetService assetService;
+
 	@Transactional
 	public void register(RegisterRequestDto dto) {
 		if (userRepository.existsByEmail(dto.companyEmail())){
@@ -105,8 +107,6 @@ public class UserService {
 		verificationTokenService.save(verToken);
 	}
 	
-
-	
 	public String login(LoginRequestDto dto) {
 		String encryptedPassword = EncryptionManager.getEncryptedPassword(dto.password());
 		Optional<Company> optCompany =
@@ -121,10 +121,9 @@ public class UserService {
 		}
 		return jwtManager.createUserToken(company.getId());
 	}
-	
-	
 
-	public UserProfileResonseDto getProfile(String token) {
+
+	public UserProfileResponseDto getProfile(String token) {
 		Optional<Long> optionalUserId = jwtManager.validateToken(token);
 		if(optionalUserId.isEmpty()){
 			throw new IKProjeException(ErrorType.INVALID_TOKEN);
@@ -133,7 +132,9 @@ public class UserService {
 		if (optionalUser.isEmpty()){
 			throw new IKProjeException(ErrorType.USER_NOTFOUND);
 		}
-		UserProfileResonseDto dto = UserProfileResonseDto.builder()
+		User user = optionalUser.get();
+
+		UserProfileResponseDto dto = UserProfileResponseDto.builder()
 				.firstName(optionalUser.get().getFirstName())
 				.lastName(optionalUser.get().getLastName())
 				.avatarUrl(optionalUser.get().getAvatarUrl())
@@ -161,5 +162,18 @@ public class UserService {
 		Company company = optCompany.get();
 		company.setLogo(cloudinaryService.uploadFile(file));
 		companyService.save(company);
+	}
+
+	public VwPersonel getPersonelProfile(String token){
+		Optional<Long> userIdOpt = jwtManager.validateToken(token);
+		if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		Optional<VwPersonel> vwPersonelOptional = userRepository.findVwPersonelByUserId(userIdOpt.get());
+		if (vwPersonelOptional.isEmpty()) throw new IKProjeException(ErrorType.USER_NOTFOUND);
+
+		VwPersonel vwPersonel = vwPersonelOptional.get();
+		vwPersonel.setPersonelAssets(assetService.getAllVwAssetsByUserId(vwPersonel.getId()));
+
+
+		return vwPersonelOptional.get();
 	}
 }
