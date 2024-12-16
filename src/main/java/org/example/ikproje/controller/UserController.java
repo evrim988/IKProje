@@ -76,10 +76,10 @@ public class UserController {
 	}
 	
 	@PostMapping(value = UPDATE_COMPANY_LOGO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<BaseResponse<Boolean>> addLogoToCompany(String token,
-	                                                              @ModelAttribute @Valid UpdateCompanyLogoRequestDto dto, MultipartFile file)
+	public ResponseEntity<BaseResponse<Boolean>> addLogoToCompany(@RequestParam String token,
+																  @RequestParam Long companyId, @RequestParam MultipartFile file)
 			throws IOException {
-		userService.addLogoToCompany(token,dto,file);
+		userService.addLogoToCompany(token,companyId,file);
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 				                         .code(200)
 				                         .data(true)
