@@ -132,12 +132,20 @@ public class UserService {
 		if (optionalUser.isEmpty()){
 			throw new IKProjeException(ErrorType.USER_NOTFOUND);
 		}
+
 		User user = optionalUser.get();
 
+		Optional<Company> optionalCompany = companyService.findById(user.getCompanyId());
+		if (optionalCompany.isEmpty()){
+			throw new IKProjeException(ErrorType.COMPANY_NOTFOUND);
+		}
+
 		UserProfileResponseDto dto = UserProfileResponseDto.builder()
-				.firstName(optionalUser.get().getFirstName())
-				.lastName(optionalUser.get().getLastName())
-				.avatarUrl(optionalUser.get().getAvatarUrl())
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.avatarUrl(user.getAvatarUrl())
+				.userRole(user.getUserRole())
+				.companyName(optionalCompany.get().getName())
 				.build();
 		return dto;
 	}
