@@ -1,14 +1,11 @@
 package org.example.ikproje.view;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.*;
-import org.example.ikproje.entity.Address;
-import org.example.ikproje.entity.Asset;
-import org.example.ikproje.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 import org.example.ikproje.entity.enums.EUserRole;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,12 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
+public class VwCompanyManager {
 
-//Personel ve şirket yöneticileri personel sayfasına gittiği zaman bu bilgileri görebilsin
-public class VwPersonel {
-
-    public VwPersonel(Long id, String firstName, String lastName, String email, String companyName, String phone, String avatarUrl, EUserRole userRole, String region, String city, String district, String neighbourhood, String street, String postalCode, String aptNumber, LocalDate hireDate, String tcNo, String sgkNo, LocalDate birthDate, EUserDepartmentType departmentType) {
+    public VwCompanyManager(Long id, Long companyId,String firstName, String lastName, String email, String companyName, String phone, String avatarUrl, EUserRole userRole, String region, String city, String district, String neighbourhood, String street, String postalCode, String aptNumber, LocalDate hireDate, String tcNo, String sgkNo, LocalDate birthDate) {
         this.id = id;
+        this.companyId = companyId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -43,11 +39,12 @@ public class VwPersonel {
         this.tcNo = tcNo;
         this.sgkNo = sgkNo;
         this.birthDate = birthDate;
-        this.departmentType = departmentType;
-        this.assets = new ArrayList<>();
+        this.personelList = new ArrayList<>();
     }
 
+    //user
     Long id;
+    Long companyId;
     String firstName;
     String lastName;
     String email;
@@ -55,7 +52,7 @@ public class VwPersonel {
     String phone;
     String avatarUrl;
     EUserRole userRole;
-    //adres
+    //userDetails
     String region;
     String city;
     String district;
@@ -68,6 +65,10 @@ public class VwPersonel {
     String tcNo;
     String sgkNo;
     LocalDate birthDate;
-    EUserDepartmentType departmentType;
-    List<VwAsset> assets;
+    List<VwPersonel> personelList;
+
+    //başka şeyler de eklenebilir
+
+
+
 }
