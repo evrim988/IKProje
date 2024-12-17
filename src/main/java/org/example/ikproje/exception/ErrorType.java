@@ -25,6 +25,7 @@ public enum ErrorType {
     COMPANY_ALREADY_APPROVED(6005,"Şirket zaten onaylanmıştır.",HttpStatus.BAD_REQUEST),
     MAIL_NOT_VERIFIED(6004,"Mail henüz onaylanmamış, lütfen mailinize gelen onay linkine tıklayınız.",
                       HttpStatus.BAD_REQUEST),
+    MAIL_NOT_FOUND(6006,"Girilen mail ile kayıtlı kullanıcı bulunamadı.",HttpStatus.BAD_REQUEST),
     ADMIN_NOT_FOUND(9002,"Mail ya da şifre hatalı.",HttpStatus.BAD_REQUEST);
 
 

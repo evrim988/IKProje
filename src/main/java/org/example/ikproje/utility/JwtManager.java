@@ -22,10 +22,11 @@ public class JwtManager {
     private final Long ExDate = 1000L * 60 * 60; //60 dk sonra iptal olsun.
 
     Algorithm algorithm = Algorithm.HMAC512(secretKey);
+    Date createdDate = new Date(System.currentTimeMillis());
+    Date expirationDate = new Date(System.currentTimeMillis() + ExDate);
 
     public String createUserToken(Long authId) {
-        Date createdDate = new Date(System.currentTimeMillis());
-        Date expirationDate = new Date(System.currentTimeMillis() + ExDate);
+
 
         String token = JWT.create()
                 .withAudience()
@@ -40,8 +41,6 @@ public class JwtManager {
     }
 
     public String createAdminToken(Long adminId, String email) {
-        Date createdDate = new Date(System.currentTimeMillis());
-        Date expirationDate = new Date(System.currentTimeMillis() + ExDate);
 
         return JWT.create()
                 .withIssuer(issuer)
@@ -52,6 +51,18 @@ public class JwtManager {
                 .withClaim("key","IKProje")
                 .withClaim("role","ADMIN")
                 .sign(algorithm);
+    }
+
+    public String createResetPasswordToken(Long authId,String email) {
+        return JWT.create()
+                .withIssuer(issuer)
+                .withIssuedAt(createdDate)
+                .withExpiresAt(expirationDate)
+                .withClaim("authId",authId)
+                .withClaim("RESET_PASSWORD_EMAIL_KEY",email)
+                .withClaim("role","USER")
+                .sign(algorithm);
+
     }
 
     public Optional<Long> validateToken(String token) {
@@ -71,6 +82,7 @@ public class JwtManager {
 
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             return Optional.empty();
         }
     }
