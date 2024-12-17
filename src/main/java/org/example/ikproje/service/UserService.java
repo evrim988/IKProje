@@ -12,10 +12,7 @@ import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 //import org.example.ikproje.mapper.AddressMapper;
-import org.example.ikproje.mapper.AddressMapper;
-import org.example.ikproje.mapper.CompanyMapper;
-import org.example.ikproje.mapper.UserDetailsMapper;
-import org.example.ikproje.mapper.UserMapper;
+import org.example.ikproje.mapper.*;
 import org.example.ikproje.repository.UserRepository;
 import org.example.ikproje.utility.EncryptionManager;
 import org.example.ikproje.utility.JwtManager;
@@ -41,6 +38,7 @@ public class UserService {
 	private final VerificationTokenService verificationTokenService;
 	private final CloudinaryService cloudinaryService;
 	private final AssetService assetService;
+	private final MembershipService membershipService;
 
 	@Transactional
 	public void register(RegisterRequestDto dto) {
@@ -67,6 +65,12 @@ public class UserService {
 		userRepository.save(user);
 		userDetails.setUserId(user.getId());
 		userDetailsService.save(userDetails);
+		Membership membership = MembershipMapper.INSTANCE.fromRegisterDto(dto);
+		membership.setCompanyId(company.getId());
+		membership.setPrice(membership.getMembershipType().getDiscountRate()*membership.getPrice());
+		membership.setStartDate(membership.getMembershipType().getStartDate());
+		membership.setEndDate(membership.getMembershipType().getEndDate());
+		membershipService.save(membership);
 		//Mail gönderirken alıcı olarak dto'dan gelen (şirket yöneticisi) mail adresi ve oluşturduğum verification
 		// token'i giriyorum
 		emailService.sendEmail(dto.companyEmail(),verificationTokenService.generateVerificationToken(user.getId()));
@@ -168,6 +172,23 @@ public class UserService {
 		Company company = optCompany.get();
 		company.setLogo(cloudinaryService.uploadFile(file));
 		companyService.save(company);
+	}
+	
+	public void addAvatarToUser(String token,  MultipartFile file) throws IOException {
+		Optional<Long> optUserId = jwtManager.validateToken(token);
+		if (optUserId.isEmpty()){
+			throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		}
+		Optional<User> optUser = userRepository.findById(optUserId.get());
+		if (optUser.isEmpty()){
+			throw new IKProjeException(ErrorType.USER_NOTFOUND);
+		}
+		User user = optUser.get();
+		if (!user.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
+			throw new IKProjeException(ErrorType.UNAUTHORIZED);
+		}
+		user.setAvatarUrl(cloudinaryService.uploadFile(file));
+		userRepository.save(user);
 	}
 
 	public VwPersonel getPersonelProfile(String token){

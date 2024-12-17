@@ -1,6 +1,7 @@
 package org.example.ikproje.dto.request;
 
 import jakarta.validation.constraints.Pattern;
+import org.example.ikproje.entity.enums.EMembershipType;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 
 import java.time.LocalDate;
@@ -36,6 +37,7 @@ public record RegisterRequestDto(
 		String companyPassword,
 		String companyRePassword,
 		LocalDate companyFoundationDate,
-		String companyIndustry
+		String companyIndustry,
+		EMembershipType membershipType
 		) {
 }

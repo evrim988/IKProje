@@ -89,6 +89,19 @@ public class UserController {
 				                         .message("Şirket logosu eklendi.")
 		                                     .build());
 	}
+	
+	@PostMapping(value = UPDATE_USER_AVATAR,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<BaseResponse<Boolean>> addAvatarToUser(@RequestParam String token,
+	                                                             @RequestParam MultipartFile file)
+			throws IOException {
+		userService.addAvatarToUser(token,file);
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+		                                     .code(200)
+		                                     .data(true)
+		                                     .success(true)
+		                                     .message("User avatarı eklendi.")
+		                                     .build());
+	}
 
 	@GetMapping("get-personel-profile")
 	public ResponseEntity<BaseResponse<VwPersonel>> getPersonelProfile(@RequestParam String token){
