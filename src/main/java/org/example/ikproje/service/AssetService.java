@@ -19,7 +19,7 @@ public class AssetService {
 
     private final AssetRepository assetRepository;
     private final JwtManager jwtManager;
-    private final UserService userService;
+
 
     public List<VwAsset> getAllVwAssetsByUserId(Long userId){
         return assetRepository.getAllVwAssetsByUserId(userId);

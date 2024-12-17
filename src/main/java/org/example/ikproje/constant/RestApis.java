@@ -26,5 +26,6 @@ public class RestApis {
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";
+    public static final String UPDATE_USER_AVATAR="/update-user-avatar";
 
 }
