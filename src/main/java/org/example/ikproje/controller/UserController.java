@@ -4,12 +4,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.request.RegisterRequestDto;
+import org.example.ikproje.dto.request.ResetPasswordRequestDto;
 import org.example.ikproje.dto.request.UpdateCompanyLogoRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.dto.response.UserProfileResponseDto;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
+import org.example.ikproje.view.VwCompanyManager;
 import org.example.ikproje.view.VwPersonel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +97,36 @@ public class UserController {
 						.data(userService.getPersonelProfile(token))
 						.success(true)
 						.message("Personel profili getirildi.")
+				.build());
+	}
+
+	@GetMapping("get-company-manager-profile")
+	public ResponseEntity<BaseResponse<VwCompanyManager>> getCompanyManagerProfile(@RequestParam String token){
+		return ResponseEntity.ok(BaseResponse.<VwCompanyManager>builder()
+				.code(200)
+				.data(userService.getCompanyManagerProfile(token))
+				.success(true)
+				.message("Personel profili getirildi.")
+				.build());
+	}
+
+	@PostMapping(FORGOT_PASSWORD)
+	public ResponseEntity<BaseResponse<Boolean>> forgotPassword(@RequestParam String email){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+						.data(userService.forgotPassword(email))
+						.code(200)
+						.message("Şifre sıfırlama linki kullanıcı mailine gönderildi.")
+						.success(true)
+				.build());
+	}
+
+	@PostMapping(RESET_PASSWORD)
+	public ResponseEntity<BaseResponse<Boolean>> resetPassword(@RequestBody ResetPasswordRequestDto dto){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+				.data(userService.resetPassword(dto))
+				.code(200)
+				.message("Şifre başarı ile değiştirildi.")
+				.success(true)
 				.build());
 	}
 

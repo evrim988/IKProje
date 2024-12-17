@@ -11,12 +11,17 @@ public class RestApis {
     
     public static final String USER=ROOT+"/user";
     public static final String ADMIN=ROOT+"/admin";
+
     
     public static final String REGISTER="/register";
     public static final String LOGIN="/login";
     public static final String UPDATE="/update";
     public static final String VERIFY_ACCOUNT="/verify-account";
     public static final String GETPROFILE = "/get-profile";
+    public static final String FORGOT_PASSWORD = "/forgot-password";
+    public static final String RESET_PASSWORD = "/reset-password";
+
+
     
     
     
