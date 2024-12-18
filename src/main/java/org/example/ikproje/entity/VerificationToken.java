@@ -16,10 +16,10 @@ public class VerificationToken extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	String token;
-	Long companyId;
+	Long userId;
 	
 	public VerificationToken(String token,Long companyId){
 		this.token = token;
-		this.companyId = companyId;
+		this.userId = companyId;
 	}
 }

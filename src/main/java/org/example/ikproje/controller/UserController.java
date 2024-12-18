@@ -32,7 +32,7 @@ public class UserController {
 	public ResponseEntity<BaseResponse<Boolean>> register(
 			@RequestBody @Valid RegisterRequestDto dto) {
 		
-		if (!dto.companyPassword().equals(dto.companyRePassword())){
+		if (!dto.password().equals(dto.rePassword())){
 			throw new IKProjeException(ErrorType.PASSWORDS_NOT_MATCH);
 		}
 		
@@ -79,9 +79,9 @@ public class UserController {
 	
 	@PostMapping(value = UPDATE_COMPANY_LOGO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<BaseResponse<Boolean>> addLogoToCompany(@RequestParam String token,
-																  @RequestParam Long companyId, @RequestParam MultipartFile file)
+																  @RequestParam MultipartFile file)
 			throws IOException {
-		userService.addLogoToCompany(token,companyId,file);
+		userService.addLogoToCompany(token,file);
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 				                         .code(200)
 				                         .data(true)

@@ -20,9 +20,6 @@ public class RestApis {
     public static final String GETPROFILE = "/get-profile";
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
-
-
-    
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";

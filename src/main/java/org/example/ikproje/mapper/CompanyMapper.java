@@ -13,8 +13,6 @@ public interface CompanyMapper {
 	
 	@Mapping(target = "name", source = "companyName")
 	@Mapping(target = "phone", source = "companyPhone")
-	@Mapping(target = "email", source = "companyEmail")
-	@Mapping(target = "password", source = "companyPassword")
 	@Mapping(target = "foundationDate", source = "companyFoundationDate")
 	@Mapping(target = "industry", source = "companyIndustry")
 	Company fromRegisterDto(RegisterRequestDto dto);
