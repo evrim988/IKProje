@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-public class VwUnapprovedCompany {
+public class VwUnapprovedAccounts {
 	Long id;
-	String name;
+	String firstName;
+	String lastName;
 	String phone;
 	String email;
+	String companyName;
 }

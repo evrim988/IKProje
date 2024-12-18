@@ -27,15 +27,15 @@ public class VerificationTokenService {
 	 * İlk 16 haneden sonraki haneler ise sistemin şuanki zamanına 1 dakika ekleyecek bir epoch time içeriyor.
 	 * verifyAccount methodunu kullanırken eğer token üretildikten sonra 1 dakikadan fazla bir zaman geçtiyse,
 	 * token'in süresi doldu diye bir hata veriyor.
-	 * @param companyId
+	 * @param userId
 	 * @return
 	 */
-	public String generateVerificationToken(Long companyId){
+	public String generateVerificationToken(Long userId){
 		StringBuilder verificationTokenSB = new StringBuilder();
 		String token = UUID.randomUUID().toString();
 		verificationTokenSB.append(token.substring(0,16));
 		verificationTokenSB.append(System.currentTimeMillis()+(1000*60));
-		VerificationToken verificationToken = new VerificationToken(verificationTokenSB.toString(),companyId);
+		VerificationToken verificationToken = new VerificationToken(verificationTokenSB.toString(),userId);
 		verificationTokenRepository.save(verificationToken);
 		return verificationTokenSB.toString();
 	}

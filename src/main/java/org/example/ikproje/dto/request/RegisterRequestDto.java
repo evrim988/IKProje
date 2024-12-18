@@ -33,9 +33,9 @@ public record RegisterRequestDto(
 		String companyAptNumber,
 		String companyName,
 		String companyPhone,
-		String companyEmail,
-		String companyPassword,
-		String companyRePassword,
+		String email,
+		String password,
+		String rePassword,
 		LocalDate companyFoundationDate,
 		String companyIndustry,
 		EMembershipType membershipType
