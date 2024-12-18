@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.LoginRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.service.AdminService;
-import org.example.ikproje.view.VwUnapprovedCompany;
+import org.example.ikproje.view.VwUnapprovedAccounts;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,19 +31,28 @@ public class AdminController {
     }
     
     @PutMapping("/approveAccount")
-    public ResponseEntity<BaseResponse<Boolean>> approveAccount(Long companyId){
-        adminService.approveCompanyAccount(companyId);
+    public ResponseEntity<BaseResponse<Boolean>> approveAccount(Long userId, String confirmationMessage){
+        adminService.approveAccount(userId,confirmationMessage);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                                          .code(200)
                                          .success(true)
                                          .data(true)
-                                         .message("Hesap onaylandı.")
+                                         .message("Kayıt onaylandı.")
                                              .build());
     }
-    
+    @PutMapping("/rejectAccount")
+    public ResponseEntity<BaseResponse<Boolean>> rejectAccount(Long userId,String rejectionMessage ){
+        adminService.rejectAccount(userId,rejectionMessage);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                                         .code(200)
+                                         .success(true)
+                                         .data(true)
+                                         .message("Kayıt onayı başarıyla reddedildi.")
+                                             .build());
+    }
     @GetMapping("/get-unapproved-companies")
-    public ResponseEntity<BaseResponse<List<VwUnapprovedCompany>>> getUnapprovedCompanies() {
-        return ResponseEntity.ok(BaseResponse.<List<VwUnapprovedCompany>>builder()
+    public ResponseEntity<BaseResponse<List<VwUnapprovedAccounts>>> getUnapprovedCompanies() {
+        return ResponseEntity.ok(BaseResponse.<List<VwUnapprovedAccounts>>builder()
                                          .code(200)
                                              .success(true)
                                          .message("Onaylanmamış şirketler getirildi.")

@@ -3,6 +3,7 @@ package org.example.ikproje.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EUserRole;
 
 @EqualsAndHashCode(callSuper = true)
@@ -26,5 +27,9 @@ public class User extends BaseEntity {
     String avatarUrl;
     @Enumerated(EnumType.STRING)
     EUserRole userRole;
-   
+    @Builder.Default
+    Boolean isMailVerified=false;
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    EIsApproved isApproved=EIsApproved.REJECTED;
 }

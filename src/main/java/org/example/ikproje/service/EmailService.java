@@ -34,6 +34,14 @@ public class EmailService {
 		message.setText(body);
 		mailSender.send(message);
 	}
+	
+	public void sendAdminConfirmationEmail(String email,String message)  {
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(email);
+		msg.setSubject("About register");
+		msg.setText(message);
+		mailSender.send(msg);
+	}
 
 
 }
