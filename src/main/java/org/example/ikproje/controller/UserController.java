@@ -92,7 +92,7 @@ public class UserController {
 		                                     .build());
 	}
 
-	@GetMapping("get-personel-profile")
+	@GetMapping("/get-personel-profile")
 	public ResponseEntity<BaseResponse<VwPersonel>> getPersonelProfile(@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<VwPersonel>builder()
 						.code(200)
@@ -102,7 +102,7 @@ public class UserController {
 				.build());
 	}
 
-	@GetMapping("get-company-manager-profile")
+	@GetMapping("/get-company-manager-profile")
 	public ResponseEntity<BaseResponse<VwCompanyManager>> getCompanyManagerProfile(@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<VwCompanyManager>builder()
 				.code(200)

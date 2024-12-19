@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.ikproje.entity.enums.EUserDepartmentType;
 import org.example.ikproje.entity.enums.EUserRole;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @NoArgsConstructor
@@ -29,6 +26,7 @@ public class VwCompanyManager {
     String companyName;
     String phone;
     String avatarUrl;
+    String companyLogoUrl;
     EUserRole userRole;
     //userDetails
     String region;
