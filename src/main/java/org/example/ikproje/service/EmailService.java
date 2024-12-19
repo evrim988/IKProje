@@ -28,7 +28,7 @@ public class EmailService {
 	}
 
 	public void sendResetPasswordEmail(String email, String token)  {
-		String url = "http://localhost:9090/v1/dev/user/reset-password?token=" + token;
+		String url = "http://localhost:3000/resetPassword?token=" + token;
 		String body = "Şifrenizi değiştirmek için lütfen aşağıdaki linke tıklayınız.\n"+url;
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(email);

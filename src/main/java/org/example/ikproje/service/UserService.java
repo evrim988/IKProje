@@ -210,8 +210,8 @@ public class UserService {
 		return true;
 	}
 
-	public Boolean resetPassword(ResetPasswordRequestDto dto) {
-		User user = getUserByToken(dto.token());
+	public Boolean resetPassword(String token,ResetPasswordRequestDto dto) {
+		User user = getUserByToken(token);
 		if(!dto.password().equals(dto.rePassword())) throw new IKProjeException(ErrorType.PASSWORDS_NOT_MATCH);
 		
 		user.setPassword(EncryptionManager.getEncryptedPassword(dto.password()));
