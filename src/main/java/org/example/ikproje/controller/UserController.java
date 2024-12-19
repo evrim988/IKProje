@@ -123,9 +123,9 @@ public class UserController {
 	}
 
 	@PostMapping(RESET_PASSWORD)
-	public ResponseEntity<BaseResponse<Boolean>> resetPassword(@RequestBody ResetPasswordRequestDto dto){
+	public ResponseEntity<BaseResponse<Boolean>> resetPassword(@RequestParam("token") String token,@RequestBody ResetPasswordRequestDto dto){
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-				.data(userService.resetPassword(dto))
+				.data(userService.resetPassword(token,dto))
 				.code(200)
 				.message("Şifre başarı ile değiştirildi.")
 				.success(true)
