@@ -23,29 +23,7 @@ import java.util.List;
 //Personel ve şirket yöneticileri personel sayfasına gittiği zaman bu bilgileri görebilsin
 public class VwPersonel {
 
-    public VwPersonel(Long id, String firstName, String lastName, String email, String companyName, String phone, String avatarUrl, EUserRole userRole, String region, String city, String district, String neighbourhood, String street, String postalCode, String aptNumber, LocalDate hireDate, String tcNo, String sgkNo, LocalDate birthDate, EUserDepartmentType departmentType) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.companyName = companyName;
-        this.phone = phone;
-        this.avatarUrl = avatarUrl;
-        this.userRole = userRole;
-        this.region = region;
-        this.city = city;
-        this.district = district;
-        this.neighbourhood = neighbourhood;
-        this.street = street;
-        this.postalCode = postalCode;
-        this.aptNumber = aptNumber;
-        this.hireDate = hireDate;
-        this.tcNo = tcNo;
-        this.sgkNo = sgkNo;
-        this.birthDate = birthDate;
-        this.departmentType = departmentType;
-        this.assets = new ArrayList<>();
-    }
+
 
     Long id;
     String firstName;
@@ -69,5 +47,4 @@ public class VwPersonel {
     String sgkNo;
     LocalDate birthDate;
     EUserDepartmentType departmentType;
-    List<VwAsset> assets;
 }

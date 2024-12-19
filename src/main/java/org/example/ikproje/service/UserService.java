@@ -2,10 +2,8 @@ package org.example.ikproje.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.ikproje.dto.request.LoginRequestDto;
-import org.example.ikproje.dto.request.RegisterRequestDto;
-import org.example.ikproje.dto.request.ResetPasswordRequestDto;
-import org.example.ikproje.dto.response.UserProfileResponseDto;
+import org.example.ikproje.dto.request.*;
+import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EState;
@@ -19,7 +17,9 @@ import org.example.ikproje.utility.EncryptionManager;
 import org.example.ikproje.utility.JwtManager;
 import org.example.ikproje.view.VwCompanyManager;
 import org.example.ikproje.view.VwPersonel;
+import org.example.ikproje.view.VwPersonelSummary;
 import org.example.ikproje.view.VwUnapprovedAccounts;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +39,6 @@ public class UserService {
 	private final EmailService emailService;
 	private final VerificationTokenService verificationTokenService;
 	private final CloudinaryService cloudinaryService;
-	private final AssetService assetService;
 	private final MembershipService membershipService;
 	
 	public Optional<User> findById(Long userId){
@@ -143,10 +142,11 @@ public class UserService {
 	}
 	
 	private void validateUser(User user) {
+		checkMailVerification(user);
 		if (user.getUserRole() == EUserRole.COMPANY_MANAGER) {
-			checkMailVerification(user);
 			checkApprovalStatus(user);
 		}
+
 	}
 	
 	private void checkMailVerification(User user) {
@@ -163,36 +163,8 @@ public class UserService {
 		}
 	}
 	
-
-	public UserProfileResponseDto getProfile(String token) {
-		Optional<Long> optionalUserId = jwtManager.validateToken(token);
-		if(optionalUserId.isEmpty()){
-			throw new IKProjeException(ErrorType.INVALID_TOKEN);
-		}
-		Optional<User> optionalUser = userRepository.findById(optionalUserId.get());
-		if (optionalUser.isEmpty()){
-			throw new IKProjeException(ErrorType.USER_NOTFOUND);
-		}
-		User user = optionalUser.get();
-
-		UserProfileResponseDto dto = UserProfileResponseDto.builder()
-				.firstName(optionalUser.get().getFirstName())
-				.lastName(optionalUser.get().getLastName())
-				.avatarUrl(optionalUser.get().getAvatarUrl())
-				.build();
-		return dto;
-	}
-	
 	public void addLogoToCompany(String token, MultipartFile file) throws IOException {
-		Optional<Long> optUserId = jwtManager.validateToken(token);
-		if (optUserId.isEmpty()){
-			throw new IKProjeException(ErrorType.INVALID_TOKEN);
-		}
-		Optional<User> optUser = userRepository.findById(optUserId.get());
-		if (optUser.isEmpty()){
-			throw new IKProjeException(ErrorType.USER_NOTFOUND);
-		}
-		User user = optUser.get();
+		User user = getUserByToken(token);
 		if (!user.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
 			throw new IKProjeException(ErrorType.UNAUTHORIZED);
 		}
@@ -206,15 +178,7 @@ public class UserService {
 	}
 	
 	public void addAvatarToUser(String token,  MultipartFile file) throws IOException {
-		Optional<Long> optUserId = jwtManager.validateToken(token);
-		if (optUserId.isEmpty()){
-			throw new IKProjeException(ErrorType.INVALID_TOKEN);
-		}
-		Optional<User> optUser = userRepository.findById(optUserId.get());
-		if (optUser.isEmpty()){
-			throw new IKProjeException(ErrorType.USER_NOTFOUND);
-		}
-		User user = optUser.get();
+		User user = getUserByToken(token);
 		if (!user.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
 			throw new IKProjeException(ErrorType.UNAUTHORIZED);
 		}
@@ -227,9 +191,8 @@ public class UserService {
 		if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
 		Optional<VwPersonel> vwPersonelOptional = userRepository.findVwPersonelByUserId(userIdOpt.get());
 		if (vwPersonelOptional.isEmpty()) throw new IKProjeException(ErrorType.USER_NOTFOUND);
-		VwPersonel vwPersonel = vwPersonelOptional.get();
-		vwPersonel.setAssets(assetService.getAllVwAssetsByUserId(vwPersonel.getId()));
-		return vwPersonel;
+
+        return vwPersonelOptional.get();
 	}
 
 	public VwCompanyManager getCompanyManagerProfile(String token){
@@ -237,9 +200,7 @@ public class UserService {
 		if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
 		Optional<VwCompanyManager> vwCompanyManagerOptional = userRepository.findVwCompanyManagerByUserId(userIdOpt.get());
 		if(vwCompanyManagerOptional.isEmpty()) throw new IKProjeException(ErrorType.USER_NOTFOUND);
-		VwCompanyManager vwCompanyManager = vwCompanyManagerOptional.get();
-		vwCompanyManager.setPersonelList(userRepository.findAllVwPersonelByCompanyId(vwCompanyManager.getCompanyId(),EUserRole.EMPLOYEE));
-		return vwCompanyManager;
+        return vwCompanyManagerOptional.get();
 	}
 
 	public Boolean forgotPassword(String email) {
@@ -252,15 +213,74 @@ public class UserService {
 	}
 
 	public Boolean resetPassword(ResetPasswordRequestDto dto) {
-		Optional<Long> userIdOpt = jwtManager.validateToken(dto.token());
-		if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
-		Optional<User> optUser = userRepository.findById(userIdOpt.get());
-		if (optUser.isEmpty()) throw new IKProjeException(ErrorType.USER_NOTFOUND);
-		User user = optUser.get();
+		User user = getUserByToken(dto.token());
 		if(!dto.password().equals(dto.rePassword())) throw new IKProjeException(ErrorType.PASSWORDS_NOT_MATCH);
 		
 		user.setPassword(EncryptionManager.getEncryptedPassword(dto.password()));
 		userRepository.save(user);
 		return true;
 	}
+
+	@Transactional
+	public Boolean addNewPersonel(CreateNewPersonelRequestDto dto){
+		if(userRepository.existsByEmail(dto.email())) throw new IKProjeException(ErrorType.MAIL_ALREADY_EXIST);
+		if(!dto.password().equals(dto.rePassword())) throw new IKProjeException(ErrorType.PASSWORDS_NOT_MATCH);
+		User companyManager = getUserByToken(dto.token());
+		User personel = User.builder()
+				.firstName(dto.firstName())
+				.lastName(dto.lastName())
+				.email(dto.email())
+				.password(EncryptionManager.getEncryptedPassword(dto.password()))
+				.phone(dto.phone())
+				.companyId(companyManager.getCompanyId())
+				.userRole(EUserRole.EMPLOYEE)
+				.build();
+		userRepository.save(personel);
+		Address personelAddress = Address.builder().build();
+		addressService.save(personelAddress); // adres ile ilgili bilgileri personel kendi sayfasında doldursun.
+		UserDetails personelDetails = UserDetails.builder()
+				.userId(personel.getId())
+				.addressId(personelAddress.getId())
+				.birthDate(dto.birthDate())
+				.departmentType(dto.departmentType())
+				.hireDate(dto.hireDate())
+				.salary(dto.salary())
+				.sgkNo(dto.sgkNo())
+				.tcNo(dto.tcNo())
+				.build();
+		userDetailsService.save(personelDetails);
+		emailService.sendEmail(personel.getEmail(),verificationTokenService.generateVerificationToken(personel.getId()));
+		return true;
+	}
+
+
+
+	//personeli aktif ya da pasif hale getirmek için. Komple silmek için ayrı bir metod gerekli mi ?
+	public Boolean updatePersonalState(UpdatePersonelStateRequestDto dto){
+		User companyManager = getUserByToken(dto.token());
+		Optional<User> personelOpt = userRepository.findById(dto.personelId());
+		if (personelOpt.isEmpty()) throw new IKProjeException(ErrorType.USER_NOTFOUND);
+		User personel = personelOpt.get();
+		if(!companyManager.getCompanyId().equals(personel.getCompanyId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
+		if(personel.getState().equals(EState.PASSIVE) || dto.stateToChange().equals(EState.ACTIVE)){
+			emailService.sendPersonelActivationConfirmationEmail(personel.getEmail());
+		}
+		personel.setState(dto.stateToChange());
+		userRepository.save(personel);
+		return true;
+	}
+
+	public User getUserByToken(String token){
+		Optional<Long> userIdOpt = jwtManager.validateToken(token);
+		if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		Optional<User> optUser = userRepository.findById(userIdOpt.get());
+		if (optUser.isEmpty()) throw new IKProjeException(ErrorType.USER_NOTFOUND);
+		return optUser.get();
+	}
+
+	public List<VwPersonelSummary> getPersonelList(String token){
+		User companyManager = getUserByToken(token);
+		return userRepository.findAllVwPersonelSummary(companyManager.getCompanyId());
+	}
+
 }

@@ -11,6 +11,8 @@ public class RestApis {
     
     public static final String USER=ROOT+"/user";
     public static final String ADMIN=ROOT+"/admin";
+    public static final String ASSET=ROOT+"/asset";
+    public static final String LEAVE= ROOT+"/leave";
 
     
     public static final String REGISTER="/register";
@@ -20,6 +22,9 @@ public class RestApis {
     public static final String GETPROFILE = "/get-profile";
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
+    public static final String ADD_PERSONEL = "/add-personel";
+    public static final String UPDATE_PERSONEL_STATE = "/update-personel-state";
+    public static final String GET_PERSONEL_LIST = "/get-personel-list";
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";

@@ -2,23 +2,21 @@ package org.example.ikproje.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.ikproje.dto.request.LoginRequestDto;
-import org.example.ikproje.dto.request.RegisterRequestDto;
-import org.example.ikproje.dto.request.ResetPasswordRequestDto;
-import org.example.ikproje.dto.request.UpdateCompanyLogoRequestDto;
+import org.example.ikproje.dto.request.*;
 import org.example.ikproje.dto.response.BaseResponse;
-import org.example.ikproje.dto.response.UserProfileResponseDto;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
 import org.example.ikproje.view.VwCompanyManager;
 import org.example.ikproje.view.VwPersonel;
+import org.example.ikproje.view.VwPersonelSummary;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.example.ikproje.constant.RestApis.*;
 @RestController
@@ -67,15 +65,6 @@ public class UserController {
 		                                 .build());
 	}
 
-	@GetMapping(GETPROFILE)
-	public ResponseEntity<BaseResponse<UserProfileResponseDto>> getProfile(String token){
-		return ResponseEntity.ok(BaseResponse.<UserProfileResponseDto>builder()
-						.code(200)
-						.message("Profil bilgisi başarıyla getirildi.")
-						.data(userService.getProfile(token))
-						.success(true)
-				.build());
-	}
 	
 	@PostMapping(value = UPDATE_COMPANY_LOGO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<BaseResponse<Boolean>> addLogoToCompany(@RequestParam String token,
@@ -119,7 +108,7 @@ public class UserController {
 				.code(200)
 				.data(userService.getCompanyManagerProfile(token))
 				.success(true)
-				.message("Personel profili getirildi.")
+				.message("Şirket yöneticisi profili getirildi.")
 				.build());
 	}
 
@@ -140,6 +129,35 @@ public class UserController {
 				.code(200)
 				.message("Şifre başarı ile değiştirildi.")
 				.success(true)
+				.build());
+	}
+
+	@PostMapping(ADD_PERSONEL)
+	public ResponseEntity<BaseResponse<Boolean>> addNewPersonel(@RequestBody @Valid CreateNewPersonelRequestDto dto){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+						.success(userService.addNewPersonel(dto))
+						.message("Yeni personel eklendi.")
+						.code(200)
+				.build());
+	}
+
+	@PostMapping(UPDATE_PERSONEL_STATE)
+	public ResponseEntity<BaseResponse<Boolean>> updatePersonelState(@RequestBody @Valid UpdatePersonelStateRequestDto dto){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+				.success(userService.updatePersonalState(dto))
+				.message("Personel aktiflik durumu güncellendi.")
+				.code(200)
+				.build());
+	}
+
+	//Personel özet bilgilerini liste halinde getiren endpoint, şirket yöneticisi için
+	@GetMapping(GET_PERSONEL_LIST)
+	public ResponseEntity<BaseResponse<List<VwPersonelSummary>>> getPersonelList(@RequestParam String token){
+		return ResponseEntity.ok(BaseResponse.<List<VwPersonelSummary>>builder()
+				.data(userService.getPersonelList(token))
+				.success(true)
+				.message("Şirket personel listesi getirildi.")
+				.code(200)
 				.build());
 	}
 

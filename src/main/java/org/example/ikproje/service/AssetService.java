@@ -1,8 +1,6 @@
 package org.example.ikproje.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.ikproje.entity.Asset;
-import org.example.ikproje.entity.User;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.repository.AssetRepository;
@@ -21,7 +19,11 @@ public class AssetService {
     private final JwtManager jwtManager;
 
 
-    public List<VwAsset> getAllVwAssetsByUserId(Long userId){
-        return assetRepository.getAllVwAssetsByUserId(userId);
+    public List<VwAsset> getAllPersonetAssets(String token){
+        Optional<Long> userIdOptional = jwtManager.validateToken(token);
+        if(userIdOptional.isPresent()){
+            return assetRepository.getAllVwAssetsByUserId(userIdOptional.get());
+        }
+        throw new IKProjeException(ErrorType.INVALID_TOKEN);
     }
 }
