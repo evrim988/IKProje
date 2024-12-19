@@ -3,7 +3,6 @@ package org.example.ikproje.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.*;
-import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EState;
@@ -19,7 +18,6 @@ import org.example.ikproje.view.VwCompanyManager;
 import org.example.ikproje.view.VwPersonel;
 import org.example.ikproje.view.VwPersonelSummary;
 import org.example.ikproje.view.VwUnapprovedAccounts;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -270,7 +268,99 @@ public class UserService {
 		return true;
 	}
 
-	public User getUserByToken(String token){
+
+
+	public List<VwPersonelSummary> getPersonelList(String token){
+		User companyManager = getUserByToken(token);
+		return userRepository.findAllVwPersonelSummary(companyManager.getCompanyId());
+	}
+
+	@Transactional
+	public Boolean updatePersonelProfile(UpdatePersonelProfileRequestDto dto){
+		User personel = getUserByToken(dto.token());
+		if(!dto.id().equals(personel.getId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
+		personel.setFirstName(dto.firstName());
+		personel.setLastName(dto.lastName());
+		personel.setEmail(dto.email());
+		personel.setPhone(dto.phone());
+		personel.setAvatarUrl(dto.avatarUrl());
+		personel.setUpdateAt(System.currentTimeMillis());
+		userRepository.save(personel);
+
+		UserDetails personelDetails = userDetailsService.findByUserId(personel.getId());
+		personelDetails.setHireDate(dto.hireDate());
+		personelDetails.setTcNo(dto.tcNo());
+		personelDetails.setSgkNo(dto.sgkNo());
+		personelDetails.setBirthDate(dto.birthDate());
+		personelDetails.setDepartmentType(dto.departmentType());
+		personelDetails.setUpdateAt(System.currentTimeMillis());
+		userDetailsService.save(personelDetails);
+
+		Address personelAddress = addressService.findById(personelDetails.getAddressId());
+		personelAddress.setRegion(dto.region());
+		personelAddress.setCity(dto.city());
+		personelAddress.setDistrict(dto.district());
+		personelAddress.setNeighbourhood(dto.neighbourhood());
+		personelAddress.setStreet(dto.street());
+		personelAddress.setPostalCode(dto.postalCode());
+		personelAddress.setAptNumber(dto.aptNumber());
+		personelAddress.setUpdateAt(System.currentTimeMillis());
+		addressService.save(personelAddress);
+		return true;
+	}
+
+	@Transactional
+	public Boolean updateCompanyManagerProfile(UpdateCompanyManagerProfileRequestDto dto){
+		User companyManager = getUserByToken(dto.token());
+		if(!dto.id().equals(companyManager.getId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
+		companyManager.setFirstName(dto.firstName());
+		companyManager.setLastName(dto.lastName());
+		companyManager.setEmail(dto.email());
+		companyManager.setPhone(dto.phone());
+		companyManager.setUpdateAt(System.currentTimeMillis());
+		userRepository.save(companyManager);
+
+		UserDetails companyManagerDetails = userDetailsService.findByUserId(companyManager.getId());
+		companyManagerDetails.setSalary(dto.salary());
+		companyManagerDetails.setHireDate(dto.hireDate());
+		companyManagerDetails.setTcNo(dto.tcNo());
+		companyManagerDetails.setSgkNo(dto.sgkNo());
+		companyManagerDetails.setBirthDate(dto.birthDate());
+		companyManagerDetails.setDepartmentType(dto.departmentType());
+		companyManagerDetails.setUpdateAt(System.currentTimeMillis());
+		userDetailsService.save(companyManagerDetails);
+
+		Address companyManagerAddress = addressService.findById(companyManagerDetails.getAddressId());
+		companyManagerAddress.setRegion(dto.region());
+		companyManagerAddress.setCity(dto.city());
+		companyManagerAddress.setDistrict(dto.district());
+		companyManagerAddress.setNeighbourhood(dto.neighbourhood());
+		companyManagerAddress.setStreet(dto.street());
+		companyManagerAddress.setPostalCode(dto.postalCode());
+		companyManagerAddress.setAptNumber(dto.aptNumber());
+		companyManagerAddress.setUpdateAt(System.currentTimeMillis());
+		addressService.save(companyManagerAddress);
+
+		Company company = companyService.findById(companyManager.getCompanyId()).get();
+		company.setName(dto.companyName());
+		company.setPhone(dto.companyPhone());
+		company.setFoundationDate(dto.companyFoundationDate());
+		company.setIndustry(dto.companyIndustry());
+
+		Address companyAddress = addressService.findById(company.getAddressId());
+		companyAddress.setRegion(dto.companyRegion());
+		companyAddress.setCity(dto.companyCity());
+		companyAddress.setDistrict(dto.companyDistrict());
+		companyAddress.setStreet(dto.companyStreet());
+		companyAddress.setPostalCode(dto.companyPostalCode());
+		companyAddress.setAptNumber(dto.companyAptNumber());
+		companyAddress.setUpdateAt(System.currentTimeMillis());
+		addressService.save(companyAddress);
+
+		return true;
+	}
+
+	private User getUserByToken(String token){
 		Optional<Long> userIdOpt = jwtManager.validateToken(token);
 		if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
 		Optional<User> optUser = userRepository.findById(userIdOpt.get());
@@ -278,9 +368,6 @@ public class UserService {
 		return optUser.get();
 	}
 
-	public List<VwPersonelSummary> getPersonelList(String token){
-		User companyManager = getUserByToken(token);
-		return userRepository.findAllVwPersonelSummary(companyManager.getCompanyId());
-	}
+
 
 }

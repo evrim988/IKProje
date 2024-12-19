@@ -161,6 +161,24 @@ public class UserController {
 				.build());
 	}
 
+	@PutMapping("/update-personel-profile")
+	public ResponseEntity<BaseResponse<Boolean>> updatePersonelProfile(@RequestBody @Valid UpdatePersonelProfileRequestDto dto){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+						.success(userService.updatePersonelProfile(dto))
+						.message("Kullanıcı profili güncellendi.")
+						.code(200)
+				.build());
+	}
+	@PutMapping("/update-company-manager-profile")
+	public ResponseEntity<BaseResponse<Boolean>> updateCompanyManagerProfile(@RequestBody @Valid UpdateCompanyManagerProfileRequestDto dto){
+		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+				.success(userService.updateCompanyManagerProfile(dto))
+				.message("Yönetici profili güncellendi.")
+				.code(200)
+				.build());
+	}
+
+
 
 
 }
