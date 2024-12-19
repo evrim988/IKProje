@@ -4,6 +4,7 @@ import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.view.VwCompanyManager;
 import org.example.ikproje.view.VwPersonel;
+import org.example.ikproje.view.VwPersonelSummary;
 import org.example.ikproje.view.VwUnapprovedAccounts;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +32,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT NEW org.example.ikproje.view.VwUnapprovedAccounts(u.id,u.firstName,u.lastName,u.phone,u.email,c.name) FROM User u JOIN Company c ON u.companyId=c.id WHERE (u.isMailVerified=true AND u.isApproved=org.example.ikproje.entity.enums.EIsApproved.PENDING) ")
 	List<VwUnapprovedAccounts> getAllUnapprovedAccounts();
+
+	@Query("SELECT new org.example.ikproje.view.VwPersonelSummary(u.id,u.firstName,u.lastName,ud.birthDate,ud.hireDate,ud.departmentType,u.state) FROM User u JOIN UserDetails ud ON u.id=ud.userId WHERE u.companyId=?1 AND u.userRole=org.example.ikproje.entity.enums.EUserRole.EMPLOYEE")
+	public List<VwPersonelSummary> findAllVwPersonelSummary(Long companyId);
 
 }
