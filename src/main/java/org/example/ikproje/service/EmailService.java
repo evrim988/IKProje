@@ -3,6 +3,8 @@ package org.example.ikproje.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.example.ikproje.entity.Leave;
+import org.example.ikproje.entity.enums.ELeaveStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -40,6 +42,28 @@ public class EmailService {
 		msg.setTo(email);
 		msg.setSubject("About register");
 		msg.setText(message);
+		mailSender.send(msg);
+	}
+
+	public void sendPersonelActivationConfirmationEmail(String email)  {
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(email);
+		msg.setSubject("Şirket hesabı aktifleştirme hk.");
+		msg.setText("Şirket hesabınız aktifleştirilmiştir. Tanımlanan mail ve şifreniz ile giriş yapabilirsiniz.");
+		mailSender.send(msg);
+	}
+
+	public void sendLeaveNotificationEmail(String email, Leave leave){
+		String approvedMessage = "Yapmış olduğunuz izin başvurusu yönetici tarafından onaylanmıştır. İyi tatiller dileriz\n" +
+				"İzin başlangıç tarihi: "+leave.getStartDate()+"\n"+
+				"İzin bitiş tarihi    : "+leave.getEndDate()+"\n"+
+				"İzin türü            :"+leave.getLeaveType();
+		String rejectedMessage = "Yapmış olduğunuz izin başvurusu reddedilmiştir. İyi günler dileriz.\n"+
+				"İzin açıklaması: "+leave.getDescription();
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(email);
+		msg.setSubject("İzin başvurusu hk.");
+		msg.setText(leave.getLeaveStatus().equals(ELeaveStatus.APPROVED) ? approvedMessage : rejectedMessage);
 		mailSender.send(msg);
 	}
 

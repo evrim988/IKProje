@@ -9,10 +9,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorType {
     INTERNAL_SERVER_ERROR(500,"Sunucuda beklenmeyen bir hata oldu. Lütfen tekrar deneyiniz",HttpStatus.INTERNAL_SERVER_ERROR),
     VALIDATION_ERROR(400,"Girilen parametreler hatalıdır. Lütfen kontrol ederek tekrar deneyiniz.", HttpStatus.BAD_REQUEST),
-    
+    PAGE_NOT_FOUND(404,"Sayfa bulunamadı", HttpStatus.NOT_FOUND),
     USER_NOTFOUND(5001,"Kullanıcı Bulunamadı!",HttpStatus.NOT_FOUND),
     COMPANY_NOTFOUND(5002,"Şirket Bulunamadı!",HttpStatus.NOT_FOUND),
-    UNAUTHORIZED(5003,"Bu işlem için yetkiniz yok!",HttpStatus.NOT_FOUND),
+    UNAUTHORIZED(5003,"Bu işlem için yetkiniz yok!",HttpStatus.FORBIDDEN),
     INVALID_TOKEN(9001,"Geçersiz token bilgisi",HttpStatus.BAD_REQUEST),
     EXP_TOKEN(9002,"Token'in süresi doldu!",HttpStatus.BAD_REQUEST),
     TOKEN_ALREADY_USED(9003,"Bu token zaten kullanıldı.",HttpStatus.BAD_REQUEST),
