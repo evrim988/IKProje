@@ -23,7 +23,14 @@ public class WebSecurityConfig {
                 .requestMatchers("/**").permitAll());
 
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.addAllowedOrigin("http://localhost:3000");
+                    corsConfig.addAllowedMethod("*");
+                    corsConfig.addAllowedHeader("*");
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                }))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
