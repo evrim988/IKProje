@@ -23,6 +23,7 @@ public class AdminService {
     private final UserService userService;
     private final JwtManager jwtManager;
     private final EmailService emailService;
+    private final CompanyManagerService companyManagerService;
 
     public String login(LoginRequestDto dto) {
         Optional<Admin> adminOptional = adminRepository.findByEmailAndPassword(dto.email(),dto.password());
@@ -53,7 +54,7 @@ public class AdminService {
     
     
     public List<VwUnapprovedAccounts> getAllUnapprovedCompanies() {
-       return userService.getAllUnapprovedAccounts();
+       return companyManagerService.getAllUnapprovedAccounts();
     }
     
     public void rejectAccount(Long userId,String rejectionMessage) {

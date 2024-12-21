@@ -10,6 +10,10 @@ public class RestApis {
     private static final String ROOT = VERSION+ DEVELOPER;
     
     public static final String USER=ROOT+"/user";
+    public static final String AUTH=ROOT+"/auth";
+    public static final String COMPANY_MANAGER=ROOT+"/companymanager";
+    public static final String EMPLOYEE = ROOT+"/employee";
+
     public static final String ADMIN=ROOT+"/admin";
     public static final String ASSET=ROOT+"/asset";
     public static final String LEAVE= ROOT+"/leave";
