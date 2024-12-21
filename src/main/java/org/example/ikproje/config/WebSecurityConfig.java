@@ -28,7 +28,7 @@ public class WebSecurityConfig {
                     corsConfig.addAllowedOrigin("http://localhost:3000");
                     corsConfig.addAllowedMethod("*");
                     corsConfig.addAllowedHeader("*");
-                    corsConfig.setAllowCredentials(true);
+                    corsConfig.setAllowCredentials(true);   
                     return corsConfig;
                 }))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
