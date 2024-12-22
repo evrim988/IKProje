@@ -158,6 +158,7 @@ public class CompanyManagerService {
         companyAddress.setCity(dto.companyCity());
         companyAddress.setDistrict(dto.companyDistrict());
         companyAddress.setStreet(dto.companyStreet());
+        companyAddress.setNeighbourhood(dto.companyNeighbourhood());
         companyAddress.setPostalCode(dto.companyPostalCode());
         companyAddress.setAptNumber(dto.companyAptNumber());
         companyAddress.setUpdateAt(System.currentTimeMillis());
