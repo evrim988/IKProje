@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.example.ikproje.entity.enums.EUserRole;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,7 +26,9 @@ public class JwtManager {
     Date createdDate = new Date(System.currentTimeMillis());
     Date expirationDate = new Date(System.currentTimeMillis() + ExDate);
 
-    public String createUserToken(Long authId) {
+    // Token oluştururken userRole'ü de aldım.
+    // FrontEnd'de token'i decode edip içerisinden userRole'ü alacağım.
+    public String createUserToken(Long authId, EUserRole userRole) {
 
 
         String token = JWT.create()
@@ -35,7 +38,7 @@ public class JwtManager {
                 .withExpiresAt(expirationDate)
                 .withClaim("authId", authId)
                 .withClaim("key", "IKProje")
-                .withClaim("role","USER")
+                .withClaim("role",userRole.name())
                 .sign(algorithm);
         return token;
     }

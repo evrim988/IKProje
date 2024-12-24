@@ -122,7 +122,7 @@ public class UserService {
 
         validateUser(user);
 
-        return jwtManager.createUserToken(user.getId());
+        return jwtManager.createUserToken(user.getId(),user.getUserRole());
     }
 
     private void validateUser(User user) {
