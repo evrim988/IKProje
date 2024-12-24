@@ -57,6 +57,7 @@ public class UserService {
         user.setCompanyId(company.getId());
         user.setState(EState.ACTIVE);
         user.setIsApproved(EIsApproved.PENDING);
+        user.setGender(dto.gender());
         userRepository.save(user);
         userDetails.setUserId(user.getId());
         userDetailsService.save(userDetails);

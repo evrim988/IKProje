@@ -9,6 +9,7 @@ import org.example.ikproje.entity.Address;
 import org.example.ikproje.entity.Company;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.UserDetails;
+import org.example.ikproje.entity.enums.ELeaveType;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.exception.ErrorType;
@@ -74,6 +75,7 @@ public class CompanyManagerService {
                 .email(dto.email())
                 .password(EncryptionManager.getEncryptedPassword(dto.password()))
                 .phone(dto.phone())
+                .gender(dto.gender())
                 .companyId(companyManager.getCompanyId())
                 .userRole(EUserRole.EMPLOYEE)
                 .build();
@@ -163,7 +165,6 @@ public class CompanyManagerService {
         companyAddress.setAptNumber(dto.companyAptNumber());
         companyAddress.setUpdateAt(System.currentTimeMillis());
         addressService.save(companyAddress);
-
         return true;
     }
 

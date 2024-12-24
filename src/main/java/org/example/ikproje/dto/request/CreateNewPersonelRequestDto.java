@@ -1,5 +1,6 @@
 package org.example.ikproje.dto.request;
 
+import org.example.ikproje.entity.enums.EGender;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public record CreateNewPersonelRequestDto(
         Double salary,
         String tcNo,
         String sgkNo,
+		EGender gender,
         LocalDate birthDate,
         LocalDate hireDate,
         EUserDepartmentType departmentType

@@ -19,6 +19,18 @@ public class RestApis {
     public static final String LEAVE= ROOT+"/leave";
 
     
+    public static final String APPROVE_ACCOUNT="/approve-account";
+    public static final String REJECT_ACCOUNT="/reject-account";
+    public static final String GET_UNAPPROVED_COMPANIES="/get-unapproved-companies";
+    
+    public static final String GET_PERSONEL_ASSETS="/get-personel-assets";
+    
+    public static final String GET_COMPANY_MANAGER_PROFILE="/get-company-manager-profile";
+    public static final String UPDATE_COMPANY_MANAGER_PROFILE="/update-company-manager-profile";
+    
+    public static final String GET_PERSONEL_PROFILE="/get-personel-profile";
+    public static final String UPDATE_PERSONEL_PROFILE="/update-personel-profile";
+    
     public static final String REGISTER="/register";
     public static final String LOGIN="/login";
     public static final String UPDATE="/update";
@@ -29,6 +41,10 @@ public class RestApis {
     public static final String ADD_PERSONEL = "/add-personel";
     public static final String UPDATE_PERSONEL_STATE = "/update-personel-state";
     public static final String GET_PERSONEL_LIST = "/get-personel-list";
+    public static final String NEW_LEAVE_REQUEST = "/new-leave-request";
+    public static final String GET_LEAVE_REQUEST = "/get-leave-requests";
+    public static final String APPROVE_LEAVE_REQUEST = "/approve-leave-request";
+    public static final String REJECT_LEAVE_REQUEST = "/reject-leave-request";
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";

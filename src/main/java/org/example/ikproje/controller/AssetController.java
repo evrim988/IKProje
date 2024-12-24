@@ -21,7 +21,7 @@ import static org.example.ikproje.constant.RestApis.*;
 public class AssetController {
     private final AssetService assetService;
 
-    @GetMapping("/personel-asset")
+    @GetMapping(GET_PERSONEL_ASSETS)
     public ResponseEntity<BaseResponse<List<VwAsset>>> getAllPersonelAssets(String token){
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
                         .success(true)

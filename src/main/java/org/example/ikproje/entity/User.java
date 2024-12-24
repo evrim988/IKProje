@@ -3,6 +3,7 @@ package org.example.ikproje.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.example.ikproje.entity.enums.EGender;
 import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EUserRole;
 
@@ -25,6 +26,8 @@ public class User extends BaseEntity {
     Long companyId;
     String phone;
     String avatarUrl;
+    @Enumerated(EnumType.STRING)
+    EGender gender;
     @Enumerated(EnumType.STRING)
     EUserRole userRole;
     @Builder.Default

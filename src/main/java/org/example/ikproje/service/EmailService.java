@@ -18,7 +18,7 @@ public class EmailService {
 
 	
 	public void sendEmail(String alici, String token)  {
-		String url  = "http://localhost:9090/v1/dev/user/verify-account?token=" + token;
+		String url  = "http://localhost:9090/v1/dev/auth/verify-account?token=" + token;
 		String body = "Hesabınızı onaylamak için lütfen aşağıdaki linke tıklayınız. \n\n"+url;
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(alici);
@@ -53,17 +53,26 @@ public class EmailService {
 		mailSender.send(msg);
 	}
 
-	public void sendLeaveNotificationEmail(String email, Leave leave){
+	public void sendApprovedLeaveNotificationEmail(String email, Leave leave){
 		String approvedMessage = "Yapmış olduğunuz izin başvurusu yönetici tarafından onaylanmıştır. İyi tatiller dileriz\n" +
 				"İzin başlangıç tarihi: "+leave.getStartDate()+"\n"+
 				"İzin bitiş tarihi    : "+leave.getEndDate()+"\n"+
 				"İzin türü            :"+leave.getLeaveType();
-		String rejectedMessage = "Yapmış olduğunuz izin başvurusu reddedilmiştir. İyi günler dileriz.\n"+
-				"İzin açıklaması: "+leave.getDescription();
+		
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(email);
 		msg.setSubject("İzin başvurusu hk.");
-		msg.setText(leave.getLeaveStatus().equals(ELeaveStatus.APPROVED) ? approvedMessage : rejectedMessage);
+		msg.setText(approvedMessage);
+		mailSender.send(msg);
+	}
+	
+	public void sendRejectedLeaveNotificationEmail(String email, Leave leave, String message){
+		String rejectedMessage = "Yapmış olduğunuz izin başvurusu reddedilmiştir. İyi günler dileriz.\n"+
+				"İzin açıklaması: "+message;
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(email);
+		msg.setSubject("İzin başvurusu hk.");
+		msg.setText(rejectedMessage);
 		mailSender.send(msg);
 	}
 
