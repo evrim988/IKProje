@@ -18,7 +18,7 @@ import static org.example.ikproje.constant.RestApis.*;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
-    @GetMapping("/get-personel-profile")
+    @GetMapping(GET_PERSONEL_PROFILE)
     public ResponseEntity<BaseResponse<VwPersonel>> getPersonelProfile(@RequestParam String token){
         return ResponseEntity.ok(BaseResponse.<VwPersonel>builder()
                 .code(200)
@@ -29,7 +29,7 @@ public class EmployeeController {
     }
 
 
-    @PutMapping("/update-personel-profile")
+    @PutMapping(UPDATE_PERSONEL_PROFILE)
     public ResponseEntity<BaseResponse<Boolean>> updatePersonelProfile(@RequestBody @Valid UpdatePersonelProfileRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .success(employeeService.updatePersonelProfile(dto))

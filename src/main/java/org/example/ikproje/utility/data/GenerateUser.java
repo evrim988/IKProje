@@ -4,6 +4,7 @@ import org.example.ikproje.entity.Address;
 import org.example.ikproje.entity.Company;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.UserDetails;
+import org.example.ikproje.entity.enums.EGender;
 import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 import org.example.ikproje.entity.enums.EUserRole;
@@ -22,6 +23,7 @@ public class GenerateUser {
                 .companyId(1L)
                 .firstName("Vehbi")
                 .lastName("Koç")
+                .gender(EGender.MALE)
                 .isApproved(EIsApproved.APPROVED)
                 .isMailVerified(true)
                 .email("vehbi@gmail.com")
@@ -38,6 +40,7 @@ public class GenerateUser {
                 .lastName("Oray")
                 .isMailVerified(true)
                 .email("gizem@gmail.com")
+                .gender(EGender.FEMALE)
                 .password(EncryptionManager.getEncryptedPassword("sifre123"))
                 .build();
 
@@ -49,6 +52,7 @@ public class GenerateUser {
                 .lastName("Karaca")
                 .isMailVerified(true)
                 .email("mehmet@gmail.com")
+                .gender(EGender.MALE)
                 .password(EncryptionManager.getEncryptedPassword("sifre123"))
                 .build();
 
@@ -60,6 +64,7 @@ public class GenerateUser {
                 .lastName("Gök")
                 .isMailVerified(true)
                 .email("furkan@gmail.com")
+                .gender(EGender.MALE)
                 .password(EncryptionManager.getEncryptedPassword("sifre123"))
                 .build();
         return List.of(personel1, personel2, personel3);

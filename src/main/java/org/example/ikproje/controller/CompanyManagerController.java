@@ -38,7 +38,7 @@ public class CompanyManagerController {
                 .message("Şirket logosu eklendi.")
                 .build());
     }
-    @GetMapping("/get-company-manager-profile")
+    @GetMapping(GET_COMPANY_MANAGER_PROFILE)
     public ResponseEntity<BaseResponse<VwCompanyManager>> getCompanyManagerProfile(@RequestParam String token){
         return ResponseEntity.ok(BaseResponse.<VwCompanyManager>builder()
                 .code(200)
@@ -77,7 +77,7 @@ public class CompanyManagerController {
                 .build());
     }
 
-    @PutMapping("/update-company-manager-profile")
+    @PutMapping(UPDATE_COMPANY_MANAGER_PROFILE)
     public ResponseEntity<BaseResponse<Boolean>> updateCompanyManagerProfile(@RequestBody @Valid UpdateCompanyManagerProfileRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .success(companyManagerService.updateCompanyManagerProfile(dto))

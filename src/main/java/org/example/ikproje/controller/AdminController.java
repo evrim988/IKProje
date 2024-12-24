@@ -20,7 +20,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN)
     public ResponseEntity<BaseResponse<String>> login(@RequestBody LoginRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<String>builder()
                         .code(200)
@@ -30,7 +30,7 @@ public class AdminController {
                 .build());
     }
     
-    @PutMapping("/approveAccount")
+    @PutMapping(APPROVE_ACCOUNT)
     public ResponseEntity<BaseResponse<Boolean>> approveAccount(Long userId, String confirmationMessage){
         adminService.approveAccount(userId,confirmationMessage);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
@@ -40,7 +40,7 @@ public class AdminController {
                                          .message("Kayıt onaylandı.")
                                              .build());
     }
-    @PutMapping("/rejectAccount")
+    @PutMapping(REJECT_ACCOUNT)
     public ResponseEntity<BaseResponse<Boolean>> rejectAccount(Long userId,String rejectionMessage ){
         adminService.rejectAccount(userId,rejectionMessage);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
@@ -50,7 +50,7 @@ public class AdminController {
                                          .message("Kayıt onayı başarıyla reddedildi.")
                                              .build());
     }
-    @GetMapping("/get-unapproved-companies")
+    @GetMapping(GET_UNAPPROVED_COMPANIES)
     public ResponseEntity<BaseResponse<List<VwUnapprovedAccounts>>> getUnapprovedCompanies() {
         return ResponseEntity.ok(BaseResponse.<List<VwUnapprovedAccounts>>builder()
                                          .code(200)

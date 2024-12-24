@@ -1,6 +1,7 @@
 package org.example.ikproje.dto.request;
 
 import jakarta.validation.constraints.Pattern;
+import org.example.ikproje.entity.enums.EGender;
 import org.example.ikproje.entity.enums.EMembershipType;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 
@@ -16,6 +17,7 @@ public record RegisterRequestDto(
 		String tcNo,
 		String sgkNo,
 		LocalDate birthDate,
+		EGender gender,
 		EUserDepartmentType departmentType,
 		String region,
 		String city,

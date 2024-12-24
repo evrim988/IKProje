@@ -19,7 +19,7 @@ import static org.example.ikproje.constant.RestApis.*;
 public class LeaveController {
     private final LeaveService leaveService;
 
-    @PostMapping("/new-leave-request")
+    @PostMapping(NEW_LEAVE_REQUEST)
     public ResponseEntity<BaseResponse<Boolean>> createNewLeaveRequest(@RequestBody NewLeaveRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .code(200)
@@ -28,7 +28,7 @@ public class LeaveController {
                 .build());
     }
 
-    @GetMapping("/get-leave-requests")
+    @GetMapping(GET_LEAVE_REQUEST)
     public ResponseEntity<BaseResponse<List<Leave>>> getLeaveRequests(@RequestParam String token){
         return ResponseEntity.ok(BaseResponse.<List<Leave>>builder()
                 .code(200)
@@ -38,7 +38,7 @@ public class LeaveController {
                 .build());
     }
 
-    @PostMapping("approve-leave-request")
+    @PostMapping(APPROVE_LEAVE_REQUEST)
     public ResponseEntity<BaseResponse<Boolean>> approveLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .success(leaveService.approveLeaveRequest(token,leaveId))
@@ -47,12 +47,14 @@ public class LeaveController {
                 .build());
     }
 
-    @PostMapping("reject-leave-request")
-    public ResponseEntity<BaseResponse<Boolean>> rejectLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
+    @PostMapping(REJECT_LEAVE_REQUEST)
+    public ResponseEntity<BaseResponse<Boolean>> rejectLeaveRequest(@RequestParam String token,
+                                                                    @RequestParam Long leaveId,
+                                                                    @RequestParam String rejectionMessage){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-                .success(leaveService.rejectLeaveRequest(token,leaveId))
+                .success(leaveService.rejectLeaveRequest(token,leaveId,rejectionMessage))
                 .code(200)
-                .message("Personel izin isteği onaylandı.")
+                .message("Personel izin isteği reddedildi.")
                 .build());
     }
 
