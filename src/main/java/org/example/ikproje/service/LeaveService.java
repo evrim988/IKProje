@@ -52,6 +52,13 @@ public class LeaveService {
         return leaveRepository.findAllByLeaveStatusAndCompanyId(ELeaveStatus.PENDING,companyManager.getCompanyId());
     }
 
+    //personelin talepte bulunduğu izin listesi
+    public List<Leave> getPersonelRequestLeaveList(String token){
+        User personel = getUserByToken(token);
+        if(!personel.getUserRole().equals(EUserRole.EMPLOYEE)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
+        return leaveRepository.findAllByLeaveStatusAndUserId(ELeaveStatus.PENDING,personel.getId());
+    }
+
 
     public Boolean approveLeaveRequest(String token,Long leaveId){
         User companyManager = getUserByToken(token);

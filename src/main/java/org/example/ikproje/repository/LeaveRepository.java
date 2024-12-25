@@ -9,4 +9,6 @@ import java.util.List;
 public interface LeaveRepository extends JpaRepository<Leave,Long> {
 
     List<Leave> findAllByLeaveStatusAndCompanyId(ELeaveStatus status,Long companyId);
+
+    List<Leave> findAllByLeaveStatusAndUserId(ELeaveStatus status,Long userId);
 }
