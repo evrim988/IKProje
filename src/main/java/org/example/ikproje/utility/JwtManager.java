@@ -29,8 +29,7 @@ public class JwtManager {
     // Token oluştururken userRole'ü de aldım.
     // FrontEnd'de token'i decode edip içerisinden userRole'ü alacağım.
     public String createUserToken(Long authId, EUserRole userRole) {
-
-
+        
         String token = JWT.create()
                 .withAudience()
                 .withIssuer(issuer)

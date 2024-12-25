@@ -10,6 +10,7 @@ public enum ErrorType {
     INTERNAL_SERVER_ERROR(500,"Sunucuda beklenmeyen bir hata oldu. Lütfen tekrar deneyiniz",HttpStatus.INTERNAL_SERVER_ERROR),
     VALIDATION_ERROR(400,"Girilen parametreler hatalıdır. Lütfen kontrol ederek tekrar deneyiniz.", HttpStatus.BAD_REQUEST),
     PAGE_NOT_FOUND(404,"Sayfa bulunamadı", HttpStatus.NOT_FOUND),
+    LEAVE_ERROR(6008,"İzin ile ilgili bir hata oluştu.", HttpStatus.NOT_FOUND),
     USER_NOTFOUND(5001,"Kullanıcı Bulunamadı!",HttpStatus.NOT_FOUND),
     COMPANY_NOTFOUND(5002,"Şirket Bulunamadı!",HttpStatus.NOT_FOUND),
     UNAUTHORIZED(5003,"Bu işlem için yetkiniz yok!",HttpStatus.FORBIDDEN),
@@ -26,7 +27,7 @@ public enum ErrorType {
     USER_NOT_APPROVED(6006,"Site yöneticisi kaydınızı henüz onaylamamıştır veya kaydınız reddedilmiştir. Lütfen mail kutunuzu kontrol ediniz.",HttpStatus.BAD_REQUEST),
     MAIL_NOT_VERIFIED(6004,"Mail henüz onaylanmamış, lütfen mailinize gelen onay linkine tıklayınız.",
                       HttpStatus.BAD_REQUEST),
-    MAIL_NOT_FOUND(6006,"Girilen mail ile kayıtlı kullanıcı bulunamadı.",HttpStatus.BAD_REQUEST),
+    MAIL_NOT_FOUND(6007,"Girilen mail ile kayıtlı kullanıcı bulunamadı.",HttpStatus.BAD_REQUEST),
     ADMIN_NOT_FOUND(9002,"Mail ya da şifre hatalı.",HttpStatus.BAD_REQUEST);
 
 
