@@ -188,7 +188,7 @@ public class UserService {
 
     public void addAvatarToUser(String token,  MultipartFile file) throws IOException {
         User user = getUserByToken(token);
-        if (!user.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
+        if (!user.getUserRole().equals(EUserRole.EMPLOYEE)){
             throw new IKProjeException(ErrorType.UNAUTHORIZED);
         }
         user.setAvatarUrl(cloudinaryService.uploadFile(file));

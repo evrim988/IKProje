@@ -38,6 +38,16 @@ public class LeaveController {
                 .build());
     }
 
+    @GetMapping("/get-personel-request-leave")
+    public ResponseEntity<BaseResponse<List<Leave>>> getPersonelRequestLeaveList(@RequestParam String token){
+        return ResponseEntity.ok(BaseResponse.<List<Leave>>builder()
+                        .code(200)
+                        .message("Personel talepte bulunduğu izin istekleri listesi.")
+                        .success(true)
+                        .data(leaveService.getPersonelRequestLeaveList(token))
+                .build());
+    }
+
     @PostMapping(APPROVE_LEAVE_REQUEST)
     public ResponseEntity<BaseResponse<Boolean>> approveLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
