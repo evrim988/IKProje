@@ -14,6 +14,7 @@ import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.mapper.LeaveMapper;
 import org.example.ikproje.repository.LeaveRepository;
 import org.example.ikproje.utility.JwtManager;
+import org.example.ikproje.view.VwAllPersonelLeaveList;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +91,10 @@ public class LeaveService {
     private double getMultiplierForAnnualLeave(NewLeaveRequestDto dto, UserDetails personelDetails) {
         double multiplierForAnnualLeave;
         long numberOfDaysWorked = ChronoUnit.DAYS.between( personelDetails.getHireDate(), LocalDate.now());
+        System.out.println("number of days worked" + numberOfDaysWorked);
+        System.out.println("TESTTTT");
         if (numberOfDaysWorked<365){
+            System.out.println("TEST");
             if(dto.leaveType().equals(ELeaveType.YILLIK_IZIN)) throw new IKProjeException(ErrorType.NOT_ELIGIBLE_FOR_ANNUAL_LEAVE);
             multiplierForAnnualLeave=0;
         }
@@ -111,10 +115,10 @@ public class LeaveService {
 
 
     //Şirket yöneticisine gelen izin istekleri
-    public List<Leave> getAllLeaveRequests(String token){
+    public List<VwAllPersonelLeaveList> getAllLeaveRequests(String token){
         User companyManager = getUserByToken(token);
         if(!companyManager.getUserRole().equals(EUserRole.COMPANY_MANAGER)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
-        return leaveRepository.findAllByLeaveStatusAndCompanyId(ELeaveStatus.PENDING,companyManager.getCompanyId());
+        return leaveRepository.findAllVwPersonelLeaveList(companyManager.getCompanyId());
     }
 
     //personelin talepte bulunduğu izin listesi
