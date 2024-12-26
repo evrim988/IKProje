@@ -6,6 +6,7 @@ import org.example.ikproje.dto.request.UpdateLeaveRequstDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.entity.Leave;
 import org.example.ikproje.service.LeaveService;
+import org.example.ikproje.view.VwAllPersonelLeaveList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +30,10 @@ public class LeaveController {
                 .build());
     }
 
+    //Şirket yöneticisi için
     @GetMapping(GET_LEAVE_REQUEST)
-    public ResponseEntity<BaseResponse<List<Leave>>> getLeaveRequests(@RequestParam String token){
-        return ResponseEntity.ok(BaseResponse.<List<Leave>>builder()
+    public ResponseEntity<BaseResponse<List<VwAllPersonelLeaveList>>> getLeaveRequests(@RequestParam String token){
+        return ResponseEntity.ok(BaseResponse.<List<VwAllPersonelLeaveList>>builder()
                 .code(200)
                 .message("Personel izin istekleri listesi.")
                 .success(true)
@@ -39,6 +41,7 @@ public class LeaveController {
                 .build());
     }
 
+    //personelin yaptığı izin istekleri için
     @GetMapping("/get-personel-request-leave")
     public ResponseEntity<BaseResponse<List<Leave>>> getPersonelRequestLeaveList(@RequestParam String token){
         return ResponseEntity.ok(BaseResponse.<List<Leave>>builder()
