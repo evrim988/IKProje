@@ -28,7 +28,10 @@ public enum ErrorType {
     MAIL_NOT_VERIFIED(6004,"Mail henüz onaylanmamış, lütfen mailinize gelen onay linkine tıklayınız.",
                       HttpStatus.BAD_REQUEST),
     MAIL_NOT_FOUND(6007,"Girilen mail ile kayıtlı kullanıcı bulunamadı.",HttpStatus.BAD_REQUEST),
-    ADMIN_NOT_FOUND(9002,"Mail ya da şifre hatalı.",HttpStatus.BAD_REQUEST);
+    ADMIN_NOT_FOUND(9002,"Mail ya da şifre hatalı.",HttpStatus.BAD_REQUEST),
+    NOT_ELIGIBLE_FOR_ANNUAL_LEAVE(6007,"İşe girişinizden itibaren geçen süre 1 seneden az olduğu için yıllık izin talebinde bulunamazsınız",HttpStatus.BAD_REQUEST),
+    NOT_ELIGIBLE_FOR_MATERNITY_LEAVE(6008,"Doğum izni talebinde bulunamazsınız.",HttpStatus.BAD_REQUEST),
+    ANNUAL_LEAVE_DAYS_EXCEEDED(6009,"İstediğiniz izin günü miktarı kalan yıllık izin günlerinizden daha fazladır",HttpStatus.BAD_REQUEST);
 
 
     int code;

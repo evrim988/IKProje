@@ -2,6 +2,7 @@ package org.example.ikproje.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.NewLeaveRequestDto;
+import org.example.ikproje.dto.request.UpdateLeaveRequstDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.entity.Leave;
 import org.example.ikproje.service.LeaveService;
@@ -65,6 +66,26 @@ public class LeaveController {
                 .success(leaveService.rejectLeaveRequest(token,leaveId,rejectionMessage))
                 .code(200)
                 .message("Personel izin isteği reddedildi.")
+                .build());
+    }
+
+    @PutMapping("update-leave-request")
+    public ResponseEntity<BaseResponse<Boolean>> updateLeaveRequest(@RequestBody UpdateLeaveRequstDto dto){
+        Boolean success = leaveService.updatePersonelLeaveRequest(dto);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                        .code(200)
+                        .success(success)
+                        .message(success ? "İzin güncelleme başarılı" : "İzin güncelleme gerçekleştirilemedi.")
+                .build());
+    }
+
+    @DeleteMapping("delete-leave-request")
+    public ResponseEntity<BaseResponse<Boolean>> deleteLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
+        Boolean success  = leaveService.deletePersonelLeaveRequest(token,leaveId);
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .code(200)
+                .success(success)
+                .message(success ? "İzin isteği başarı ile silindi" : "Silme işlemi gerçekleştirilemedi.")
                 .build());
     }
 

@@ -16,7 +16,7 @@ public class LeaveDetailsService {
 		leaveDetailsRepository.save(leaveDetails);
 	}
 	
-	public Optional<LeaveDetails> findByLeaveId(Long leaveId) {
-		return leaveDetailsRepository.findByLeaveId(leaveId);
+	public Optional<LeaveDetails> findByUserId(Long userId) {
+		return leaveDetailsRepository.findByUserId(userId);
 	}
 }

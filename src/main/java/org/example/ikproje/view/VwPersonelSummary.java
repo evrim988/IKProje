@@ -3,6 +3,7 @@ package org.example.ikproje.view;
 
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
+import org.example.ikproje.entity.enums.EUserWorkStatus;
 
 import java.time.LocalDate;
 
@@ -15,7 +16,8 @@ public record VwPersonelSummary(
         LocalDate birthDate,
         LocalDate hireDate,
         EUserDepartmentType departmentType,
-        EState state
+        EState state,
+        EUserWorkStatus userWorkStatus
 
 
 ) {
