@@ -5,13 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.CreateNewPersonelRequestDto;
 import org.example.ikproje.dto.request.UpdateCompanyManagerProfileRequestDto;
 import org.example.ikproje.dto.request.UpdatePersonelStateRequestDto;
-import org.example.ikproje.entity.Address;
-import org.example.ikproje.entity.Company;
-import org.example.ikproje.entity.User;
-import org.example.ikproje.entity.UserDetails;
+import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.ELeaveType;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
+import org.example.ikproje.entity.enums.EUserWorkStatus;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.repository.UserRepository;
@@ -38,6 +36,7 @@ public class CompanyManagerService {
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
     private final UserDetailsService userDetailsService;
+    private final LeaveService leaveService;
 
     public void addLogoToCompany(String token, MultipartFile file) throws IOException {
         User user = getUserByToken(token);
@@ -114,6 +113,11 @@ public class CompanyManagerService {
 
     public List<VwPersonelSummary> getPersonelList(String token){
         User companyManager = getUserByToken(token);
+        List<User> personelsOnLeave = userRepository.findAllByStateAndUserRoleAndCompanyIdAndUserWorkStatus(EState.ACTIVE,EUserRole.EMPLOYEE,companyManager.getCompanyId(),EUserWorkStatus.ON_LEAVE);
+        for(User personel : personelsOnLeave){
+            leaveService.checkPersonelsWorkStatus(personel);
+            userRepository.save(personel);
+        }
         return userRepository.findAllVwPersonelSummary(companyManager.getCompanyId());
     }
 

@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import org.example.ikproje.entity.enums.EGender;
 import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EUserRole;
+import org.example.ikproje.entity.enums.EUserWorkStatus;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -35,4 +36,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     EIsApproved isApproved=EIsApproved.REJECTED;
+    @Builder.Default
+    EUserWorkStatus userWorkStatus = EUserWorkStatus.WORKING;
+
+
 }

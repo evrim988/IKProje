@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface LeaveDetailsRepository extends JpaRepository<LeaveDetails, Long> {
- Optional<LeaveDetails> findByLeaveId(Long leaveId);
+ Optional<LeaveDetails> findByUserId(Long userId);
 }

@@ -29,6 +29,9 @@ public class Leave {
     ELeaveType leaveType;
     @Enumerated(EnumType.STRING)
     ELeaveStatus leaveStatus;
+    String managerName;
+    String rejectResponse;
+    //hangi yönetici tarafından neden reddedildiği de field olarak olsun
     LocalDate statusDate;
 
 

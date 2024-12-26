@@ -15,8 +15,9 @@ public class LeaveDetails extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	Long leaveId;
+	Long userId;
 	Integer numberOfDaysRemainingFromAnnualLeave;
-	Integer numberOfDaysRemainingFromMarriageLeave;
-	Integer numberOfDaysRemainingFromMaternityLeave; // Doğum izni
+
+
+
 }
