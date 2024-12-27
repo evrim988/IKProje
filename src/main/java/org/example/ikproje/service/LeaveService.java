@@ -191,9 +191,10 @@ public class LeaveService {
                     (int) (leaveDetails.getNumberOfDaysRemainingFromAnnualLeave() - numberOfLeaveDays)
             );
 
-        } else {
-            throw new IKProjeException(ErrorType.LEAVE_ERROR);
         }
+//        else {
+//            throw new IKProjeException(ErrorType.LEAVE_ERROR);
+//        }
     }
 
     public void checkPersonelsWorkStatus(User user){
