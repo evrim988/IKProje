@@ -19,6 +19,7 @@ public class RestApis {
     public static final String LEAVE= ROOT+"/leave";
     public static final String SHIFT= ROOT+"/shift";
     public static final String USERSHIFT= ROOT+"/usershift";
+    public static final String BREAK= ROOT+"/break";
 
     
     public static final String APPROVE_ACCOUNT="/approve-account";
@@ -54,6 +55,12 @@ public class RestApis {
     public static final String DELETE_SHIFT = "/delete-shift";
     public static final String ALL_SHIFTS_BY_COMPANY = "/all-shifts-by-company";
     public static final String ASSIGN_SHIFT_TO_USER = "/assign-shift-to-user";
+    public static final String GET_ACTIVE_SHIFT_DETAILS = "/get-active-shift-details";
+    
+    public static final String ADD_NEW_BREAK = "/add-new-break";
+    public static final String UPDATE_BREAK = "/update-break";
+    public static final String DELETE_BREAK = "/delete-break";
+    public static final String GET_BREAKS_BY_SHIFT_ID = "/get-breaks-by-shift-id";
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";
