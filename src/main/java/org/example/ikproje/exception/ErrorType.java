@@ -34,7 +34,9 @@ public enum ErrorType {
     ANNUAL_LEAVE_DAYS_EXCEEDED(6009,"İstediğiniz izin günü miktarı kalan yıllık izin günlerinizden daha fazladır",HttpStatus.BAD_REQUEST),
     SHIFT_NOT_FOUND(4001,"Vardiya bulunamadı!",HttpStatus.NOT_FOUND),
     SHIFT_TIME_ERROR(4002,"Vardiya bitiş günü başlangıç gününden önce olamaz!",HttpStatus.BAD_REQUEST),
-    SHIFT_DATE_OVERLAP(4003,"Tanımlanan tarih aralığı başka bir aktif vardiya ile çakışıyor.",HttpStatus.BAD_REQUEST);
+    SHIFT_DATE_OVERLAP(4003,"Tanımlanan tarih aralığı başka bir aktif vardiya ile çakışıyor.",HttpStatus.BAD_REQUEST),
+    BREAK_TIME_ERROR(4004,"Mola tanımlamak istenilen saatler vardiya saatlerinin dışındadır!",HttpStatus.BAD_REQUEST),
+    BREAK_NOT_FOUND(4005,"Mola bulunamadı!",HttpStatus.NOT_FOUND);
 
 
     int code;
