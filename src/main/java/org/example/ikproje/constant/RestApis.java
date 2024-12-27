@@ -17,6 +17,8 @@ public class RestApis {
     public static final String ADMIN=ROOT+"/admin";
     public static final String ASSET=ROOT+"/asset";
     public static final String LEAVE= ROOT+"/leave";
+    public static final String SHIFT= ROOT+"/shift";
+    public static final String USERSHIFT= ROOT+"/usershift";
 
     
     public static final String APPROVE_ACCOUNT="/approve-account";
@@ -41,10 +43,17 @@ public class RestApis {
     public static final String ADD_PERSONEL = "/add-personel";
     public static final String UPDATE_PERSONEL_STATE = "/update-personel-state";
     public static final String GET_PERSONEL_LIST = "/get-personel-list";
-    public static final String NEW_LEAVE_REQUEST = "/new-leave-request";
+    
     public static final String GET_LEAVE_REQUEST = "/get-leave-requests";
     public static final String APPROVE_LEAVE_REQUEST = "/approve-leave-request";
     public static final String REJECT_LEAVE_REQUEST = "/reject-leave-request";
+    public static final String NEW_LEAVE_REQUEST = "/new-leave-request";
+    
+    public static final String NEW_SHIFT_REQUEST = "/new-shift-request";
+    public static final String UPDATE_SHIFT = "/update-shift";
+    public static final String DELETE_SHIFT = "/delete-shift";
+    public static final String ALL_SHIFTS_BY_COMPANY = "/all-shifts-by-company";
+    public static final String ASSIGN_SHIFT_TO_USER = "/assign-shift-to-user";
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";
