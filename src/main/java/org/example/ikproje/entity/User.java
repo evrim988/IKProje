@@ -36,6 +36,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     EIsApproved isApproved=EIsApproved.REJECTED;
+    @Enumerated(EnumType.STRING)
     @Builder.Default
     EUserWorkStatus userWorkStatus = EUserWorkStatus.WORKING;
 

@@ -32,7 +32,7 @@ public class LeaveService {
     private final JwtManager jwtManager;
     private final EmailService emailService;
     private final LeaveDetailsService leaveDetailsService;
-    
+
     @Transactional
     public Boolean createNewLeaveRequest(NewLeaveRequestDto dto){
         double multiplierForAnnualLeave;
@@ -91,10 +91,7 @@ public class LeaveService {
     private double getMultiplierForAnnualLeave(NewLeaveRequestDto dto, UserDetails personelDetails) {
         double multiplierForAnnualLeave;
         long numberOfDaysWorked = ChronoUnit.DAYS.between( personelDetails.getHireDate(), LocalDate.now());
-        System.out.println("number of days worked" + numberOfDaysWorked);
-        System.out.println("TESTTTT");
         if (numberOfDaysWorked<365){
-            System.out.println("TEST");
             if(dto.leaveType().equals(ELeaveType.YILLIK_IZIN)) throw new IKProjeException(ErrorType.NOT_ELIGIBLE_FOR_ANNUAL_LEAVE);
             multiplierForAnnualLeave=0;
         }
@@ -125,7 +122,7 @@ public class LeaveService {
     public List<Leave> getPersonelRequestLeaveList(String token){
         User personel = getUserByToken(token);
         if(!personel.getUserRole().equals(EUserRole.EMPLOYEE)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
-        return leaveRepository.findAllByLeaveStatusAndUserId(ELeaveStatus.PENDING,personel.getId());
+        return leaveRepository.findAllByUserId(personel.getId());
     }
 
     //personelin talepte bulunduğu izni güncellenmesi
@@ -149,10 +146,10 @@ public class LeaveService {
         leaveRepository.delete(leave);
         return true;
     }
-    
-    
-  
 
+
+
+    @Transactional
     public Boolean approveLeaveRequest(String token,Long leaveId){
         User companyManager = getUserByToken(token);
         if(!companyManager.getUserRole().equals(EUserRole.COMPANY_MANAGER)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
@@ -163,6 +160,9 @@ public class LeaveService {
         leave.setLeaveStatus(ELeaveStatus.APPROVED);
         leave.setStatusDate(LocalDate.now());
         leaveRepository.save(leave);
+        User user = userService.findById(leave.getUserId()).orElseThrow(()->new IKProjeException(ErrorType.PAGE_NOT_FOUND));
+        user.setUserWorkStatus(EUserWorkStatus.ON_LEAVE);
+        userService.save(user);
         String personelMail = userService.findById(leave.getUserId()).get().getEmail();
         emailService.sendApprovedLeaveNotificationEmail(personelMail,leave);
         return true;

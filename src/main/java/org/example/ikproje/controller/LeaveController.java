@@ -72,7 +72,7 @@ public class LeaveController {
                 .build());
     }
 
-    @PutMapping("update-leave-request")
+    @PutMapping("/update-leave-request")
     public ResponseEntity<BaseResponse<Boolean>> updateLeaveRequest(@RequestBody UpdateLeaveRequstDto dto){
         Boolean success = leaveService.updatePersonelLeaveRequest(dto);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
@@ -82,7 +82,7 @@ public class LeaveController {
                 .build());
     }
 
-    @DeleteMapping("delete-leave-request")
+    @DeleteMapping("/delete-leave-request")
     public ResponseEntity<BaseResponse<Boolean>> deleteLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
         Boolean success  = leaveService.deletePersonelLeaveRequest(token,leaveId);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
