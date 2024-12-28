@@ -198,4 +198,8 @@ public class UserService {
     public String findEmailByUserId(Long userId){
         return userRepository.findEmailByUserId(userId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
     }
+
+    public Long findCompanyManagerIdByCompanyId(Long companyId){
+        return userRepository.findCompanyManagerIdByCompanyId(companyId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
+    }
 }

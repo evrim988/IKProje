@@ -20,6 +20,7 @@ public class RestApis {
     public static final String SHIFT= ROOT+"/shift";
     public static final String USERSHIFT= ROOT+"/usershift";
     public static final String BREAK= ROOT+"/break";
+    public static final String EXPENSE= ROOT+"/expense";
 
     
     public static final String APPROVE_ACCOUNT="/approve-account";
