@@ -36,7 +36,8 @@ public enum ErrorType {
     SHIFT_TIME_ERROR(4002,"Vardiya bitiş günü başlangıç gününden önce olamaz!",HttpStatus.BAD_REQUEST),
     SHIFT_DATE_OVERLAP(4003,"Tanımlanan tarih aralığı başka bir aktif vardiya ile çakışıyor.",HttpStatus.BAD_REQUEST),
     BREAK_TIME_ERROR(4004,"Mola tanımlamak istenilen saatler vardiya saatlerinin dışındadır!",HttpStatus.BAD_REQUEST),
-    BREAK_NOT_FOUND(4005,"Mola bulunamadı!",HttpStatus.NOT_FOUND);
+    BREAK_NOT_FOUND(4005,"Mola bulunamadı!",HttpStatus.NOT_FOUND),
+    ASSET_NOT_FOUND(4101,"Zimmet bulunamadı",HttpStatus.BAD_REQUEST);
 
 
     int code;

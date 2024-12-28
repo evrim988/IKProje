@@ -167,7 +167,7 @@ public class UserService {
 
 
 
-    private User getUserByToken(String token){
+    public User getUserByToken(String token){
         Optional<Long> userIdOpt = jwtManager.validateToken(token);
         if (userIdOpt.isEmpty()) throw new IKProjeException(ErrorType.INVALID_TOKEN);
         Optional<User> optUser = userRepository.findById(userIdOpt.get());
@@ -193,5 +193,9 @@ public class UserService {
         }
         user.setAvatarUrl(cloudinaryService.uploadFile(file));
         userRepository.save(user);
+    }
+
+    public String findEmailByUserId(Long userId){
+        return userRepository.findEmailByUserId(userId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
     }
 }

@@ -29,9 +29,9 @@ public class GenerateData {
                     .build();
             adminRepository.save(admin);
         }
-        if(assetRepository.count() == 0){
-            assetRepository.saveAll(GenerateAsset.generateAsset());
-        }
+//        if(assetRepository.count() == 0){
+//            assetRepository.saveAll(GenerateAsset.generateAsset());
+//        }
 
         if(userRepository.count() == 0){
             userRepository.save(GenerateUser.generateUser());

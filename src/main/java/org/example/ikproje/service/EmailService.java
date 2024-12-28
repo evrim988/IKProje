@@ -1,14 +1,9 @@
 package org.example.ikproje.service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.entity.Leave;
-import org.example.ikproje.entity.enums.ELeaveStatus;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -73,6 +68,15 @@ public class EmailService {
 		msg.setTo(email);
 		msg.setSubject("İzin başvurusu hk.");
 		msg.setText(rejectedMessage);
+		mailSender.send(msg);
+	}
+
+	public void sendAssetAssignmentRejectionMessage(String emailTo,String emailFrom, String message){
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(emailTo);
+		msg.setFrom(emailFrom);
+		msg.setSubject("Zimmet ataması hk.");
+		msg.setText(message);
 		mailSender.send(msg);
 	}
 
