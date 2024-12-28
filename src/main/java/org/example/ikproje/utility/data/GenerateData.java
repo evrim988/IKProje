@@ -34,11 +34,11 @@ public class GenerateData {
 //        }
 
         if(userRepository.count() == 0){
-            userRepository.save(GenerateUser.generateUser());
+            userRepository.saveAll(GenerateUser.generateCompanyManager());
             userRepository.saveAll(GenerateUser.generateEmployee());
         }
         if(companyRepository.count() == 0){
-            companyRepository.save(GenerateUser.generateCompany());
+            companyRepository.saveAll(GenerateUser.generateCompany());
         }
         if(addressRepository.count() == 0){
             addressRepository.saveAll(GenerateUser.generateAddress());
