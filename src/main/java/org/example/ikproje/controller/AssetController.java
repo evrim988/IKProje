@@ -1,14 +1,12 @@
 package org.example.ikproje.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ikproje.dto.request.NewAssetRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.service.AssetService;
 import org.example.ikproje.view.VwAsset;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +25,34 @@ public class AssetController {
                         .success(true)
                         .message("Personel zimmet listesi")
                         .success(true)
-                        .data(assetService.getAllPersonetAssets(token))
+                        .data(assetService.getAllPersonelAssets(token))
+                .build());
+    }
+
+    @PostMapping("assign-new-asset")
+    public ResponseEntity<BaseResponse<Boolean>> assignNewAsset(@RequestBody NewAssetRequestDto dto){
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                        .message("İşlem başarılı")
+                        .success(assetService.assignNewAssetToPersonel(dto))
+                        .code(200)
+                .build());
+    }
+
+    @PutMapping("approve-asset")
+    public ResponseEntity<BaseResponse<Boolean>> approveAsset(@RequestParam String token,@RequestParam Long assetId){
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .message("Zimmet atanması onaylandı.")
+                .success(assetService.approveAssetAssignment(token,assetId))
+                .code(200)
+                .build());
+    }
+
+    @PutMapping("reject-asset")
+    public ResponseEntity<BaseResponse<Boolean>> rejectAsset(@RequestParam String token,@RequestParam Long assetId,String rejectMessage){
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .message("Zimmet atanması reddedildi.")
+                .success(assetService.rejectAssetAssignment(token,assetId,rejectMessage))
+                .code(200)
                 .build());
     }
 
