@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	List<User> findAllByStateAndUserRoleAndCompanyIdAndUserWorkStatus(EState state, EUserRole role, Long companyId, EUserWorkStatus userWorkStatus);
 
+	List<User> findAllByCompanyIdAndUserWorkStatusAndStateAndUserRole(Long companyId, EUserWorkStatus userWorkStatus, EState state, EUserRole role);
+
 	@Query("SELECT new org.example.ikproje.view.VwPersonel(u.id,u.firstName,u.lastName,u.email,c.name,u.phone,u.avatarUrl,u.userRole,a.region,a.city,a.district,a.neighbourhood,a.street,a.postalCode,a.aptNumber,ud.hireDate,ud.tcNo,ud.sgkNo,ud.birthDate,ud.departmentType) FROM User u JOIN Company c ON u.companyId=c.id JOIN UserDetails ud ON u.id=ud.userId JOIN Address a ON ud.addressId=a.id WHERE u.id=?1")
 	Optional<VwPersonel> findVwPersonelByUserId(Long id);
 

@@ -9,6 +9,7 @@ import org.example.ikproje.entity.*;
 import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
+import org.example.ikproje.entity.enums.EUserWorkStatus;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.mapper.*;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -183,6 +185,11 @@ public class UserService {
     }
 
 
+    public List<User> findAllPersonelByCompanyId(Long companyId){
+        List<User> personelList = userRepository.findAllByCompanyIdAndUserWorkStatusAndStateAndUserRole(companyId, EUserWorkStatus.WORKING, EState.ACTIVE, EUserRole.EMPLOYEE);
+
+        return personelList;
+    }
 
 
 
