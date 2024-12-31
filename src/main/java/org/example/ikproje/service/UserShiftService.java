@@ -2,6 +2,7 @@ package org.example.ikproje.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.AssignShiftToUserRequestDto;
+import org.example.ikproje.dto.response.UserShiftResponseDto;
 import org.example.ikproje.entity.Shift;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.UserShift;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,5 +108,45 @@ public class UserShiftService {
 		// Burada da Vw'in içerisini yukarıda almış olduğum bilgilerle doldurdum.
 		return new VwUserActiveShift(userId,shift.getName(),LocalTime.parse(shift.getStartTime()),
 		                             LocalTime.parse(shift.getEndTime()),breakList);
+	}
+
+	public List<User> getPersonelListByCompanyId(String token) {
+		Optional<Long> optionalCompanyManagerId = jwtManager.validateToken(token);
+		if (optionalCompanyManagerId.isEmpty()){
+			throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		}
+		List<User> personelList = userService.findAllPersonelByCompanyId(optionalCompanyManagerId.get());
+		return personelList;
+	}
+
+	public List<UserShiftResponseDto> getPersonelShiftList(String token) {
+		Optional<Long> optionalCompanyManagerId = jwtManager.validateToken(token);
+		if (optionalCompanyManagerId.isEmpty()){
+			throw new IKProjeException(ErrorType.INVALID_TOKEN);
+		}
+		List<UserShift> userShiftList = userShiftRepository.findAllByState(EState.ACTIVE);
+		List<UserShiftResponseDto> responseDtoList = new ArrayList<>();
+
+		for (UserShift userShift : userShiftList){
+
+			Optional<User> optionalUser = userService.findById(userShift.getUserId());
+			Optional<Shift> optionalShift = shiftService.findById(userShift.getShiftId());
+			if(optionalUser.isEmpty() ) {
+				throw new IKProjeException(ErrorType.USER_NOTFOUND);
+			}
+			if(optionalShift.isEmpty()){
+				throw new IKProjeException(ErrorType.SHIFT_NOT_FOUND);
+			}
+			UserShiftResponseDto dto = UserShiftResponseDto.builder()
+					.id(userShift.getId())
+					.shiftName(optionalShift.get().getName())
+					.personelName(optionalUser.get().getFirstName())
+					.personelSurname(optionalUser.get().getLastName())
+					.startDate(userShift.getStartDate())
+					.endDate(userShift.getEndDate())
+					.build();
+			responseDtoList.add(dto);
+		}
+		return responseDtoList;
 	}
 }

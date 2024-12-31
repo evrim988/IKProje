@@ -69,4 +69,8 @@ public class ShiftService {
 		User user = getUser(token);
 		return shiftRepository.getAllByCompanyIdAndState(user.getCompanyId(),EState.ACTIVE);
 	}
+
+	public Optional<Shift> findById(Long shiftId) {
+		return shiftRepository.findById(shiftId);
+	}
 }

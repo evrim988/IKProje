@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.CreateNewBreakRequestDto;
 import org.example.ikproje.dto.request.UpdateBreakRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
+import org.example.ikproje.dto.response.BreakResponseDto;
 import org.example.ikproje.entity.Break;
 import org.example.ikproje.service.BreakService;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,16 @@ public class BreakController {
 				                         .message("Mola başarıyla silindi")
 				                         .data(breakService.deleteBreak(token,breakId))
 		                                     .build());
+	}
+
+	//şirkete ait mola listesini getirir.
+	@GetMapping("/get-all-break")
+	public ResponseEntity<BaseResponse<List<BreakResponseDto>>> getAllBreak(@RequestParam String token){
+		return ResponseEntity.ok(BaseResponse.<List<BreakResponseDto>>builder()
+						.code(200)
+						.success(true)
+						.data(breakService.getAllBreak(token))
+				.build());
 	}
 	
 	@GetMapping(GET_BREAKS_BY_SHIFT_ID)

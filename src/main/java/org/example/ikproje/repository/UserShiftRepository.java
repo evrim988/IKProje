@@ -9,5 +9,6 @@ import java.util.List;
 public interface UserShiftRepository extends JpaRepository<UserShift, Long> {
 	
 	List<UserShift> findByUserIdAndState(Long userId, EState state);
-	
+
+	List<UserShift> findAllByState(EState state);
 }

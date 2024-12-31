@@ -3,6 +3,7 @@ package org.example.ikproje.service;
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.CreateNewBreakRequestDto;
 import org.example.ikproje.dto.request.UpdateBreakRequestDto;
+import org.example.ikproje.dto.response.BreakResponseDto;
 import org.example.ikproje.entity.Break;
 import org.example.ikproje.entity.Shift;
 import org.example.ikproje.entity.User;
@@ -16,7 +17,9 @@ import org.example.ikproje.utility.JwtManager;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,12 +45,13 @@ public class BreakService {
 		return true;
 	}
 	
-	private void userControl(String token) {
+	private User userControl(String token) {
 		Long userId = jwtManager.validateToken(token).orElseThrow(() -> new IKProjeException(ErrorType.INVALID_TOKEN));
 		User user = userService.findById(userId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
 		if (user.getUserRole() == EUserRole.EMPLOYEE) {
 			throw new IKProjeException(ErrorType.UNAUTHORIZED);
 		}
+		return user;
 	}
 	
 	public List<Break> findByShiftId(Long shiftId) {
@@ -82,5 +86,35 @@ public class BreakService {
 		userControl(token);
 		shiftService.getShiftById(shiftId).orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
 		return breakRepository.findByShiftId(shiftId);
+	}
+
+	public List<BreakResponseDto> getAllBreak(String token) {
+		User user = userControl(token);
+		Long companyId = user.getCompanyId();
+		List<Break> breakList = breakRepository.findAllByState(EState.ACTIVE);
+		List<BreakResponseDto> dtoList = new ArrayList<>();
+
+		for (Break item: breakList) {
+			Optional<Shift> optionalShift = shiftService.findById(item.getShiftId());
+			if(optionalShift.isEmpty()){
+				throw new IKProjeException(ErrorType.SHIFT_NOT_FOUND);
+			}
+
+			// Kullanıcının şirketiyle eşleşmeyen molaları atla
+			if(!optionalShift.get().getCompanyId().equals(companyId)){
+				continue;
+			}
+
+			BreakResponseDto dto = BreakResponseDto.builder()
+					.id(item.getId())
+					.name(item.getName())
+					.shiftName(optionalShift.get().getName())
+					.startTime(item.getStartTime())
+					.endTime(item.getEndTime())
+					.build();
+
+			dtoList.add(dto);
+		}
+		return dtoList;
 	}
 }
