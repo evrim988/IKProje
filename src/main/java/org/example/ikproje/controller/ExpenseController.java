@@ -17,7 +17,7 @@ import static org.example.ikproje.constant.RestApis.*;
 @RequiredArgsConstructor
 @RequestMapping(EXPENSE)
 @CrossOrigin("*")
-public class ExpenseController {
+public class    ExpenseController {
 
     private final ExpenseService expenseService;
 

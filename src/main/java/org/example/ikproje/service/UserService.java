@@ -209,4 +209,9 @@ public class UserService {
     public Long findCompanyManagerIdByCompanyId(Long companyId){
         return userRepository.findCompanyManagerIdByCompanyId(companyId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
     }
+
+    public Long getTotalPersonelCountByCompanyManagerId(Long companyManagerId){
+        User user = findById(companyManagerId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
+        return userRepository.countByCompanyIdAndState(user.getCompanyId(),EState.ACTIVE).orElseThrow(() -> new IKProjeException(ErrorType.COMPANY_NOTFOUND));
+    }
 }

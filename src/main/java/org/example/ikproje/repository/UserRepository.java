@@ -48,4 +48,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT u.id FROM User u WHERE u.companyId=?1 AND u.userRole=org.example.ikproje.entity.enums.EUserRole.COMPANY_MANAGER")
 	Optional<Long> findCompanyManagerIdByCompanyId(Long companyId);
 
+	Optional<Long> countByCompanyIdAndState(Long companyId,EState state);
+
 }
