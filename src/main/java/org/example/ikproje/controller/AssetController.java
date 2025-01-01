@@ -19,13 +19,24 @@ import static org.example.ikproje.constant.RestApis.*;
 public class AssetController {
     private final AssetService assetService;
 
+
     @GetMapping(GET_PERSONEL_ASSETS)
-    public ResponseEntity<BaseResponse<List<VwAsset>>> getAllPersonelAssets(String token){
+    public ResponseEntity<BaseResponse<List<VwAsset>>> getPersonelAssets(
+            @RequestParam String token,
+            @RequestParam(required = false) Long personelId) {
+
+        List<VwAsset> assets;
+
+        if (personelId != null) {
+            assets = assetService.getAssetListOfPersonel(token, personelId);
+        } else {
+            assets = assetService.getAllPersonelAssets(token);
+        }
+
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
-                        .success(true)
-                        .message("Personel zimmet listesi")
-                        .success(true)
-                        .data(assetService.getAllPersonelAssets(token))
+                .success(true)
+                .message("Personel zimmet listesi")
+                .data(assets)
                 .build());
     }
 
