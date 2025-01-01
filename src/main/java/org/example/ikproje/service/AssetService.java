@@ -7,6 +7,7 @@ import org.example.ikproje.entity.Asset;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.enums.EAssetStatus;
 import org.example.ikproje.entity.enums.EState;
+import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.repository.AssetRepository;
@@ -33,6 +34,19 @@ public class AssetService {
         Optional<Long> userIdOptional = jwtManager.validateToken(token);
         if(userIdOptional.isPresent()){
             return assetRepository.getAllVwAssetsByUserId(userIdOptional.get());
+        }
+        throw new IKProjeException(ErrorType.INVALID_TOKEN);
+    }
+
+    //Şirket yöneticisi için personelin üzerine atanan zimmetlerin listesi
+    public List<VwAsset> getAssetListOfPersonel(String token,Long personelId){
+        User companyManager = userService.getUserByToken(token);
+        if(companyManager.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
+            User user = userService.findById(personelId).orElseThrow(()->new IKProjeException(ErrorType.USER_NOTFOUND));
+            //Aynı şirkette mi çalışıyorlar ?
+            if(user.getCompanyId().equals(companyManager.getCompanyId())){
+                return assetRepository.getAllVwAssetsByUserId(user.getId());
+            }
         }
         throw new IKProjeException(ErrorType.INVALID_TOKEN);
     }
