@@ -16,10 +16,10 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
 
     Optional<Comment> findByCompanyManagerId(Long id);
 
-    @Query("SELECT new org.example.ikproje.view.VwComment(co.name, CONCAT(u.firstName,' ',u.lastName),c.managerPhoto,c.companyLogo,c.content) FROM Comment c JOIN User u ON u.id=c.companyManagerId JOIN Company co ON co.id=u.companyId")
+    @Query("SELECT new org.example.ikproje.view.VwComment(c.id,co.name, CONCAT(u.firstName,' ',u.lastName),c.managerPhoto,c.companyLogo,c.content) FROM Comment c JOIN User u ON u.id=c.companyManagerId JOIN Company co ON co.id=u.companyId")
     List<VwComment> findAllVwComment();
 
-    @Query("SELECT new org.example.ikproje.view.VwCommentDetail(co.name, CONCAT(u.firstName,' ',u.lastName),c.managerPhoto,c.companyLogo,c.content, 0L,ud.birthDate,a.city,co.phone) FROM Comment c JOIN User u ON u.id=c.companyManagerId JOIN Company co ON co.id=u.companyId JOIN UserDetails ud ON ud.userId=u.id JOIN Address a ON co.addressId=a.id WHERE c.id=1")
+    @Query("SELECT new org.example.ikproje.view.VwCommentDetail(c.id,co.name, CONCAT(u.firstName,' ',u.lastName),c.managerPhoto,c.companyLogo,c.content, 0L,ud.birthDate,a.city,co.phone) FROM Comment c JOIN User u ON u.id=c.companyManagerId JOIN Company co ON co.id=u.companyId JOIN UserDetails ud ON ud.userId=u.id JOIN Address a ON co.addressId=a.id WHERE c.id=?1")
     VwCommentDetail findVwCommentDetailsByCommentId(Long commentId);
 
 

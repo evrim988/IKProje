@@ -21,6 +21,7 @@
     @Data
     public class VwCommentDetail {
 
+            Long id;
             String companyName;
             String managerName;
             String managerPhoto;
