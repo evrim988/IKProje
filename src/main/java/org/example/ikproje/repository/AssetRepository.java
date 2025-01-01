@@ -11,4 +11,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
 
     @Query("SELECT new org.example.ikproje.view.VwAsset(a.id,CONCAT(p.firstName,' ',p.lastName) ,CONCAT(cm.firstName,' ',cm.lastName),a.givenDate,a.description,a.status,a.assetType) from Asset a JOIN User cm ON cm.id=a.companyManagerId JOIN User p ON a.personelId=p.id WHERE a.personelId=?1 AND a.state = org.example.ikproje.entity.enums.EState.ACTIVE")
     List<VwAsset> getAllVwAssetsByUserId(Long userId);
+
+    @Query("SELECT new org.example.ikproje.view.VwAsset(a.id,CONCAT(p.firstName,' ',p.lastName) ,CONCAT(cm.firstName,' ',cm.lastName),a.givenDate,a.description,a.status,a.assetType) from Asset a JOIN User cm ON cm.id=a.companyManagerId JOIN User p ON a.personelId=p.id WHERE p.companyId=?1 AND a.state = org.example.ikproje.entity.enums.EState.ACTIVE")
+    List<VwAsset> getAllVwPersonelAssetsByCompanyId(Long companyId);
 }

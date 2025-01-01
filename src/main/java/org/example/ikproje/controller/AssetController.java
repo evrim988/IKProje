@@ -20,23 +20,24 @@ public class AssetController {
     private final AssetService assetService;
 
 
+    //personel üzerine atanan assetleri görüyor
     @GetMapping(GET_PERSONEL_ASSETS)
-    public ResponseEntity<BaseResponse<List<VwAsset>>> getPersonelAssets(
-            @RequestParam String token,
-            @RequestParam(required = false) Long personelId) {
+    public ResponseEntity<BaseResponse<List<VwAsset>>> getPersonelAssets(@RequestParam String token) {
+        return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
+                .success(true)
+                .message("Şirket personellerinin zimmet listesi")
+                .data(assetService.getAllPersonelAssets(token))
+                .build());
+    }
 
-        List<VwAsset> assets;
 
-        if (personelId != null) {
-            assets = assetService.getAssetListOfPersonel(token, personelId);
-        } else {
-            assets = assetService.getAllPersonelAssets(token);
-        }
-
+    //Şirket yöneticisi için, bütün personel assetlerini görüyor
+    @GetMapping("get-assets-of-company")
+    public ResponseEntity<BaseResponse<List<VwAsset>>> getAssetListOfCompany(@RequestParam String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
                 .success(true)
                 .message("Personel zimmet listesi")
-                .data(assets)
+                .data(assetService.getAssetListOfCompany(token))
                 .build());
     }
 
