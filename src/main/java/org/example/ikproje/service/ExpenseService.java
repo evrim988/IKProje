@@ -2,6 +2,7 @@ package org.example.ikproje.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.NewExpenseRequestDto;
+import org.example.ikproje.dto.request.UpdateExpenseRequestDto;
 import org.example.ikproje.entity.Expense;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.enums.EExpenseStatus;
@@ -11,14 +12,18 @@ import org.example.ikproje.repository.ExpenseRepository;
 import org.example.ikproje.utility.JwtManager;
 import org.example.ikproje.view.VwExpense;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
 
 
     //personelin yapmış olduğu tüm istekler, reddedilmiş kabul edilmiş ve beklemede olanlar
@@ -50,6 +55,23 @@ public class ExpenseService {
         return true;
     }
 
+    public Boolean addReceiptPhotoToExpense(String token,Long expenseId, MultipartFile file) throws IOException {
+        Expense expense = checkCompany(token,expenseId);
+        expense.setReceiptUrl(cloudinaryService.uploadFile(file));
+        expenseRepository.save(expense);
+        return true;
+    }
+
+    public Boolean updateExpense(UpdateExpenseRequestDto dto){
+        User personel = userService.getUserByToken(dto.token());
+        Expense expense = checkCompany(dto.token(),dto.expenseId());
+        if(!personel.getId().equals(expense.getId())) throw new IKProjeException((ErrorType.UNAUTHORIZED));
+        expense.setAmount(dto.amount());
+        expense.setDescription(dto.description());
+        expenseRepository.save(expense);
+        return true;
+    }
+
     //Şirket yöneticisi harcama isteği onaylama
     public Boolean approveExpenseRequest(String token, Long expenseId){
         Expense expense = checkCompany(token, expenseId);
@@ -66,6 +88,8 @@ public class ExpenseService {
         return true;
     }
 
+
+
     private Expense checkCompany(String token, Long expenseId) {
         User companyManager = userService.getUserByToken(token);
         Expense expense = expenseRepository.findById(expenseId).orElseThrow(()->new IKProjeException(ErrorType.EXPENSE_NOT_FOUND));
@@ -73,5 +97,7 @@ public class ExpenseService {
         if(!user.getCompanyId().equals(companyManager.getCompanyId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
         return expense;
     }
+
+
 
 }

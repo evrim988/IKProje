@@ -3,12 +3,16 @@ package org.example.ikproje.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.dto.request.NewExpenseRequestDto;
+import org.example.ikproje.dto.request.UpdateExpenseRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.service.ExpenseService;
 import org.example.ikproje.view.VwExpense;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.example.ikproje.constant.RestApis.*;
@@ -67,6 +71,27 @@ public class    ExpenseController {
                 .success(expenseService.rejectExpenseRequest(token,expenseId))
                 .build());
     }
+
+    @PostMapping(value = "upload-receipt",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<Boolean>> uploadReceipt(@RequestParam String token,
+                                                               @RequestParam Long expenseId,
+                                                               @RequestParam MultipartFile file) throws IOException {
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .message("Fiş fotoğrafı yüklendi.")
+                .code(200)
+                .success(expenseService.addReceiptPhotoToExpense(token,expenseId,file))
+                .build());
+    }
+
+    @PutMapping("update-expense")
+    public ResponseEntity<BaseResponse<Boolean>> updateExpense(UpdateExpenseRequestDto dto) {
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .message("Harcama isteği güncellendi.")
+                .code(200)
+                .success(expenseService.updateExpense(dto))
+                .build());
+    }
+
 
 
 
