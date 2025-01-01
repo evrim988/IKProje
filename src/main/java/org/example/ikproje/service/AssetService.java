@@ -39,16 +39,12 @@ public class AssetService {
     }
 
     //Şirket yöneticisi için personelin üzerine atanan zimmetlerin listesi
-    public List<VwAsset> getAssetListOfPersonel(String token,Long personelId){
+    public List<VwAsset> getAssetListOfCompany(String token){
         User companyManager = userService.getUserByToken(token);
         if(companyManager.getUserRole().equals(EUserRole.COMPANY_MANAGER)){
-            User user = userService.findById(personelId).orElseThrow(()->new IKProjeException(ErrorType.USER_NOTFOUND));
-            //Aynı şirkette mi çalışıyorlar ?
-            if(user.getCompanyId().equals(companyManager.getCompanyId())){
-                return assetRepository.getAllVwAssetsByUserId(user.getId());
+                return assetRepository.getAllVwPersonelAssetsByCompanyId(companyManager.getCompanyId());
             }
-        }
-        throw new IKProjeException(ErrorType.INVALID_TOKEN);
+        throw new IKProjeException(ErrorType.UNAUTHORIZED);
     }
 
     //companyManagerin personele yeni zimmet ataması için
