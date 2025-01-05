@@ -42,7 +42,7 @@ public class LeaveController {
     }
 
     //personelin yaptığı izin istekleri için
-    @GetMapping("/get-personel-request-leave")
+    @GetMapping(GET_PERSONEL_REQUEST_LEAVE)
     public ResponseEntity<BaseResponse<List<Leave>>> getPersonelRequestLeaveList(@RequestParam String token){
         return ResponseEntity.ok(BaseResponse.<List<Leave>>builder()
                         .code(200)
@@ -72,7 +72,7 @@ public class LeaveController {
                 .build());
     }
 
-    @PutMapping("/update-leave-request")
+    @PutMapping(UPDATE_LEAVE_REQUEST)
     public ResponseEntity<BaseResponse<Boolean>> updateLeaveRequest(@RequestBody UpdateLeaveRequstDto dto){
         Boolean success = leaveService.updatePersonelLeaveRequest(dto);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
@@ -82,7 +82,7 @@ public class LeaveController {
                 .build());
     }
 
-    @DeleteMapping("/delete-leave-request")
+    @DeleteMapping(DELETE_LEAVE_REQUEST)
     public ResponseEntity<BaseResponse<Boolean>> deleteLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
         Boolean success  = leaveService.deletePersonelLeaveRequest(token,leaveId);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()

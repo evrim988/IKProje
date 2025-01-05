@@ -53,7 +53,7 @@ public class BreakController {
 	}
 
 	//şirkete ait mola listesini getirir.
-	@GetMapping("/get-all-break")
+	@GetMapping(GET_ALL_BREAK)
 	public ResponseEntity<BaseResponse<List<BreakResponseDto>>> getAllBreak(@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<List<BreakResponseDto>>builder()
 						.code(200)

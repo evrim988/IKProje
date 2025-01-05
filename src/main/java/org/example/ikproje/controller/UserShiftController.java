@@ -46,7 +46,7 @@ public class UserShiftController {
 	}
 
 	//Şirkete ait personelleri getirir.
-	@GetMapping("/get-personel-list-by-companyId")
+	@GetMapping(GET_PERSONEL_LIST_BY_COMPANYID)
 	public ResponseEntity<BaseResponse<List<User>>> getPersonelListByCompanyId(@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<List<User>>builder()
 						.code(200)
@@ -57,7 +57,7 @@ public class UserShiftController {
 	}
 
 	//Şirket Yöneticisi tarafından personele atanmış vardiya listesini döndürür.
-	@GetMapping("/get-personel-shift-list")
+	@GetMapping(GET_PERSONEL_SHIFT_LIST)
 	public ResponseEntity<BaseResponse<List<UserShiftResponseDto>>> getGetPersonelShiftList(@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<List<UserShiftResponseDto>>builder()
 						.code(200)

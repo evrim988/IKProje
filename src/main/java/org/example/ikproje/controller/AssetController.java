@@ -32,7 +32,7 @@ public class AssetController {
 
 
     //Şirket yöneticisi için, bütün personel assetlerini görüyor
-    @GetMapping("get-assets-of-company")
+    @GetMapping(GET_ASSETS_OF_COMPANY)
     public ResponseEntity<BaseResponse<List<VwAsset>>> getAssetListOfCompany(@RequestParam String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
                 .success(true)
@@ -41,7 +41,7 @@ public class AssetController {
                 .build());
     }
 
-    @PostMapping("assign-new-asset")
+    @PostMapping(ASSIGN_NEW_ASSET)
     public ResponseEntity<BaseResponse<Boolean>> assignNewAsset(@RequestBody NewAssetRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .message("İşlem başarılı")
@@ -50,7 +50,7 @@ public class AssetController {
                 .build());
     }
 
-    @PutMapping("approve-asset")
+    @PutMapping(APPROVE_ASSET)
     public ResponseEntity<BaseResponse<Boolean>> approveAsset(@RequestParam String token,@RequestParam Long assetId){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Zimmet atanması onaylandı.")
@@ -59,7 +59,7 @@ public class AssetController {
                 .build());
     }
 
-    @PutMapping("reject-asset")
+    @PutMapping(REJECT_ASSET)
     public ResponseEntity<BaseResponse<Boolean>> rejectAsset(@RequestParam String token,@RequestParam Long assetId,String rejectMessage){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Zimmet atanması reddedildi.")

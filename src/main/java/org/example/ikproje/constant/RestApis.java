@@ -29,6 +29,10 @@ public class RestApis {
     public static final String GET_UNAPPROVED_COMPANIES="/get-unapproved-companies";
     
     public static final String GET_PERSONEL_ASSETS="/get-personel-assets";
+    public static final String GET_ASSETS_OF_COMPANY="/get-assets-of-company";
+    public static final String ASSIGN_NEW_ASSET="/assign-new-asset";
+    public static final String APPROVE_ASSET="/approve-asset";
+    public static final String REJECT_ASSET="/reject-asset";
     
     public static final String GET_COMPANY_MANAGER_PROFILE="/get-company-manager-profile";
     public static final String UPDATE_COMPANY_MANAGER_PROFILE="/update-company-manager-profile";
@@ -51,6 +55,9 @@ public class RestApis {
     public static final String APPROVE_LEAVE_REQUEST = "/approve-leave-request";
     public static final String REJECT_LEAVE_REQUEST = "/reject-leave-request";
     public static final String NEW_LEAVE_REQUEST = "/new-leave-request";
+    public static final String UPDATE_LEAVE_REQUEST = "/update-leave-request";
+    public static final String DELETE_LEAVE_REQUEST = "/delete-leave-request";
+    public static final String GET_PERSONEL_REQUEST_LEAVE = "/get-personel-request-leave";
     
     public static final String NEW_SHIFT_REQUEST = "/new-shift-request";
     public static final String UPDATE_SHIFT = "/update-shift";
@@ -58,11 +65,30 @@ public class RestApis {
     public static final String ALL_SHIFTS_BY_COMPANY = "/all-shifts-by-company";
     public static final String ASSIGN_SHIFT_TO_USER = "/assign-shift-to-user";
     public static final String GET_ACTIVE_SHIFT_DETAILS = "/get-active-shift-details";
+    public static final String GET_PERSONEL_LIST_BY_COMPANYID = "/get-personel-list-by-companyId";
+    public static final String GET_PERSONEL_SHIFT_LIST = "/get-personel-shift-list";
     
     public static final String ADD_NEW_BREAK = "/add-new-break";
     public static final String UPDATE_BREAK = "/update-break";
     public static final String DELETE_BREAK = "/delete-break";
+    public static final String GET_ALL_BREAK = "/get-all-break";
     public static final String GET_BREAKS_BY_SHIFT_ID = "/get-breaks-by-shift-id";
+    
+    public static final String GET_PERSONEL_EXPENSES = "/get-personel-expenses";
+    public static final String GET_PERSONEL_EXPENSE_REQUESTS = "/get-personel-expense-requests";
+    public static final String CREATE_NEW_EXPENSE_REQUEST = "/create-new-expense-request";
+    public static final String APPROVE_EXPENSE = "/approve-expense";
+    public static final String REJECT_EXPENSE = "/reject-expense";
+    public static final String UPLOAD_RECEIPT = "/upload-receipt";
+    public static final String UPLOAD_EXPENSE = "/update-expense";
+    
+    
+    public static final String CREATE_COMMENT = "/create-comment";
+    public static final String UPDATE_COMMENT = "/update-comment";
+    public static final String UPDATE_MANAGER_PHOTO = "/update-manager-photo";
+    public static final String UPDATE_COMPANY_PHOTO = "/update-company-logo";
+    public static final String GET_COMMENTS = "/get-comments";
+    public static final String GET_COMMENT = "/get-comment";
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";

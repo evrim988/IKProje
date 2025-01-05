@@ -5,6 +5,7 @@ import org.example.ikproje.dto.request.NewExpenseRequestDto;
 import org.example.ikproje.dto.request.UpdateExpenseRequestDto;
 import org.example.ikproje.entity.Expense;
 import org.example.ikproje.entity.User;
+import org.example.ikproje.entity.UserDetails;
 import org.example.ikproje.entity.enums.EExpenseStatus;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
@@ -24,6 +25,7 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
+    private final UserDetailsService userDetailsService;
 
 
     //personelin yapmış olduğu tüm istekler, reddedilmiş kabul edilmiş ve beklemede olanlar
@@ -76,7 +78,10 @@ public class ExpenseService {
     public Boolean approveExpenseRequest(String token, Long expenseId){
         Expense expense = checkCompany(token, expenseId);
         expense.setStatus(EExpenseStatus.APPROVED);
+        UserDetails userDetails = userDetailsService.findByUserId(expense.getUserId());
+        userDetails.setSalary(userDetails.getSalary() + expense.getAmount());
         expenseRepository.save(expense);
+        userDetailsService.save(userDetails);
         return true;
     }
 
