@@ -23,17 +23,18 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("create-comment")
+    @PostMapping(CREATE_COMMENT)
     public ResponseEntity<BaseResponse<Boolean>> createComment(@RequestParam String token, @RequestParam String content){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-                        .success(commentService.createComment(token, content))
+                        .success(true)
                         .code(200)
                         .message("Comment başarı ile oluşturuldu.")
+                        .data(commentService.createComment(token, content))
                 .build());
     }
 
     //Ana sayfa ziyaretçiler için 5 random yönetici Commenti
-    @GetMapping("/get-comments")
+    @GetMapping(GET_COMMENTS)
     public ResponseEntity<BaseResponse<List<VwComment>>> getComments(){
         return ResponseEntity.ok(BaseResponse.<List<VwComment>>builder()
                 .data(commentService.findAllComments())
@@ -44,7 +45,7 @@ public class CommentController {
     }
 
     //Ziyaretçi bir commenta tıklarsa o şirket/yönetici ile ilgili detaylı bilgi görmesi için
-    @GetMapping("/get-comment")
+    @GetMapping(GET_COMMENT)
     public ResponseEntity<BaseResponse<VwCommentDetail>> getComments(@RequestParam Long commentId){
         return ResponseEntity.ok(BaseResponse.<VwCommentDetail>builder()
                 .data(commentService.getCommentDetail(commentId))
@@ -54,32 +55,35 @@ public class CommentController {
                 .build());
     }
 
-    @PutMapping("/update-comment")
+    @PutMapping(UPDATE_COMMENT)
     public ResponseEntity<BaseResponse<Boolean>> updateComment(@RequestParam String token,@RequestParam String content){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-                .success(commentService.updateComment(token, content))
+                .success(true)
                 .code(200)
                 .message("Comment başarı ile güncellendi.")
+                .data(commentService.updateComment(token, content))
                 .build());
     }
 
-    @PostMapping(value = "update-manager-photo",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = UPDATE_MANAGER_PHOTO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseResponse<Boolean>> addManagerPhoto(@RequestParam String token,
                                                                  @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-                .success(commentService.addManagerPhotoToComment(token, file))
+                .success(true)
                 .code(200)
                 .message("Comment fotosu güncellendi.")
+                .data(commentService.addManagerPhotoToComment(token, file))
                 .build());
     }
 
-    @PostMapping(value = "update-company-logo",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = UPDATE_COMPANY_PHOTO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseResponse<Boolean>> addCompanyLogo(@RequestParam String token,
                                                                  @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
-                .success(commentService.addCompanyLogoToComment(token, file))
+                .success(true)
                 .code(200)
                 .message("Comment fotosu güncellendi.")
+                .data(commentService.addCompanyLogoToComment(token, file))
                 .build());
     }
 

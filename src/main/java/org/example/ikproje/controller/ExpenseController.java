@@ -25,7 +25,7 @@ public class    ExpenseController {
 
     private final ExpenseService expenseService;
 
-    @GetMapping("get-personel-expenses")
+    @GetMapping(GET_PERSONEL_EXPENSES)
     public ResponseEntity<BaseResponse<List<VwExpense>>> getPersonelExpenses(String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwExpense>>builder()
                         .code(200)
@@ -35,7 +35,7 @@ public class    ExpenseController {
                 .build());
     }
 
-    @GetMapping("get-personel-expense-requests")
+    @GetMapping(GET_PERSONEL_EXPENSE_REQUESTS)
     public ResponseEntity<BaseResponse<List<VwExpense>>> getPersonelExpenseRequests(String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwExpense>>builder()
                 .code(200)
@@ -45,50 +45,55 @@ public class    ExpenseController {
                 .build());
     }
 
-    @PostMapping("create-new-expense-request")
+    @PostMapping(CREATE_NEW_EXPENSE_REQUEST)
     public ResponseEntity<BaseResponse<Boolean>> createNewExpenseRequest(NewExpenseRequestDto dto) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .message("Yeni harcama kaydı isteği oluşturuldu.")
                         .code(200)
-                        .success(expenseService.createNewExpenseRequest(dto))
+                        .success(true)
+                        .data(expenseService.createNewExpenseRequest(dto))
                 .build());
     }
 
-    @PutMapping("approve-expense")
+    @PutMapping(APPROVE_EXPENSE)
     public ResponseEntity<BaseResponse<Boolean>> approveExpense(String token, Long expenseId) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Personel harcama isteği onaylandı.")
                 .code(200)
-                .success(expenseService.approveExpenseRequest(token,expenseId))
+                .success(true)
+                .data(expenseService.approveExpenseRequest(token,expenseId))
                 .build());
     }
 
-    @PutMapping("reject-expense")
+    @PutMapping(REJECT_EXPENSE)
     public ResponseEntity<BaseResponse<Boolean>> rejectExpense(String token, Long expenseId) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Personel harcama isteği reddedildi..")
                 .code(200)
-                .success(expenseService.rejectExpenseRequest(token,expenseId))
+                .success(true)
+                .data(expenseService.rejectExpenseRequest(token,expenseId))
                 .build());
     }
 
-    @PostMapping(value = "upload-receipt",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = UPLOAD_RECEIPT,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseResponse<Boolean>> uploadReceipt(@RequestParam String token,
                                                                @RequestParam Long expenseId,
                                                                @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Fiş fotoğrafı yüklendi.")
                 .code(200)
-                .success(expenseService.addReceiptPhotoToExpense(token,expenseId,file))
+                .success(true)
+                .data(expenseService.addReceiptPhotoToExpense(token,expenseId,file))
                 .build());
     }
 
-    @PutMapping("update-expense")
+    @PutMapping(UPLOAD_EXPENSE)
     public ResponseEntity<BaseResponse<Boolean>> updateExpense(UpdateExpenseRequestDto dto) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Harcama isteği güncellendi.")
                 .code(200)
-                .success(expenseService.updateExpense(dto))
+                .success(true)
+                .data(expenseService.updateExpense(dto))
                 .build());
     }
 
