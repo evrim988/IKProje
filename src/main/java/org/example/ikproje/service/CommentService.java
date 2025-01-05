@@ -2,6 +2,7 @@ package org.example.ikproje.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.ikproje.entity.Comment;
+import org.example.ikproje.entity.Company;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.exception.ErrorType;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +24,16 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
+    private final CompanyService companyService;
 
     //En başta sadece 1 kere comment oluşturabilsin yönetici, sonradan değiştirmek için update Methodunu kullanabilir.
     public Boolean createComment(String token,String content){
         User companyManager = userService.getUserByToken(token);
         if(!companyManager.getUserRole().equals(EUserRole.COMPANY_MANAGER)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
         if(commentRepository.existsByCompanyManagerId(companyManager.getId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
-        commentRepository.save(Comment.builder().companyManagerId(companyManager.getId()).content(content).build());
+        Optional<Company> optionalCompany = companyService.findById(companyManager.getId());
+        if(optionalCompany.isEmpty()) throw new IKProjeException(ErrorType.COMPANY_NOTFOUND);
+        commentRepository.save(Comment.builder().companyManagerId(companyManager.getId()).content(content).managerPhoto(optionalCompany.get().getLogo()).build());
         return true;
     }
 

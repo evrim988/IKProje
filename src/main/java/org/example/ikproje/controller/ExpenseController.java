@@ -46,7 +46,7 @@ public class    ExpenseController {
     }
 
     @PostMapping(CREATE_NEW_EXPENSE_REQUEST)
-    public ResponseEntity<BaseResponse<Boolean>> createNewExpenseRequest(NewExpenseRequestDto dto) {
+    public ResponseEntity<BaseResponse<Boolean>> createNewExpenseRequest(@RequestBody NewExpenseRequestDto dto) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .message("Yeni harcama kaydı isteği oluşturuldu.")
                         .code(200)
