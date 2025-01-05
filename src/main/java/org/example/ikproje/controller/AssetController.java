@@ -24,6 +24,7 @@ public class AssetController {
     @GetMapping(GET_PERSONEL_ASSETS)
     public ResponseEntity<BaseResponse<List<VwAsset>>> getPersonelAssets(@RequestParam String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
+                        .code(200)
                 .success(true)
                 .message("Şirket personellerinin zimmet listesi")
                 .data(assetService.getAllPersonelAssets(token))
@@ -35,6 +36,7 @@ public class AssetController {
     @GetMapping(GET_ASSETS_OF_COMPANY)
     public ResponseEntity<BaseResponse<List<VwAsset>>> getAssetListOfCompany(@RequestParam String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
+                        .code(200)
                 .success(true)
                 .message("Personel zimmet listesi")
                 .data(assetService.getAssetListOfCompany(token))

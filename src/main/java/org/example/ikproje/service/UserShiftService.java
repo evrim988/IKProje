@@ -120,10 +120,9 @@ public class UserShiftService {
 	}
 
 	public List<UserShiftResponseDto> getPersonelShiftList(String token) {
-		Optional<Long> optionalCompanyManagerId = jwtManager.validateToken(token);
-		if (optionalCompanyManagerId.isEmpty()){
-			throw new IKProjeException(ErrorType.INVALID_TOKEN);
-		}
+		User companyManager = userService.getUserByToken(token);
+
+
 		List<UserShift> userShiftList = userShiftRepository.findAllByState(EState.ACTIVE);
 		List<UserShiftResponseDto> responseDtoList = new ArrayList<>();
 
@@ -136,6 +135,9 @@ public class UserShiftService {
 			}
 			if(optionalShift.isEmpty()){
 				throw new IKProjeException(ErrorType.SHIFT_NOT_FOUND);
+			}
+			if(!optionalShift.get().getCompanyId().equals(companyManager.getId())){
+				continue;
 			}
 			UserShiftResponseDto dto = UserShiftResponseDto.builder()
 					.id(userShift.getId())
