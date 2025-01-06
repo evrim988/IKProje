@@ -11,6 +11,7 @@ import org.example.ikproje.entity.UserShift;
 import org.example.ikproje.service.UserShiftService;
 import org.example.ikproje.view.VwUserActiveShift;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserShiftController {
 	private final UserShiftService userShiftService;
 	
 	@PostMapping(ASSIGN_SHIFT_TO_USER)
+	@PreAuthorize("hasAuthority('COMPANY_MANAGER')")
 	public ResponseEntity<BaseResponse<Boolean>> assignShiftToUser(@RequestBody @Valid AssignShiftToUserRequestDto dto){
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 				                         .code(200)

@@ -30,7 +30,7 @@ public class CommentService {
     public Boolean createComment(String token,String content){
         User companyManager = userService.getUserByToken(token);
         if(!companyManager.getUserRole().equals(EUserRole.COMPANY_MANAGER)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
-        if(commentRepository.existsByCompanyManagerId(companyManager.getId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
+        if(commentRepository.existsByCompanyManagerId(companyManager.getId())) throw new IKProjeException(ErrorType.COMMENT_ALREADY_EXIST);
         Optional<Company> optionalCompany = companyService.findById(companyManager.getId());
         if(optionalCompany.isEmpty()) throw new IKProjeException(ErrorType.COMPANY_NOTFOUND);
         commentRepository.save(Comment.builder().companyManagerId(companyManager.getId()).content(content).managerPhoto(optionalCompany.get().getLogo()).build());

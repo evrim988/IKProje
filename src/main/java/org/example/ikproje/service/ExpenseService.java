@@ -51,7 +51,9 @@ public class ExpenseService {
                                                      .approverId(companyManagerId)
                                                      .description(description)
                                                      .status(EExpenseStatus.PENDING).amount(amount).build());
-        expense.setReceiptUrl(cloudinaryService.uploadFile(file));
+        if(file!=null){//burda resim yüklememişse hata da fırlatabiliriz.
+            expense.setReceiptUrl(cloudinaryService.uploadFile(file));
+        }
         expenseRepository.save(expense);
         return true;
     }

@@ -24,6 +24,7 @@ public class GenerateData {
     public void generateData(){
         if(adminRepository.count() == 0){
             Admin admin = Admin.builder()
+                    .id(99999L)
                     .email("admin@test.com")
                     .password("java15")
                     .build();

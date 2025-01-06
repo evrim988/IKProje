@@ -9,6 +9,7 @@ import org.example.ikproje.dto.response.BreakResponseDto;
 import org.example.ikproje.entity.Break;
 import org.example.ikproje.service.BreakService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class BreakController {
 
 	//şirkete ait mola listesini getirir.
 	@GetMapping(GET_ALL_BREAK)
+	@PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
 	public ResponseEntity<BaseResponse<List<BreakResponseDto>>> getAllBreak(@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<List<BreakResponseDto>>builder()
 						.code(200)
@@ -63,6 +65,7 @@ public class BreakController {
 	}
 	
 	@GetMapping(GET_BREAKS_BY_SHIFT_ID)
+	@PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
 	public ResponseEntity<BaseResponse<List<Break>>> getBreaksByShiftId(@RequestParam String token, @RequestParam Long shiftId){
 		return ResponseEntity.ok(BaseResponse.<List<Break>>builder()
 				                         .code(200)

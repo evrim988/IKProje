@@ -8,6 +8,7 @@ import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.entity.Shift;
 import org.example.ikproje.service.ShiftService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ShiftController {
 	private final ShiftService shiftService;
 	
 	@PostMapping(NEW_SHIFT_REQUEST)
+	@PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
 	public ResponseEntity<BaseResponse<Boolean>> createNewShift(@RequestBody @Valid CreateNewShiftRequestDto dto){
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 				                         .code(200)
@@ -32,6 +34,7 @@ public class ShiftController {
 	}
 	
 	@PutMapping(UPDATE_SHIFT)
+	@PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
 	public ResponseEntity<BaseResponse<Boolean>> updateShift(@RequestBody @Valid UpdateShiftRequestDto dto){
 		
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
@@ -43,6 +46,7 @@ public class ShiftController {
 	}
 	
 	@PutMapping(DELETE_SHIFT)
+	@PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
 	public ResponseEntity<BaseResponse<Boolean>> deleteShift(@RequestParam String token, @RequestParam Long shiftId){
 		return ResponseEntity.ok(BaseResponse.<Boolean>builder()
 		                                     .code(200)

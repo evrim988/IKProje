@@ -50,6 +50,7 @@ public class AssetService {
     //companyManagerin personele yeni zimmet ataması için
     public Boolean assignNewAssetToPersonel(NewAssetRequestDto dto){
         User personelManager = userService.getUserByToken(dto.token());
+        System.out.println(personelManager.getUserRole());
         User personelToAssign = userService.findById(dto.personalId()).orElseThrow(()->new IKProjeException(ErrorType.USER_NOTFOUND));
         if(!personelManager.getCompanyId().equals(personelToAssign.getCompanyId())) throw new IKProjeException(ErrorType.UNAUTHORIZED);
         assetRepository.save(Asset.builder()

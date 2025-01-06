@@ -11,6 +11,7 @@ import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,7 +86,9 @@ public class AuthController {
                 .build());
     }
 
+
     @PostMapping(value = UPDATE_USER_AVATAR,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> addAvatarToUser(@RequestParam String token,
                                                                  @RequestParam MultipartFile file)
             throws IOException {
