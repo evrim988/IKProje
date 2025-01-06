@@ -71,7 +71,11 @@ public class ExpenseService {
         if(!personel.getId().equals(expense.getUserId())) throw new IKProjeException((ErrorType.UNAUTHORIZED));
         expense.setAmount(amount);
         expense.setDescription(description);
-        expense.setReceiptUrl(cloudinaryService.uploadFile(file));
+
+        if(file != null){
+            expense.setReceiptUrl(cloudinaryService.uploadFile(file));
+        }
+
         expenseRepository.save(expense);
         return true;
     }
