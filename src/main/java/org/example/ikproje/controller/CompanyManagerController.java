@@ -6,7 +6,9 @@ import org.example.ikproje.dto.request.CreateNewPersonelRequestDto;
 import org.example.ikproje.dto.request.UpdateCompanyManagerProfileRequestDto;
 import org.example.ikproje.dto.request.UpdatePersonelStateRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
+import org.example.ikproje.entity.User;
 import org.example.ikproje.service.CompanyManagerService;
+import org.example.ikproje.service.UserService;
 import org.example.ikproje.view.VwCompanyManager;
 import org.example.ikproje.view.VwPersonelSummary;
 import org.springframework.http.MediaType;
@@ -25,7 +27,8 @@ import static org.example.ikproje.constant.RestApis.*;
 public class CompanyManagerController {
 
     private final CompanyManagerService companyManagerService;
-
+    private final UserService userService;
+    
     @PostMapping(value = UPDATE_COMPANY_LOGO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseResponse<Boolean>> addLogoToCompany(@RequestParam String token,
                                                                   @RequestParam MultipartFile file)
@@ -85,4 +88,6 @@ public class CompanyManagerController {
                 .code(200)
                 .build());
     }
+    
+    
 }

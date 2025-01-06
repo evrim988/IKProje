@@ -214,4 +214,15 @@ public class UserService {
         User user = findById(companyManagerId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
         return userRepository.countByCompanyIdAndState(user.getCompanyId(),EState.ACTIVE).orElseThrow(() -> new IKProjeException(ErrorType.COMPANY_NOTFOUND));
     }
+    
+    // Hem kayıtlı şirket hem de kayıtlı şirket yöneticisi sayısı geliyor.
+    public Long activeCompanyCount(){
+        return userRepository.countByIsApprovedAndUserRoleAndState(EIsApproved.APPROVED, EUserRole.COMPANY_MANAGER, EState.ACTIVE);
+    }
+    
+    public Long activeEmployeeCount(){
+        return userRepository.countByIsApprovedAndUserRoleAndState(EIsApproved.APPROVED,EUserRole.EMPLOYEE,EState.ACTIVE);
+    }
+    
+    
 }
