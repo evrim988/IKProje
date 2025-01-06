@@ -1,12 +1,12 @@
 package org.example.ikproje.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.ikproje.dto.request.NewExpenseRequestDto;
 import org.example.ikproje.dto.request.UpdateExpenseRequestDto;
 import org.example.ikproje.entity.Expense;
 import org.example.ikproje.entity.User;
 import org.example.ikproje.entity.UserDetails;
 import org.example.ikproje.entity.enums.EExpenseStatus;
+import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.repository.ExpenseRepository;
@@ -26,6 +26,7 @@ public class ExpenseService {
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
     private final UserDetailsService userDetailsService;
+    private final EmailService emailService;
 
 
     //personelin yapmış olduğu tüm istekler, reddedilmiş kabul edilmiş ve beklemede olanlar
@@ -42,18 +43,16 @@ public class ExpenseService {
 
 
     //Personel yeni harcama isteği
-    public Boolean createNewExpenseRequest(NewExpenseRequestDto dto){
-
-        User personel = userService.getUserByToken(dto.token());
+    public Boolean createNewExpenseRequest(String token,Double amount, String description,MultipartFile file) throws IOException {
+        System.out.println(token);
+        User personel = userService.getUserByToken(token);
         Long companyManagerId = userService.findCompanyManagerIdByCompanyId(personel.getCompanyId());
-        expenseRepository.save(Expense.builder()
-                .userId(personel.getId())
-                .approverId(companyManagerId)
-                .receiptUrl(dto.receiptUrl())
-                .description(dto.description())
-                .status(EExpenseStatus.PENDING)
-                .amount(dto.amount())
-                .build());
+        Expense expense = expenseRepository.save(Expense.builder().userId(personel.getId())
+                                                     .approverId(companyManagerId)
+                                                     .description(description)
+                                                     .status(EExpenseStatus.PENDING).amount(amount).build());
+        expense.setReceiptUrl(cloudinaryService.uploadFile(file));
+        expenseRepository.save(expense);
         return true;
     }
 
@@ -64,12 +63,13 @@ public class ExpenseService {
         return true;
     }
 
-    public Boolean updateExpense(UpdateExpenseRequestDto dto){
-        User personel = userService.getUserByToken(dto.token());
-        Expense expense = checkCompany(dto.token(),dto.expenseId());
-        if(!personel.getId().equals(expense.getId())) throw new IKProjeException((ErrorType.UNAUTHORIZED));
-        expense.setAmount(dto.amount());
-        expense.setDescription(dto.description());
+    public Boolean updateExpense(String token,Long expenseId, Double amount, String description,MultipartFile file) throws IOException {
+        User personel = userService.getUserByToken(token);
+        Expense expense = checkCompany(token,expenseId);
+        if(!personel.getId().equals(expense.getUserId())) throw new IKProjeException((ErrorType.UNAUTHORIZED));
+        expense.setAmount(amount);
+        expense.setDescription(description);
+        expense.setReceiptUrl(cloudinaryService.uploadFile(file));
         expenseRepository.save(expense);
         return true;
     }
@@ -86,11 +86,30 @@ public class ExpenseService {
     }
 
     //Şirket yöneticisi harcama isteği reddetme, reddedilince databaseden passive çekebiliriz belki.
-    public Boolean rejectExpenseRequest(String token, Long expenseId){
+    public Boolean rejectExpenseRequest(String token, Long expenseId,String rejectReason){
+        User companyManager = userService.getUserByToken(token);
         Expense expense = checkCompany(token, expenseId);
+        User personel = userService.findById(expense.getUserId())
+                               .orElseThrow(() -> new IKProjeException((ErrorType.UNAUTHORIZED)));
         expense.setStatus(EExpenseStatus.REJECTED);
         expenseRepository.save(expense);
+        emailService.sendRejectedExpenseNotificationEmail(personel.getEmail(),companyManager.getEmail(),rejectReason );
         return true;
+    }
+    
+    public Boolean deleteExpense(String token, Long expenseId){
+        User personel = userService.getUserByToken(token);
+        Expense expense = checkCompany(token, expenseId);
+        if(!personel.getId().equals(expense.getUserId())) throw new IKProjeException((ErrorType.UNAUTHORIZED));
+        if (expense.getState().equals(EState.PASSIVE)) throw new IKProjeException((ErrorType.EXPENSE_ALREADY_DELETED));
+        if (expense.getStatus().equals(EExpenseStatus.PENDING)){
+            expense.setState(EState.PASSIVE);
+            expenseRepository.save(expense);
+            return true;
+        }
+       else {
+           throw new IKProjeException((ErrorType.EXPENSE_CANNOT_BE_DELETED));
+        }
     }
 
 

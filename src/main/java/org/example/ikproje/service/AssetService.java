@@ -82,7 +82,7 @@ public class AssetService {
         asset.setState(EState.PASSIVE);
         String companyManagerMail = userService.findEmailByUserId(asset.getCompanyManagerId());
         String personelMail = userService.findEmailByUserId(asset.getPersonelId());
-        emailService.sendAssetAssignmentRejectionMessage(companyManagerMail, personelMail, rejectMessage);
+        emailService.sendAssetAssignmentRejectionMessage( personelMail,companyManagerMail, rejectMessage);
         assetRepository.save(asset);
         return true;
     }

@@ -2,7 +2,7 @@ package org.example.ikproje.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.ikproje.dto.request.NewExpenseRequestDto;
+
 import org.example.ikproje.dto.request.UpdateExpenseRequestDto;
 import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.service.ExpenseService;
@@ -21,7 +21,7 @@ import static org.example.ikproje.constant.RestApis.*;
 @RequiredArgsConstructor
 @RequestMapping(EXPENSE)
 @CrossOrigin("*")
-public class    ExpenseController {
+public class  ExpenseController {
 
     private final ExpenseService expenseService;
 
@@ -45,13 +45,20 @@ public class    ExpenseController {
                 .build());
     }
 
-    @PostMapping(CREATE_NEW_EXPENSE_REQUEST)
-    public ResponseEntity<BaseResponse<Boolean>> createNewExpenseRequest(@RequestBody NewExpenseRequestDto dto) {
+    @PostMapping(value = CREATE_NEW_EXPENSE_REQUEST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<Boolean>> createNewExpenseRequest(@RequestParam String token,
+                                                                         @RequestParam Double amount,
+                                                                         @RequestParam String description,
+                                                                         @RequestParam MultipartFile file)
+		    throws IOException {
+        System.out.println("Token: " + token);
+        System.out.println("Description: " + description);
+        System.out.println("Amount: " + amount);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .message("Yeni harcama kaydı isteği oluşturuldu.")
                         .code(200)
                         .success(true)
-                        .data(expenseService.createNewExpenseRequest(dto))
+                        .data(expenseService.createNewExpenseRequest(token,amount,description,file))
                 .build());
     }
 
@@ -66,15 +73,26 @@ public class    ExpenseController {
     }
 
     @PutMapping(REJECT_EXPENSE)
-    public ResponseEntity<BaseResponse<Boolean>> rejectExpense(String token, Long expenseId) {
+    public ResponseEntity<BaseResponse<Boolean>> rejectExpense(String token, Long expenseId, String rejectReason) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Personel harcama isteği reddedildi..")
                 .code(200)
                 .success(true)
-                .data(expenseService.rejectExpenseRequest(token,expenseId))
+                .data(expenseService.rejectExpenseRequest(token,expenseId,rejectReason))
                 .build());
     }
-
+    
+    @PutMapping(DELETE_EXPENSE)
+    public ResponseEntity<BaseResponse<Boolean>> deleteExpense(String token,Long expenseId){
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                                         .code(200)
+                                         .data(expenseService.deleteExpense(token,expenseId))
+                                         .success(true)
+                                         .message("Harcama isteği başarıyla silindi.")
+                                         .build());
+        
+    }
+    
     @PostMapping(value = UPLOAD_RECEIPT,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseResponse<Boolean>> uploadReceipt(@RequestParam String token,
                                                                @RequestParam Long expenseId,
@@ -87,13 +105,17 @@ public class    ExpenseController {
                 .build()); 
     }
 
-    @PutMapping(UPLOAD_EXPENSE)
-    public ResponseEntity<BaseResponse<Boolean>> updateExpense(UpdateExpenseRequestDto dto) {
+    @PutMapping(value = UPDATE_EXPENSE,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse<Boolean>> updateExpense(@RequestParam String token,
+                                                               @RequestParam Long expenseId,
+                                                               @RequestParam Double amount,
+                                                               @RequestParam String description,
+                                                               @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Harcama isteği güncellendi.")
                 .code(200)
                 .success(true)
-                .data(expenseService.updateExpense(dto))
+                .data(expenseService.updateExpense(token,expenseId,amount,description,file))
                 .build());
     }
 

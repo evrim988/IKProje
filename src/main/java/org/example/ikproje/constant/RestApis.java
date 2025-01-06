@@ -80,7 +80,8 @@ public class RestApis {
     public static final String APPROVE_EXPENSE = "/approve-expense";
     public static final String REJECT_EXPENSE = "/reject-expense";
     public static final String UPLOAD_RECEIPT = "/upload-receipt";
-    public static final String UPLOAD_EXPENSE = "/update-expense";
+    public static final String UPDATE_EXPENSE = "/update-expense";
+    public static final String DELETE_EXPENSE = "/delete-expense";
     
     
     public static final String CREATE_COMMENT = "/create-comment";

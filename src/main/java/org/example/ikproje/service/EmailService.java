@@ -79,6 +79,15 @@ public class EmailService {
 		msg.setText(message);
 		mailSender.send(msg);
 	}
+	
+	public void sendRejectedExpenseNotificationEmail(String emailTo, String emailFrom, String message){
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(emailTo);
+		msg.setFrom(emailFrom);
+		msg.setSubject("Harcama hakkında");
+		msg.setText(message);
+		mailSender.send(msg);
+	}
 
 
 }
