@@ -84,7 +84,7 @@ public class    ExpenseController {
                 .code(200)
                 .success(true)
                 .data(expenseService.addReceiptPhotoToExpense(token,expenseId,file))
-                .build());
+                .build()); 
     }
 
     @PutMapping(UPLOAD_EXPENSE)
