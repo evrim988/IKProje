@@ -39,6 +39,8 @@ public enum ErrorType {
     BREAK_NOT_FOUND(4005,"Mola bulunamadı!",HttpStatus.NOT_FOUND),
     ASSET_NOT_FOUND(4101,"Zimmet bulunamadı",HttpStatus.NOT_FOUND),
     EXPENSE_NOT_FOUND(4201,"Harcama bulunamadı",HttpStatus.NOT_FOUND),
+    EXPENSE_ALREADY_DELETED(4202,"Harcama zaten silinmiş",HttpStatus.BAD_REQUEST),
+    EXPENSE_CANNOT_BE_DELETED(4203,"Harcama onaylanmış veya reddedilmiş ise, artık silinemez!",HttpStatus.BAD_REQUEST),
     COMMENT_NOT_FOUND(4301,"Comment bulunamadı.",HttpStatus.NOT_FOUND),
     COMMENT_ALREADY_EXIST(4302,"Zaten önceden ana sayfa için yorum oluşturulmuş. Var olanı düzenlemeyi deneyin.",HttpStatus.BAD_REQUEST),;
 

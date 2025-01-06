@@ -1,5 +1,6 @@
 package org.example.ikproje.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.example.ikproje.entity.enums.EMembershipType;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
@@ -9,7 +10,9 @@ import java.time.LocalDate;
 public record UpdateCompanyManagerProfileRequestDto(
 
         //user
+        @NotNull
         String token,
+        @NotNull
         Long id,
         String firstName,
         String lastName,

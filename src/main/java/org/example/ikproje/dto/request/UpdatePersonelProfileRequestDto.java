@@ -1,5 +1,6 @@
 package org.example.ikproje.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.example.ikproje.entity.enums.EUserDepartmentType;
 import org.example.ikproje.entity.enums.EUserRole;
@@ -8,7 +9,9 @@ import java.time.LocalDate;
 
 public record UpdatePersonelProfileRequestDto(
         //companyName ve userRole gibi personelin değiştirimeyeceği alanları koymadım buraya.
+        @NotNull
         String token,
+        @NotNull
         Long id,
         String firstName,
         String lastName,
