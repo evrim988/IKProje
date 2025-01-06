@@ -48,6 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         Optional<User> userOptional = userRepository.findById(id);
                         if (userOptional.isPresent()) {
                             User user = userOptional.get();
+                            System.out.println(user.getUserRole().toString());
                             setAuthentication(user, user.getUserRole().toString());
                         }
                     }

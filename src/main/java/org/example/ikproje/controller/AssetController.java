@@ -6,6 +6,7 @@ import org.example.ikproje.dto.response.BaseResponse;
 import org.example.ikproje.service.AssetService;
 import org.example.ikproje.view.VwAsset;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class AssetController {
 
     //personel üzerine atanan assetleri görüyor
     @GetMapping(GET_PERSONEL_ASSETS)
+    @PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
     public ResponseEntity<BaseResponse<List<VwAsset>>> getPersonelAssets(@RequestParam String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
                         .code(200)
@@ -34,6 +36,7 @@ public class AssetController {
 
     //Şirket yöneticisi için, bütün personel assetlerini görüyor
     @GetMapping(GET_ASSETS_OF_COMPANY)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<List<VwAsset>>> getAssetListOfCompany(@RequestParam String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwAsset>>builder()
                         .code(200)
@@ -44,6 +47,7 @@ public class AssetController {
     }
 
     @PostMapping(ASSIGN_NEW_ASSET)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> assignNewAsset(@RequestBody NewAssetRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .message("İşlem başarılı")
@@ -53,6 +57,7 @@ public class AssetController {
     }
 
     @PutMapping(APPROVE_ASSET)
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> approveAsset(@RequestParam String token,@RequestParam Long assetId){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Zimmet atanması onaylandı.")
@@ -62,6 +67,7 @@ public class AssetController {
     }
 
     @PutMapping(REJECT_ASSET)
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> rejectAsset(@RequestParam String token,@RequestParam Long assetId,String rejectMessage){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Zimmet atanması reddedildi.")

@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
      */
         @ExceptionHandler(RuntimeException.class)
         public ResponseEntity<ErrorMessage> runtimeExcepitonHandler(RuntimeException exception){
+            System.out.println("Global exception: "+exception.getMessage());
             return  createResponseEntity(ErrorType.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR,null);
         }
 
@@ -45,7 +46,9 @@ public class GlobalExceptionHandler {
 
 
         public ResponseEntity<ErrorMessage> createResponseEntity(ErrorType errorType, HttpStatus httpStatus, List<String> fields){
-            log.error("TÜM HATALARIN GEÇTİĞİ NOKTA....: "+ errorType.getMessage()+ fields);
+            log.error("TÜM HATALARIN GEÇTİĞİ NOKTA....: "+ errorType.getMessage());
+            System.out.println("httpStatus = "+httpStatus);
+            if(fields!=null) log.error("\nFields: "+fields);
             return new ResponseEntity<>(ErrorMessage.builder()
                     .fields(fields)
                     .success(false)

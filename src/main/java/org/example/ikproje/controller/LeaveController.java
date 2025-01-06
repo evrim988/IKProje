@@ -8,6 +8,7 @@ import org.example.ikproje.entity.Leave;
 import org.example.ikproje.service.LeaveService;
 import org.example.ikproje.view.VwAllPersonelLeaveList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class LeaveController {
     private final LeaveService leaveService;
 
     @PostMapping(NEW_LEAVE_REQUEST)
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> createNewLeaveRequest(@RequestBody NewLeaveRequestDto dto){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .code(200)
@@ -32,6 +34,7 @@ public class LeaveController {
 
     //Şirket yöneticisi için
     @GetMapping(GET_LEAVE_REQUEST)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<List<VwAllPersonelLeaveList>>> getLeaveRequests(@RequestParam String token){
         return ResponseEntity.ok(BaseResponse.<List<VwAllPersonelLeaveList>>builder()
                 .code(200)
@@ -53,6 +56,7 @@ public class LeaveController {
     }
 
     @PostMapping(APPROVE_LEAVE_REQUEST)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> approveLeaveRequest(@RequestParam String token,@RequestParam Long leaveId){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .success(leaveService.approveLeaveRequest(token,leaveId))
@@ -62,6 +66,7 @@ public class LeaveController {
     }
 
     @PostMapping(REJECT_LEAVE_REQUEST)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> rejectLeaveRequest(@RequestParam String token,
                                                                     @RequestParam Long leaveId,
                                                                     @RequestParam String rejectionMessage){

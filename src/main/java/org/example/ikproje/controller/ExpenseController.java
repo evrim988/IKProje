@@ -9,6 +9,7 @@ import org.example.ikproje.service.ExpenseService;
 import org.example.ikproje.view.VwExpense;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,7 @@ public class  ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping(GET_PERSONEL_EXPENSES)
+    @PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
     public ResponseEntity<BaseResponse<List<VwExpense>>> getPersonelExpenses(String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwExpense>>builder()
                         .code(200)
@@ -35,7 +37,9 @@ public class  ExpenseController {
                 .build());
     }
 
+
     @GetMapping(GET_PERSONEL_EXPENSE_REQUESTS)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<List<VwExpense>>> getPersonelExpenseRequests(String token) {
         return ResponseEntity.ok(BaseResponse.<List<VwExpense>>builder()
                 .code(200)
@@ -46,10 +50,11 @@ public class  ExpenseController {
     }
 
     @PostMapping(value = CREATE_NEW_EXPENSE_REQUEST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> createNewExpenseRequest(@RequestParam String token,
                                                                          @RequestParam Double amount,
                                                                          @RequestParam String description,
-                                                                         @RequestParam MultipartFile file)
+                                                                         @RequestParam(required = false) MultipartFile file)
 		    throws IOException {
         System.out.println("Token: " + token);
         System.out.println("Description: " + description);
@@ -63,6 +68,7 @@ public class  ExpenseController {
     }
 
     @PutMapping(APPROVE_EXPENSE)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> approveExpense(String token, Long expenseId) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Personel harcama isteği onaylandı.")
@@ -73,6 +79,7 @@ public class  ExpenseController {
     }
 
     @PutMapping(REJECT_EXPENSE)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> rejectExpense(String token, Long expenseId, String rejectReason) {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .message("Personel harcama isteği reddedildi..")
@@ -83,6 +90,7 @@ public class  ExpenseController {
     }
     
     @PutMapping(DELETE_EXPENSE)
+    @PreAuthorize("hasAnyAuthority('COMPANY_MANAGER','EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> deleteExpense(String token,Long expenseId){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                                          .code(200)
@@ -94,6 +102,7 @@ public class  ExpenseController {
     }
     
     @PostMapping(value = UPLOAD_RECEIPT,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> uploadReceipt(@RequestParam String token,
                                                                @RequestParam Long expenseId,
                                                                @RequestParam MultipartFile file) throws IOException {
@@ -106,6 +115,7 @@ public class  ExpenseController {
     }
 
     @PutMapping(value = UPDATE_EXPENSE,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<BaseResponse<Boolean>> updateExpense(@RequestParam String token,
                                                                @RequestParam Long expenseId,
                                                                @RequestParam Double amount,

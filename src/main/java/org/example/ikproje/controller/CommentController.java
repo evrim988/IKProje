@@ -7,6 +7,7 @@ import org.example.ikproje.view.VwComment;
 import org.example.ikproje.view.VwCommentDetail;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,9 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     @PostMapping(CREATE_COMMENT)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> createComment(@RequestParam String token, @RequestParam String content){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .success(true)
@@ -56,6 +59,7 @@ public class CommentController {
     }
 
     @PutMapping(UPDATE_COMMENT)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> updateComment(@RequestParam String token,@RequestParam String content){
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .success(true)
@@ -66,6 +70,7 @@ public class CommentController {
     }
 
     @PostMapping(value = UPDATE_MANAGER_PHOTO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> addManagerPhoto(@RequestParam String token,
                                                                  @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
@@ -77,6 +82,7 @@ public class CommentController {
     }
 
     @PostMapping(value = UPDATE_COMPANY_PHOTO,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
     public ResponseEntity<BaseResponse<Boolean>> addCompanyLogo(@RequestParam String token,
                                                                  @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
