@@ -78,6 +78,7 @@ public class UserShiftService {
 				(startDate.isBefore(shift.getEndDate()) || startDate.isEqual(shift.getEndDate())) &&
 				(endDate.isAfter(shift.getStartDate()) || endDate.isEqual(shift.getStartDate())));
 	}
+	
 	// Personelin vardiyasının ve molalarının detaylarını getiren metot.
 	public VwUserActiveShift getActiveShiftDetailsByUserId(Long userId,String token){
 		Optional<Long> optCompanyManagerId = jwtManager.validateToken(token);

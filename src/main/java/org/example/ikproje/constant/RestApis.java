@@ -22,11 +22,15 @@ public class RestApis {
     public static final String BREAK= ROOT+"/break";
     public static final String EXPENSE= ROOT+"/expense";
     public static final String COMMENT = ROOT+"/comment";
+    public static final String COMPANY = ROOT+"/company";
 
     
     public static final String APPROVE_ACCOUNT="/approve-account";
     public static final String REJECT_ACCOUNT="/reject-account";
     public static final String GET_UNAPPROVED_COMPANIES="/get-unapproved-companies";
+    public static final String COMPANY_COUNT="/company-count";
+    public static final String EMPLOYEE_COUNT="/employee-count";
+    public static final String EXPIRING_MEMBERSHIPS="/expiring-memberships";
     
     public static final String GET_PERSONEL_ASSETS="/get-personel-assets";
     public static final String GET_ASSETS_OF_COMPANY="/get-assets-of-company";
@@ -58,6 +62,9 @@ public class RestApis {
     public static final String UPDATE_LEAVE_REQUEST = "/update-leave-request";
     public static final String DELETE_LEAVE_REQUEST = "/delete-leave-request";
     public static final String GET_PERSONEL_REQUEST_LEAVE = "/get-personel-request-leave";
+    public static final String USED_LEAVE_DAYS = "/used-leave-days";
+    public static final String REMAINING_LEAVE_DAYS = "/remaining-leave-days";
+    public static final String UPCOMING_BIRTHDAYS = "/upcoming-birthdays";
     
     public static final String NEW_SHIFT_REQUEST = "/new-shift-request";
     public static final String UPDATE_SHIFT = "/update-shift";

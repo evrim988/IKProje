@@ -14,8 +14,11 @@ import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.mapper.BreakMapper;
 import org.example.ikproje.repository.BreakRepository;
 import org.example.ikproje.utility.JwtManager;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +36,29 @@ public class BreakService {
 		userControl(dto.token());
 		Shift shift = shiftService.getShiftById(dto.shiftId())
 		                          .orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
-		LocalTime shiftStartTime = LocalTime.parse(shift.getStartTime());
-		LocalTime shiftEndTime = LocalTime.parse(shift.getEndTime());
-		LocalTime breakStartTime = LocalTime.parse(dto.startTime());
-		LocalTime breakEndTime = LocalTime.parse(dto.endTime());
-		if (breakStartTime.isBefore(shiftStartTime) || breakEndTime.isAfter(shiftEndTime)) {
+		
+		LocalDateTime shiftStartTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(shift.getStartTime()));
+		LocalDateTime shiftEndTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(shift.getEndTime()));
+		
+		// 23:00 - 07:00 vardiyası için
+		if (shiftEndTime.isBefore(shiftStartTime)) {
+			shiftEndTime = shiftEndTime.plusDays(1); // EndTime'ı bir gün ileri kaydır
+		}
+		
+		LocalDateTime breakStartTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(dto.startTime()));
+		LocalDateTime breakEndTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(dto.endTime()));
+		
+		// Mola başlangıç saati vardiya başlangıç saatinden önce ise düzelt
+		if (breakStartTime.isBefore(shiftStartTime)) {
+			breakStartTime = shiftStartTime.plusMinutes(1); // 1 dakika ileri alarak düzelt
+			
+		}
+		
+		
+		if (breakStartTime.isAfter(shiftEndTime) || breakEndTime.isAfter(shiftEndTime)) {
 			throw new IKProjeException(ErrorType.BREAK_TIME_ERROR);
 		}
+		
 		Break newBreak = BreakMapper.INSTANCE.fromCreateNewBreakDto(dto);
 		breakRepository.save(newBreak);
 		return true;

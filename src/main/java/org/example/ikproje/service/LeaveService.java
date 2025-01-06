@@ -44,7 +44,7 @@ public class LeaveService {
             throw new IKProjeException(ErrorType.NOT_ELIGIBLE_FOR_MATERNITY_LEAVE);
         }
         UserDetails personelDetails = userDetailsService.findByUserId(personel.getId());
-        multiplierForAnnualLeave = getMultiplierForAnnualLeave(dto, personelDetails);
+        multiplierForAnnualLeave = getMultiplierForAnnualLeave(dto.leaveType(), personelDetails);
         int numberOfDaysPersonelGot = (int) (ELeaveType.YILLIK_IZIN.getNumberOfLeaveDays()*multiplierForAnnualLeave);
         System.out.println(numberOfDaysPersonelGot+" number of days personal got");
         System.out.println("***");
@@ -88,11 +88,11 @@ public class LeaveService {
 
 
 
-    private double getMultiplierForAnnualLeave(NewLeaveRequestDto dto, UserDetails personelDetails) {
+    private double getMultiplierForAnnualLeave(ELeaveType leaveType, UserDetails personelDetails) {
         double multiplierForAnnualLeave;
         long numberOfDaysWorked = ChronoUnit.DAYS.between( personelDetails.getHireDate(), LocalDate.now());
         if (numberOfDaysWorked<365){
-            if(dto.leaveType().equals(ELeaveType.YILLIK_IZIN)) throw new IKProjeException(ErrorType.NOT_ELIGIBLE_FOR_ANNUAL_LEAVE);
+            if(leaveType.equals(ELeaveType.YILLIK_IZIN)) throw new IKProjeException(ErrorType.NOT_ELIGIBLE_FOR_ANNUAL_LEAVE);
             multiplierForAnnualLeave=0;
         }
         else if (numberOfDaysWorked < 1825) {
@@ -108,6 +108,29 @@ public class LeaveService {
             multiplierForAnnualLeave=2.5;
         }
         return multiplierForAnnualLeave;
+    }
+    
+    // Kullanılan izin günleri
+    public Integer usedLeaveDays(String token){
+        User personel = getUserByToken(token);
+        LeaveDetails leaveDetails = leaveDetailsService.findByUserId(personel.getId())
+                                                       .orElseThrow(() -> new IKProjeException(ErrorType.PAGE_NOT_FOUND));
+        
+        Leave lastAnnualLeave = leaveRepository.findTopByUserIdAndLeaveTypeOrderByEndDateDesc(personel.getId(), ELeaveType.YILLIK_IZIN)
+                                               .orElseThrow(() -> new IKProjeException(ErrorType.PAGE_NOT_FOUND));
+        
+        long numberOfLeaveDays = ChronoUnit.DAYS.between(lastAnnualLeave.getStartDate(), lastAnnualLeave.getEndDate());
+        return (int) numberOfLeaveDays;
+    
+    }
+    
+    // Kalan yıllık izin günleri
+    public Integer remainingAnnualLeaveDays(String token) {
+        User personel = getUserByToken(token);
+        LeaveDetails leaveDetails = leaveDetailsService.findByUserId(personel.getId())
+                                                       .orElseThrow(() -> new IKProjeException(ErrorType.PAGE_NOT_FOUND));
+        
+        return leaveDetails.getNumberOfDaysRemainingFromAnnualLeave();
     }
 
 

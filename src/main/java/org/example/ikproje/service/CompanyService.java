@@ -21,7 +21,13 @@ public class CompanyService {
 		return companyRepository.findById(id);
 	}
 	
+	public long companyCount() {
+		return companyRepository.count();
+	}
 	
+	List<Company> findCompaniesByIds(List<Long> ids) {
+		return companyRepository.findCompaniesByIds(ids);
+	}
 	
 	
 }
