@@ -14,7 +14,7 @@ public enum ErrorType {
     USER_NOTFOUND(5001,"Kullanıcı Bulunamadı!",HttpStatus.NOT_FOUND),
     COMPANY_NOTFOUND(5002,"Şirket Bulunamadı!",HttpStatus.NOT_FOUND),
     UNAUTHORIZED(5003,"Bu işlem için yetkiniz yok!",HttpStatus.FORBIDDEN),
-    INVALID_TOKEN(9001,"Geçersiz token bilgisi",HttpStatus.BAD_REQUEST),
+        INVALID_TOKEN(9001,"Geçersiz token bilgisi",HttpStatus.BAD_REQUEST),
     EXP_TOKEN(9002,"Token'in süresi doldu!",HttpStatus.BAD_REQUEST),
     TOKEN_ALREADY_USED(9003,"Bu token zaten kullanıldı.",HttpStatus.BAD_REQUEST),
     ENCRYPTION_FAILED(7001,"Şifreleme başarısız.",HttpStatus.BAD_REQUEST),

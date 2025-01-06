@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BreakRepository extends JpaRepository<Break, Long> {
-	List<Break> findByShiftId(Long shiftId);
+	List<Break> findByShiftIdOrderById(Long shiftId);
 
-	List<Break> findAllByState(EState state);
+	List<Break> findAllByStateOrderById(EState state);
 }
