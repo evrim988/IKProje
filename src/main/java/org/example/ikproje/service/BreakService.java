@@ -55,7 +55,7 @@ public class BreakService {
 	}
 	
 	public List<Break> findByShiftId(Long shiftId) {
-		return breakRepository.findByShiftId(shiftId);
+		return breakRepository.findByShiftIdOrderById(shiftId);
 	}
 	
 	public Boolean updateBreak(UpdateBreakRequestDto dto) {
@@ -85,13 +85,13 @@ public class BreakService {
 	public List<Break> getBreaksByShiftId(String token, Long shiftId) {
 		userControl(token);
 		shiftService.getShiftById(shiftId).orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
-		return breakRepository.findByShiftId(shiftId);
+		return breakRepository.findByShiftIdOrderById(shiftId);
 	}
 
 	public List<BreakResponseDto> getAllBreak(String token) {
 		User user = userControl(token);
 		Long companyId = user.getCompanyId();
-		List<Break> breakList = breakRepository.findAllByState(EState.ACTIVE);
+		List<Break> breakList = breakRepository.findAllByStateOrderById(EState.ACTIVE);
 		List<BreakResponseDto> dtoList = new ArrayList<>();
 
 		for (Break item: breakList) {
