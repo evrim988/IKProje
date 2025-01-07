@@ -39,15 +39,15 @@ public class GenerateUser {
 
     public static List<User> generateEmployee() {
         User p1 = User.builder().userRole(EUserRole.EMPLOYEE).phone("0555 444 33 22").companyId(1L).firstName("Gizem").lastName("Oray")
-                .isMailVerified(true).email("gizem@gmail.com").gender(EGender.FEMALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
+                .isMailVerified(true).isApproved(EIsApproved.APPROVED).email("gizem@gmail.com").gender(EGender.FEMALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
         User p2 = User.builder().userRole(EUserRole.EMPLOYEE).phone("0555 555 22 11").companyId(1L).firstName("Mehmet").lastName("Karaca")
-                .isMailVerified(true).email("mehmet@gmail.com").gender(EGender.MALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
+                .isMailVerified(true).isApproved(EIsApproved.APPROVED).email("mehmet@gmail.com").gender(EGender.MALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
         User p3 = User.builder().userRole(EUserRole.EMPLOYEE).phone("0444 333 11 44").companyId(1L).firstName("Furkan").lastName("Gök")
-                .isMailVerified(true).email("furkan@gmail.com").gender(EGender.MALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
+                .isMailVerified(true).isApproved(EIsApproved.APPROVED).email("furkan@gmail.com").gender(EGender.MALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
         User p4 = User.builder().userRole(EUserRole.EMPLOYEE).phone("0555 123 45 67").companyId(1L).firstName("Merve").lastName("Tuncer")
-                .isMailVerified(true).email("merve@gmail.com").gender(EGender.FEMALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
+                .isMailVerified(true).isApproved(EIsApproved.APPROVED).email("merve@gmail.com").gender(EGender.FEMALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
         User p5 = User.builder().userRole(EUserRole.EMPLOYEE).phone("0555 987 65 43").companyId(1L).firstName("Burak").lastName("Demir")
-                .isMailVerified(true).email("burak@gmail.com").gender(EGender.MALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
+                .isMailVerified(true).isApproved(EIsApproved.APPROVED).email("burak@gmail.com").gender(EGender.MALE).password(EncryptionManager.getEncryptedPassword("sifre123")).build();
 
         List<User> employees = new ArrayList<>(List.of(p1, p2, p3, p4, p5));
 
@@ -78,6 +78,7 @@ public class GenerateUser {
                         .firstName(names[i][j])
                         .lastName(lastNames.get(random.nextInt(lastNames.size()))) // Rastgele soyadı seçimi
                         .isMailVerified(true)
+                        .isApproved(EIsApproved.APPROVED)
                         .email(names[i][j].toLowerCase() + "@company"+companyIds[i]+".com")
                         .gender(j % 2 == 0 ? EGender.MALE : EGender.FEMALE)
                         .password(EncryptionManager.getEncryptedPassword("sifre123"))
