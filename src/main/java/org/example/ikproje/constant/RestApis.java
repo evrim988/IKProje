@@ -93,10 +93,13 @@ public class RestApis {
     
     public static final String CREATE_COMMENT = "/create-comment";
     public static final String UPDATE_COMMENT = "/update-comment";
+    public static final String DELETE_COMMENT = "/delete-comment";
     public static final String UPDATE_MANAGER_PHOTO = "/update-manager-photo";
     public static final String UPDATE_COMPANY_PHOTO = "/update-company-logo";
     public static final String GET_COMMENTS = "/get-comments";
+    public static final String GET_COMMENTSBYCOMPANYID = "/get-comments-by-company-id";
     public static final String GET_COMMENT = "/get-comment";
+
     
     
     public static final String UPDATE_COMPANY_LOGO="/update-company-logo";

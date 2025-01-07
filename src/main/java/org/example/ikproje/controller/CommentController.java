@@ -25,14 +25,16 @@ public class CommentController {
     private final CommentService commentService;
 
 
-    @PostMapping(CREATE_COMMENT)
+    @PostMapping(value = CREATE_COMMENT,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
-    public ResponseEntity<BaseResponse<Boolean>> createComment(@RequestParam String token, @RequestParam String content){
+    public ResponseEntity<BaseResponse<Boolean>> createComment(@RequestParam String token,
+                                                               @RequestParam String content,
+                                                               @RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .success(true)
                         .code(200)
                         .message("Comment başarı ile oluşturuldu.")
-                        .data(commentService.createComment(token, content))
+                        .data(commentService.createComment(token, content, file))
                 .build());
     }
 
@@ -58,14 +60,37 @@ public class CommentController {
                 .build());
     }
 
-    @PutMapping(UPDATE_COMMENT)
+    @GetMapping(GET_COMMENTSBYCOMPANYID)
+    public ResponseEntity<BaseResponse<List<VwComment>>> getCommentsByCompanyId(@RequestParam String token){
+        return ResponseEntity.ok(BaseResponse.<List<VwComment>>builder()
+                        .code(200)
+                        .success(true)
+                        .data(commentService.findAllCommentsByCompanyId(token))
+                        .message("Yorumlar başarı ile getirildi.")
+                .build());
+    }
+
+    @PutMapping(value = UPDATE_COMMENT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
-    public ResponseEntity<BaseResponse<Boolean>> updateComment(@RequestParam String token,@RequestParam String content){
+    public ResponseEntity<BaseResponse<Boolean>> updateComment(@RequestParam String token,
+                                                               @RequestParam String content,
+                                                               @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                 .success(true)
                 .code(200)
                 .message("Comment başarı ile güncellendi.")
-                .data(commentService.updateComment(token, content))
+                .data(commentService.updateComment(token, content, file))
+                .build());
+    }
+
+    @PutMapping(DELETE_COMMENT)
+    @PreAuthorize("hasAuthority('COMPANY_MANAGER')")
+    public ResponseEntity<BaseResponse<Boolean>> deleteComment(@RequestParam String token,@RequestParam Long commentId){
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                        .code(200)
+                        .success(true)
+                        .data(commentService.deleteComment(token, commentId))
+                        .message("Comment silme işlemi başarılı")
                 .build());
     }
 
