@@ -96,8 +96,25 @@ public class LeaveController {
                 .message(success ? "İzin isteği başarı ile silindi" : "Silme işlemi gerçekleştirilemedi.")
                 .build());
     }
-
-
+    
+    @GetMapping(USED_LEAVE_DAYS)
+    public ResponseEntity<BaseResponse<Integer>> usedLeaveDays(String token){
+        return ResponseEntity.ok(BaseResponse.<Integer>builder()
+                                         .code(200)
+                                         .message("Kullanılan yıllık izin gün sayısı getirildi.")
+                                         .success(true)
+                                         .data(leaveService.usedLeaveDays(token))
+                                             .build());
+    }
+    @GetMapping(REMAINING_LEAVE_DAYS)
+    public ResponseEntity<BaseResponse<Integer>> remainingAnnualLeaveDays(String token){
+        return ResponseEntity.ok(BaseResponse.<Integer>builder()
+                                             .code(200)
+                                             .message("Kalan yıllık izin gün sayısı getirildi.")
+                                             .success(true)
+                                             .data(leaveService.remainingAnnualLeaveDays(token))
+                                             .build());
+    }
 
 
 }

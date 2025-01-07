@@ -1,6 +1,7 @@
 package org.example.ikproje.repository;
 
 import org.example.ikproje.entity.User;
+import org.example.ikproje.entity.enums.EIsApproved;
 import org.example.ikproje.entity.enums.EState;
 import org.example.ikproje.entity.enums.EUserRole;
 import org.example.ikproje.entity.enums.EUserWorkStatus;
@@ -49,5 +50,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<Long> findCompanyManagerIdByCompanyId(Long companyId);
 
 	Optional<Long> countByCompanyIdAndState(Long companyId,EState state);
-
+	
+	Long countByIsApprovedAndUserRoleAndState(EIsApproved isApproved, EUserRole userRole, EState state);
+	
+	
 }
