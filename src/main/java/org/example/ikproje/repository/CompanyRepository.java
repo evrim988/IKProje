@@ -13,5 +13,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	
 	@Query("SELECT c FROM Company c WHERE c.id IN :companyIds")
 	List<Company> findCompaniesByIds(@Param("companyIds") List<Long> companyIds);
+	
+	@Query(value = "SELECT * FROM tbl_company ORDER BY RANDOM() LIMIT 5 ",nativeQuery = true)
+	List<Company> findRandomCompanies();
 
 }

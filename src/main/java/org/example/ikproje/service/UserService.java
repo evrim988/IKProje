@@ -16,6 +16,7 @@ import org.example.ikproje.mapper.*;
 import org.example.ikproje.repository.UserRepository;
 import org.example.ikproje.utility.EncryptionManager;
 import org.example.ikproje.utility.JwtManager;
+import org.example.ikproje.view.VwPersonelForUpcomingBirthday;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -224,5 +225,14 @@ public class UserService {
         return userRepository.countByIsApprovedAndUserRoleAndState(EIsApproved.APPROVED,EUserRole.EMPLOYEE,EState.ACTIVE);
     }
     
-    
+    public List<VwPersonelForUpcomingBirthday> findUpcomingBirthdays(String token){
+        
+        Long userId = jwtManager.validateToken(token).orElseThrow(() -> new IKProjeException(ErrorType.INVALID_TOKEN));
+        User companyManager = userRepository.findById(userId).orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
+        companyService.findById(companyManager.getCompanyId()).orElseThrow(() -> new IKProjeException(ErrorType.COMPANY_NOTFOUND));
+        if (companyManager.getUserRole().equals(EUserRole.EMPLOYEE)) throw new IKProjeException(ErrorType.UNAUTHORIZED);
+        
+        return userDetailsService.findPersonelByIds(userDetailsService.findUserIdsWithUpcomingBirthdays(companyManager.getCompanyId()));
+//        return userRepository.findAllById(userDetailsService.findUserIdsWithUpcomingBirthdays(companyManager.getCompanyId()));
+    }
 }

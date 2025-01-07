@@ -29,5 +29,10 @@ public class CompanyService {
 		return companyRepository.findCompaniesByIds(ids);
 	}
 	
+	public List<String> getRandomCompanyLogos(){
+		List<Company> randomCompanies = companyRepository.findRandomCompanies();
+		return randomCompanies.stream().map(Company::getLogo).filter(logo->logo!=null&&!logo.isEmpty()).toList();
+	}
+	
 	
 }

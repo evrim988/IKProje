@@ -10,6 +10,7 @@ import org.example.ikproje.entity.User;
 import org.example.ikproje.service.CompanyManagerService;
 import org.example.ikproje.service.UserService;
 import org.example.ikproje.view.VwCompanyManager;
+import org.example.ikproje.view.VwPersonelForUpcomingBirthday;
 import org.example.ikproje.view.VwPersonelSummary;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -89,5 +90,13 @@ public class CompanyManagerController {
                 .build());
     }
     
-    
+    @GetMapping(UPCOMING_BIRTHDAYS)
+    public ResponseEntity<BaseResponse<List<VwPersonelForUpcomingBirthday>>> upcomingBirthdays(@RequestParam String token){
+        return ResponseEntity.ok(BaseResponse.<List<VwPersonelForUpcomingBirthday>>builder()
+                                         .code(200)
+                                         .message("Yaklaşan doğum günleri getirildi.")
+                                         .success(true)
+                                         .data(userService.findUpcomingBirthdays(token))
+                                         .build());
+    }
 }
