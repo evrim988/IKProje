@@ -6,10 +6,7 @@ import org.example.ikproje.dto.request.CreateNewPersonelRequestDto;
 import org.example.ikproje.dto.request.UpdateCompanyManagerProfileRequestDto;
 import org.example.ikproje.dto.request.UpdatePersonelStateRequestDto;
 import org.example.ikproje.entity.*;
-import org.example.ikproje.entity.enums.ELeaveType;
-import org.example.ikproje.entity.enums.EState;
-import org.example.ikproje.entity.enums.EUserRole;
-import org.example.ikproje.entity.enums.EUserWorkStatus;
+import org.example.ikproje.entity.enums.*;
 import org.example.ikproje.exception.ErrorType;
 import org.example.ikproje.exception.IKProjeException;
 import org.example.ikproje.repository.UserRepository;
@@ -77,6 +74,7 @@ public class CompanyManagerService {
                 .gender(dto.gender())
                 .companyId(companyManager.getCompanyId())
                 .userRole(EUserRole.EMPLOYEE)
+                .isApproved(EIsApproved.APPROVED)
                 .build();
         userRepository.save(personel);
         Address personelAddress = Address.builder().build();

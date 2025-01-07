@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 import static org.example.ikproje.constant.RestApis.*;
 
 @RestController
@@ -25,6 +28,16 @@ public class CompanyController {
 				                         .data(companyService.companyCount())
 				                         .message("Şirket sayısı getirildi.")
 		                                 .build());
+	}
+	
+	@GetMapping(RANDOM_COMPANY_LOGOS)
+	public ResponseEntity<BaseResponse<List<String>>> companyLogos(){
+		return ResponseEntity.ok(BaseResponse.<List<String>>builder()
+				                         .code(200)
+				                         .success(true)
+				                         .message("Şirket logoları getirildi")
+				                         .data(companyService.getRandomCompanyLogos())
+		                                     .build());
 	}
 	
 }
