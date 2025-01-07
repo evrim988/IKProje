@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class GenerateData {
 
     private final AdminRepository adminRepository;
-    private final AssetRepository assetRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final CompanyRepository companyRepository;
@@ -30,9 +29,6 @@ public class GenerateData {
                     .build();
             adminRepository.save(admin);
         }
-//        if(assetRepository.count() == 0){
-//            assetRepository.saveAll(GenerateAsset.generateAsset());
-//        }
 
         if(userRepository.count() == 0){
             userRepository.saveAll(GenerateUser.generateCompanyManager());
