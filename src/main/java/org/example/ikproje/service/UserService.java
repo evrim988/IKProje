@@ -43,6 +43,12 @@ public class UserService {
         if (userRepository.existsByEmail(dto.email())){
             throw new IKProjeException(ErrorType.MAIL_ALREADY_EXIST);
         }
+        if (userRepository.existsByPhone(dto.phone())){
+            throw new IKProjeException(ErrorType.PHONE_NUMBER_ALREADY_EXIST);
+        }
+        if (userDetailsService.existsByTcNoAndSgkNo(dto.tcNo(), dto.sgkNo())){
+            throw new IKProjeException(ErrorType.TC_OR_SGK_NO_ALREADY_EXIST);
+        }
         User user = UserMapper.INSTANCE.fromRegisterDto(dto);
         user.setUserRole(EUserRole.COMPANY_MANAGER);
         String encryptedPassword = EncryptionManager.getEncryptedPassword(dto.password());
