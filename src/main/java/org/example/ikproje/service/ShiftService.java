@@ -15,6 +15,7 @@ import org.example.ikproje.repository.ShiftRepository;
 import org.example.ikproje.utility.JwtManager;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,4 +78,6 @@ public class ShiftService {
 	public Optional<Shift> findById(Long shiftId) {
 		return shiftRepository.findById(shiftId);
 	}
+	
+	
 }
