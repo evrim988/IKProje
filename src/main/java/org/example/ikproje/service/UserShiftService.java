@@ -79,6 +79,21 @@ public class UserShiftService {
 				(endDate.isAfter(shift.getStartDate()) || endDate.isEqual(shift.getStartDate())));
 	}
 	
+	public VwUserActiveShift getActiveShiftDetails(String token){
+		User user = userService.getUserByToken(token);
+		UserShift activeShift = userShiftRepository.findByUserIdAndState(user.getId(), EState.ACTIVE)
+		                                           .stream()
+		                                           .findFirst()
+		                                           .orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
+		Shift shift = shiftService.getShiftById(activeShift.getShiftId())
+		                          .orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
+		List<VwBreakSummary> breakList = breakService.findByShiftId(shift.getId()).stream()
+		                                             .map(b -> new VwBreakSummary(b.getName(), LocalTime.parse(b.getStartTime()), LocalTime.parse(b.getEndTime())))
+		                                             .toList();
+		return new VwUserActiveShift(user.getId(),shift.getName(),LocalTime.parse(shift.getStartTime()),
+		                             LocalTime.parse(shift.getEndTime()),breakList);
+	}
+	
 	// Personelin vardiyasının ve molalarının detaylarını getiren metot.
 	public VwUserActiveShift getActiveShiftDetailsByUserId(Long userId,String token){
 		Optional<Long> optCompanyManagerId = jwtManager.validateToken(token);
@@ -110,6 +125,8 @@ public class UserShiftService {
 		return new VwUserActiveShift(userId,shift.getName(),LocalTime.parse(shift.getStartTime()),
 		                             LocalTime.parse(shift.getEndTime()),breakList);
 	}
+	
+	
 
 	public List<User> getPersonelListByCompanyId(String token) {
 		Optional<Long> optionalCompanyManagerId = jwtManager.validateToken(token);

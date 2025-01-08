@@ -72,6 +72,7 @@ public class RestApis {
     public static final String ALL_SHIFTS_BY_COMPANY = "/all-shifts-by-company";
     public static final String ASSIGN_SHIFT_TO_USER = "/assign-shift-to-user";
     public static final String GET_ACTIVE_SHIFT_DETAILS = "/get-active-shift-details";
+    public static final String GET_ACTIVE_SHIFT_DETAILS_BY_USER_ID = "/get-active-shift-details-by-user-id";
     public static final String GET_PERSONEL_LIST_BY_COMPANYID = "/get-personel-list-by-companyId";
     public static final String GET_PERSONEL_SHIFT_LIST = "/get-personel-shift-list";
     
