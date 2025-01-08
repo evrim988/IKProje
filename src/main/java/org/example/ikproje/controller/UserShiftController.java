@@ -38,7 +38,17 @@ public class UserShiftController {
 	}
 	
 	@GetMapping(GET_ACTIVE_SHIFT_DETAILS)
-	public ResponseEntity<BaseResponse<VwUserActiveShift>> getActiveShiftDetails(@RequestParam Long userId,@RequestParam String token){
+	public ResponseEntity<BaseResponse<VwUserActiveShift>> getActiveShiftDetails(@RequestParam String token){
+		return ResponseEntity.ok(BaseResponse.<VwUserActiveShift>builder()
+		                                     .code(200)
+		                                     .message("Personelin vardiya ve mola bilgileri getirildi.")
+		                                     .success(true)
+		                                     .data(userShiftService.getActiveShiftDetails(token))
+		                                     .build());
+	}
+	
+	@GetMapping(GET_ACTIVE_SHIFT_DETAILS_BY_USER_ID)
+	public ResponseEntity<BaseResponse<VwUserActiveShift>> getActiveShiftDetailsByUserId(@RequestParam Long userId,@RequestParam String token){
 		return ResponseEntity.ok(BaseResponse.<VwUserActiveShift>builder()
 				                         .code(200)
 				                         .message("Personelin vardiya ve mola bilgileri getirildi.")
