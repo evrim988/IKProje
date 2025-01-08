@@ -153,7 +153,9 @@ public class UserShiftService {
 		if (optionalCompanyManagerId.isEmpty()){
 			throw new IKProjeException(ErrorType.INVALID_TOKEN);
 		}
-		List<User> personelList = userService.findAllPersonelByCompanyId(optionalCompanyManagerId.get());
+		User companyManager = userService.findById(optionalCompanyManagerId.get())
+		                       .orElseThrow(() -> new IKProjeException(ErrorType.USER_NOTFOUND));
+		List<User> personelList = userService.findAllPersonelByCompanyId(companyManager.getCompanyId());
 		return personelList;
 	}
 
