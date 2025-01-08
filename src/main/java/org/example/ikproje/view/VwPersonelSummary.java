@@ -13,6 +13,7 @@ public record VwPersonelSummary(
         Long id,
         String firstName,
         String lastName,
+        String email,
         LocalDate birthDate,
         LocalDate hireDate,
         EUserDepartmentType departmentType,

@@ -41,7 +41,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT NEW org.example.ikproje.view.VwUnapprovedAccounts(u.id,u.firstName,u.lastName,u.phone,u.email,c.name) FROM User u JOIN Company c ON u.companyId=c.id WHERE (u.isMailVerified=true AND u.isApproved=org.example.ikproje.entity.enums.EIsApproved.PENDING) ")
 	List<VwUnapprovedAccounts> getAllUnapprovedAccounts();
 
-	@Query("SELECT new org.example.ikproje.view.VwPersonelSummary(u.id,u.firstName,u.lastName,ud.birthDate,ud.hireDate,ud.departmentType,u.state,u.userWorkStatus) FROM User u JOIN UserDetails ud ON u.id=ud.userId WHERE u.companyId=?1 AND u.userRole=org.example.ikproje.entity.enums.EUserRole.EMPLOYEE AND u.state=org.example.ikproje.entity.enums.EState.ACTIVE ORDER BY u.id")
+	@Query("SELECT new org.example.ikproje.view.VwPersonelSummary(u.id,u.firstName,u.lastName, u.email,ud.birthDate,ud.hireDate,ud.departmentType,u.state,u.userWorkStatus) FROM User u JOIN UserDetails ud ON u.id=ud.userId WHERE u.companyId=?1 AND u.userRole=org.example.ikproje.entity.enums.EUserRole.EMPLOYEE AND u.state=org.example.ikproje.entity.enums.EState.ACTIVE ORDER BY u.id")
 	List<VwPersonelSummary> findAllVwPersonelSummary(Long companyId);
 
 	@Query("SELECT u.email FROM User u WHERE u.id=?1")

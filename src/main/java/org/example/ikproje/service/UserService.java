@@ -129,6 +129,9 @@ public class UserService {
     }
 
     private void validateUser(User user) {
+        if(user.getState().equals(EState.PASSIVE)){
+            throw new IKProjeException(ErrorType.USER_IS_PASSIVE);
+        }
         checkMailVerification(user);
         if (user.getUserRole() == EUserRole.COMPANY_MANAGER) {
             checkApprovalStatus(user);

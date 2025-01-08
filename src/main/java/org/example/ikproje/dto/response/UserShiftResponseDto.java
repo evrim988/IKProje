@@ -1,8 +1,10 @@
 package org.example.ikproje.dto.response;
 
 import lombok.Builder;
+import org.example.ikproje.view.VwBreakSummary;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 public record UserShiftResponseDto(
@@ -11,6 +13,7 @@ public record UserShiftResponseDto(
         String personelName,
         String personelSurname,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        List<VwBreakSummary> breaks
 ) {
 }

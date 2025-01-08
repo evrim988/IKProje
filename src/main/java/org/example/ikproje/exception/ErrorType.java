@@ -25,6 +25,7 @@ public enum ErrorType {
     MAIL_ALREADY_EXIST(6004,"Girilen mail adresi sistemde mevcut. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
     ACCOUNT_ALREADY_APPROVED(6005, "Hesap zaten onaylanmıştır.", HttpStatus.BAD_REQUEST),
     USER_NOT_APPROVED(6006,"Site yöneticisi kaydınızı henüz onaylamamıştır veya kaydınız reddedilmiştir. Lütfen mail kutunuzu kontrol ediniz.",HttpStatus.BAD_REQUEST),
+    USER_IS_PASSIVE(6010,"Üyeliğiniz askıya alınmış, lütfen site yöneticisi ile iletişime geçiniz.",HttpStatus.BAD_REQUEST),
     MAIL_NOT_VERIFIED(6004,"Mail henüz onaylanmamış, lütfen mailinize gelen onay linkine tıklayınız.",
                       HttpStatus.BAD_REQUEST),
     MAIL_NOT_FOUND(6007,"Girilen mail ile kayıtlı kullanıcı bulunamadı.",HttpStatus.BAD_REQUEST),
