@@ -93,7 +93,6 @@ public class AdminService {
         LocalDate oneMonthLater = now.plusMonths(1);
         List<Company> companies =
                 membershipService.getCompaniesWithExpiringMemberships(now, oneMonthLater);
-        System.out.println(companies);
         return companies;
     }
 }

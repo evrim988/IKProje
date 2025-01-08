@@ -22,6 +22,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	Boolean existsByEmail(String email);
 	
+	Boolean existsByPhone(String phone);
+	
 	Optional<User> findByEmail(String email);
 
 	List<User> findAllByStateAndUserRoleAndCompanyIdAndUserWorkStatus(EState state, EUserRole role, Long companyId, EUserWorkStatus userWorkStatus);
@@ -58,8 +60,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT ud.departmentType, Count(u.id) FROM User u JOIN UserDetails ud ON ud.userId=u.id WHERE u.companyId=?1 GROUP BY ud.departmentType")
 	List<Object[]> findAllDepartmentsInCompany(Long companyId);
-
-	@Query("SELECT u.gender, COUNT(u.id) FROM User u WHERE u.companyId=?1 GROUP BY u.gender")
+	
+	@Query("SELECT u.gender, COUNT(u.id) FROM User u WHERE u.companyId=?1 GROUP BY u.gender ORDER BY  u.gender DESC")
 	List<Object[]> findGenderDistribution(Long companyId);
 
 

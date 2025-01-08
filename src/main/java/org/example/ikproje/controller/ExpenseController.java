@@ -51,9 +51,6 @@ public class  ExpenseController {
                                                                          @RequestParam String description,
                                                                          @RequestParam MultipartFile file)
 		    throws IOException {
-        System.out.println("Token: " + token);
-        System.out.println("Description: " + description);
-        System.out.println("Amount: " + amount);
         return ResponseEntity.ok(BaseResponse.<Boolean>builder()
                         .message("Yeni harcama kaydı isteği oluşturuldu.")
                         .code(200)

@@ -32,4 +32,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
 			"JOIN User u ON ud.userId=u.id " +
 			"WHERE ud.userId IN :ids")
 	List<VwPersonelForUpcomingBirthday> findPersonelByIds(@Param("ids") List<Long> ids);
+	
+	Boolean existsByTcNoAndSgkNo(String tcNo, String sgkNo);
 }
