@@ -78,20 +78,38 @@ public class UserShiftService {
 				(startDate.isBefore(shift.getEndDate()) || startDate.isEqual(shift.getEndDate())) &&
 				(endDate.isAfter(shift.getStartDate()) || endDate.isEqual(shift.getStartDate())));
 	}
-	
-	public VwUserActiveShift getActiveShiftDetails(String token){
+
+	public List<VwUserActiveShift> getActiveShiftDetails(String token) {
 		User user = userService.getUserByToken(token);
-		UserShift activeShift = userShiftRepository.findByUserIdAndState(user.getId(), EState.ACTIVE)
-		                                           .stream()
-		                                           .findFirst()
-		                                           .orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
-		Shift shift = shiftService.getShiftById(activeShift.getShiftId())
-		                          .orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
-		List<VwBreakSummary> breakList = breakService.findByShiftId(shift.getId()).stream()
-		                                             .map(b -> new VwBreakSummary(b.getName(), LocalTime.parse(b.getStartTime()), LocalTime.parse(b.getEndTime())))
-		                                             .toList();
-		return new VwUserActiveShift(user.getId(),shift.getName(),LocalTime.parse(shift.getStartTime()),
-		                             LocalTime.parse(shift.getEndTime()),breakList);
+
+		// Kullanıcının tüm aktif vardiyalarını al
+		List<UserShift> activeShifts = userShiftRepository.findByUserIdAndState(user.getId(), EState.ACTIVE);
+
+		if (activeShifts.isEmpty()) {
+			throw new IKProjeException(ErrorType.SHIFT_NOT_FOUND);
+		}
+
+		// Her bir aktif vardiya için VwUserActiveShift nesneleri oluştur
+		List<VwUserActiveShift> shiftList = activeShifts.stream().map(activeShift -> {
+			Shift shift = shiftService.getShiftById(activeShift.getShiftId())
+					.orElseThrow(() -> new IKProjeException(ErrorType.SHIFT_NOT_FOUND));
+
+			List<VwBreakSummary> breakList = breakService.findByShiftId(shift.getId()).stream()
+					.map(b -> new VwBreakSummary(b.getName(), LocalTime.parse(b.getStartTime()), LocalTime.parse(b.getEndTime())))
+					.toList();
+
+			return VwUserActiveShift.builder()
+					.userId(user.getId())
+					.shiftName(shift.getName())
+					.shiftStartTime(LocalTime.parse(shift.getStartTime()))
+					.shiftEndTime(LocalTime.parse(shift.getEndTime()))
+					.startDate(activeShift.getStartDate())
+					.endDate(activeShift.getEndDate())
+					.breaks(breakList)
+					.build();
+		}).toList();
+
+		return shiftList;
 	}
 	
 	// Personelin vardiyasının ve molalarının detaylarını getiren metot.
@@ -122,8 +140,10 @@ public class UserShiftService {
 		                                        .map(b -> new VwBreakSummary(b.getName(), LocalTime.parse(b.getStartTime()), LocalTime.parse(b.getEndTime())))
 		                                        .toList();
 		// Burada da Vw'in içerisini yukarıda almış olduğum bilgilerle doldurdum.
+
+
 		return new VwUserActiveShift(userId,shift.getName(),LocalTime.parse(shift.getStartTime()),
-		                             LocalTime.parse(shift.getEndTime()),breakList);
+		                             LocalTime.parse(shift.getEndTime()), activeShift.getStartDate(), activeShift.getEndDate(),breakList);
 	}
 	
 	
@@ -157,6 +177,11 @@ public class UserShiftService {
 			if(!optionalShift.get().getCompanyId().equals(companyManager.getId())){
 				continue;
 			}
+
+			List<VwBreakSummary> breakList = breakService.findByShiftId(optionalShift.get().getId()).stream()
+					.map(b -> new VwBreakSummary(b.getName(), LocalTime.parse(b.getStartTime()), LocalTime.parse(b.getEndTime())))
+					.toList();
+
 			UserShiftResponseDto dto = UserShiftResponseDto.builder()
 					.id(userShift.getId())
 					.shiftName(optionalShift.get().getName())
@@ -164,6 +189,7 @@ public class UserShiftService {
 					.personelSurname(optionalUser.get().getLastName())
 					.startDate(userShift.getStartDate())
 					.endDate(userShift.getEndDate())
+					.breaks(breakList)
 					.build();
 			responseDtoList.add(dto);
 		}
