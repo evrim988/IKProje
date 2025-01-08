@@ -13,6 +13,7 @@ import org.example.ikproje.repository.UserRepository;
 import org.example.ikproje.utility.EncryptionManager;
 import org.example.ikproje.utility.JwtManager;
 import org.example.ikproje.view.VwCompanyManager;
+import org.example.ikproje.view.VwCompanyManagerHome;
 import org.example.ikproje.view.VwPersonelSummary;
 import org.example.ikproje.view.VwUnapprovedAccounts;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class CompanyManagerService {
     private final VerificationTokenService verificationTokenService;
     private final UserDetailsService userDetailsService;
     private final LeaveService leaveService;
+    private final ShiftService shiftService;
 
     public void addLogoToCompany(String token, MultipartFile file) throws IOException {
         User user = getUserByToken(token);
@@ -183,5 +185,27 @@ public class CompanyManagerService {
         return optUser.get();
     }
 
+    //Şirketle alakalı grafiksel bilgileri almak için
+    public VwCompanyManagerHome getCharts(String token) {
+        User user = getUserByToken(token);
+        VwCompanyManagerHome view = new VwCompanyManagerHome();
+        view.setDepartments(userRepository.findAllDepartmentsInCompany(user.getCompanyId()));
+        view.setGenderDistribution(userRepository.findGenderDistribution(user.getCompanyId()));
+        view.setTotalShiftCount(shiftService.findShiftCountByCompanyId(user.getCompanyId()));
+        view.setPersonalOnLeaveCount(userRepository.countByUserWorkStatusAndStateAndCompanyId(EUserWorkStatus.ON_LEAVE,EState.ACTIVE,user.getCompanyId()));
+        Long totalPersonelCount = userRepository.countByCompanyIdAndState(user.getCompanyId(),EState.ACTIVE).orElse(0L);
+        view.setTotalPersonelCount(totalPersonelCount);
+        return view;
+    }
 
+    public Boolean setCompanyManagerStatePassive(String token){
+        User companyManager = getUserByToken(token);
+        List<Long> personelIdList = userRepository.findAllPersonelIdByCompanyId(companyManager.getCompanyId());
+        for(Long personelId : personelIdList){
+            User user = userRepository.findById(personelId).orElseThrow(()->new IKProjeException(ErrorType.USER_NOTFOUND));
+            user.setState(EState.PASSIVE);
+            userRepository.save(user);
+        }
+        return true;
+    }
 }

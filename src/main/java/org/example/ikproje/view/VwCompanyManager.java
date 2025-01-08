@@ -9,7 +9,7 @@ import org.example.ikproje.entity.enums.EUserRole;
 
 import java.time.LocalDate;
 
-public record VwCompanyManager(
+public record   VwCompanyManager(
 
                 //user
                 Long id,

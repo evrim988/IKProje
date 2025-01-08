@@ -40,6 +40,8 @@ public class RestApis {
     
     public static final String GET_COMPANY_MANAGER_PROFILE="/get-company-manager-profile";
     public static final String UPDATE_COMPANY_MANAGER_PROFILE="/update-company-manager-profile";
+    public static final String GET_CHARTS = "/get-charts";
+    public static final String SET_COMPANY_PASSIVE = "/set-company-passive";
     
     public static final String GET_PERSONEL_PROFILE="/get-personel-profile";
     public static final String UPDATE_PERSONEL_PROFILE="/update-personel-profile";

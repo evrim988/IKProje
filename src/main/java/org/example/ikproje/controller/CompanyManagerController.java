@@ -10,6 +10,7 @@ import org.example.ikproje.entity.User;
 import org.example.ikproje.service.CompanyManagerService;
 import org.example.ikproje.service.UserService;
 import org.example.ikproje.view.VwCompanyManager;
+import org.example.ikproje.view.VwCompanyManagerHome;
 import org.example.ikproje.view.VwPersonelForUpcomingBirthday;
 import org.example.ikproje.view.VwPersonelSummary;
 import org.springframework.http.MediaType;
@@ -98,5 +99,25 @@ public class CompanyManagerController {
                                          .success(true)
                                          .data(userService.findUpcomingBirthdays(token))
                                          .build());
+    }
+
+    @GetMapping(GET_CHARTS)
+    public ResponseEntity<BaseResponse<VwCompanyManagerHome>> getCharts(@RequestParam String token){
+        return ResponseEntity.ok(BaseResponse.<VwCompanyManagerHome>builder()
+                        .data(companyManagerService.getCharts(token))
+                        .message("Şirket çalışanları grafik bilgileri getirildi.")
+                        .success(true)
+                        .code(200)
+                .build());
+    }
+
+    //Bütün şirket çalışanlarını, patron dahil, passive hale getirir.
+    @DeleteMapping(SET_COMPANY_PASSIVE)
+    public ResponseEntity<BaseResponse<Boolean>> setCompanyPassive(@RequestParam String token){
+        return ResponseEntity.ok(BaseResponse.<Boolean>builder()
+                .message("Bütün şirket çalışanları pasif duruma getirildi. Üyeliğiniz sonlandırıldı.")
+                .success(companyManagerService.setCompanyManagerStatePassive(token))
+                .code(200)
+                .build());
     }
 }

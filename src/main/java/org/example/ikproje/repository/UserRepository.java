@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	
@@ -52,6 +53,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<Long> countByCompanyIdAndState(Long companyId,EState state);
 	
 	Long countByIsApprovedAndUserRoleAndState(EIsApproved isApproved, EUserRole userRole, EState state);
-	
-	
+
+	Long countByUserWorkStatusAndStateAndCompanyId(EUserWorkStatus userWorkStatus, EState state,Long companyId);
+
+	@Query("SELECT ud.departmentType, Count(u.id) FROM User u JOIN UserDetails ud ON ud.userId=u.id WHERE u.companyId=?1 GROUP BY ud.departmentType")
+	List<Object[]> findAllDepartmentsInCompany(Long companyId);
+
+	@Query("SELECT u.gender, COUNT(u.id) FROM User u WHERE u.companyId=?1 GROUP BY u.gender")
+	List<Object[]> findGenderDistribution(Long companyId);
+
+
+	@Query("SELECT u.id FROM User u WHERE u.companyId=?1")
+	List<Long> findAllPersonelIdByCompanyId(Long companyId);
+
 }
