@@ -38,6 +38,7 @@ public record CreateNewPersonelRequestDto(
         String tcNo,
 		@NotNull
         String sgkNo,
+		@NotNull
 		EGender gender,
 		@NotNull
         LocalDate birthDate,

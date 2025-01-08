@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -46,8 +47,6 @@ public class LeaveService {
         UserDetails personelDetails = userDetailsService.findByUserId(personel.getId());
         multiplierForAnnualLeave = getMultiplierForAnnualLeave(dto.leaveType(), personelDetails);
         int numberOfDaysPersonelGot = (int) (ELeaveType.YILLIK_IZIN.getNumberOfLeaveDays()*multiplierForAnnualLeave);
-        System.out.println(numberOfDaysPersonelGot+" number of days personal got");
-        System.out.println("***");
 
         long numberOfLeaveDays = ChronoUnit.DAYS.between(dto.startDate(),dto.endDate());
 
@@ -72,7 +71,6 @@ public class LeaveService {
         }
         else{
             leaveDetails = LeaveDetails.builder().userId(personel.getId()).numberOfDaysRemainingFromAnnualLeave(numberOfDaysPersonelGot).build();
-            System.out.println("leave details : "+leaveDetails);
             if(leaveDetails.getNumberOfDaysRemainingFromAnnualLeave()<numberOfLeaveDays) throw new IKProjeException(ErrorType.ANNUAL_LEAVE_DAYS_EXCEEDED);
         }
 
@@ -171,7 +169,7 @@ public class LeaveService {
     }
 
 
-
+    
     @Transactional
     public Boolean approveLeaveRequest(String token,Long leaveId){
         User companyManager = getUserByToken(token);
@@ -184,7 +182,10 @@ public class LeaveService {
         leave.setStatusDate(LocalDate.now());
         leaveRepository.save(leave);
         User user = userService.findById(leave.getUserId()).orElseThrow(()->new IKProjeException(ErrorType.PAGE_NOT_FOUND));
-        user.setUserWorkStatus(EUserWorkStatus.ON_LEAVE);
+        if (Objects.equals(leave.getStartDate(), LocalDate.now()))
+        {
+            user.setUserWorkStatus(EUserWorkStatus.ON_LEAVE);
+        }
         userService.save(user);
         String personelMail = userService.findById(leave.getUserId()).get().getEmail();
         emailService.sendApprovedLeaveNotificationEmail(personelMail,leave);

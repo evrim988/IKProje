@@ -27,6 +27,7 @@ public record RegisterRequestDto(
 		String sgkNo,
 		@NotNull
 		LocalDate birthDate,
+		@NotNull
 		EGender gender,
 		@NotNull
 		EUserDepartmentType departmentType,

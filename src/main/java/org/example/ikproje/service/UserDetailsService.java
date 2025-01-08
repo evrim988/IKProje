@@ -31,4 +31,8 @@ public class UserDetailsService {
 	List<VwPersonelForUpcomingBirthday>findPersonelByIds(List<Long> ids){
 		return userDetailsRepository.findPersonelByIds(ids);
 	}
+	
+	public Boolean existsByTcNoAndSgkNo(String tcNo, String sgkNo) {
+		return userDetailsRepository.existsByTcNoAndSgkNo(tcNo, sgkNo);
+	}
 }

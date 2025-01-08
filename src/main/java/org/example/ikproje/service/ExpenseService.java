@@ -44,7 +44,6 @@ public class ExpenseService {
 
     //Personel yeni harcama isteği
     public Boolean createNewExpenseRequest(String token,Double amount, String description,MultipartFile file) throws IOException {
-        System.out.println(token);
         User personel = userService.getUserByToken(token);
         Long companyManagerId = userService.findCompanyManagerIdByCompanyId(personel.getCompanyId());
         Expense expense = expenseRepository.save(Expense.builder().userId(personel.getId())

@@ -23,6 +23,8 @@ public enum ErrorType {
     INVALID_USERNAME_OR_PASSWORD(6002,"Kullanıcı adı ya da şifre hatalıdır",HttpStatus.BAD_REQUEST),
     PASSWORDS_NOT_MATCH(6003,"Girilen şifreler eşleşmiyor. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
     MAIL_ALREADY_EXIST(6004,"Girilen mail adresi sistemde mevcut. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
+    PHONE_NUMBER_ALREADY_EXIST(6004,"Girilen telefon numarası sistemde mevcut. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
+    TC_OR_SGK_NO_ALREADY_EXIST(6004,"Girilen TC NO veya SGK NO sistemde mevcut. Lütfen tekrar deneyiniz.",HttpStatus.BAD_REQUEST),
     ACCOUNT_ALREADY_APPROVED(6005, "Hesap zaten onaylanmıştır.", HttpStatus.BAD_REQUEST),
     USER_NOT_APPROVED(6006,"Site yöneticisi kaydınızı henüz onaylamamıştır veya kaydınız reddedilmiştir. Lütfen mail kutunuzu kontrol ediniz.",HttpStatus.BAD_REQUEST),
     USER_IS_PASSIVE(6010,"Üyeliğiniz askıya alınmış, lütfen site yöneticisi ile iletişime geçiniz.",HttpStatus.BAD_REQUEST),
