@@ -47,11 +47,11 @@ public class GenerateData {
         }
         if(companyRepository.count() == 0){
             List<Company> companyList = GenerateUser.generateCompany();
-            File file1 = new File("E:/IKProje/src/main/java/org/example/ikproje/utility/images/koc.jpg");
-            File file2 = new File("E:/IKProje/src/main/java/org/example/ikproje/utility/images/trump.jpg");
-            File file3 = new File("E:/IKProje/src/main/java/org/example/ikproje/utility/images/apple.png");
-            File file4 = new File("E:/IKProje/src/main/java/org/example/ikproje/utility/images/microsoft.png");
-            File file5 = new File("E:/IKProje/src/main/java/org/example/ikproje/utility/images/amazon.png");
+            File file1 = new File("src/main/java/org/example/ikproje/utility/images/koc.jpg");
+            File file2 = new File("src/main/java/org/example/ikproje/utility/images/trump.jpg");
+            File file3 = new File("src/main/java/org/example/ikproje/utility/images/apple.png");
+            File file4 = new File("src/main/java/org/example/ikproje/utility/images/microsoft.png");
+            File file5 = new File("src/main/java/org/example/ikproje/utility/images/amazon.png");
             companyList.get(0).setLogo(cloudinaryService.uploadNormalFile(file1));
             companyList.get(1).setLogo(cloudinaryService.uploadNormalFile(file2));
             companyList.get(2).setLogo(cloudinaryService.uploadNormalFile(file3));

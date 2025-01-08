@@ -70,6 +70,10 @@ public class ShiftService {
 		return shiftRepository.getAllByCompanyIdAndStateOrderById(user.getCompanyId(),EState.ACTIVE);
 	}
 
+	public Long findShiftCountByCompanyId(Long companyId){
+		return shiftRepository.countByCompanyId(companyId);
+	}
+
 	public Optional<Shift> findById(Long shiftId) {
 		return shiftRepository.findById(shiftId);
 	}
